@@ -11,6 +11,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // $this->call(UserSeeder::class);
+        $this->call([
+            BancoSeeder::class,
+            RegionSeeder::class,
+            TipoCuentaBancoSeeder::class,
+            TipoInmuebleSeeder::class,
+            CategoriaNotificacionSeeder::class,
+            EstadoInmuebleSeeder::class
+        ]);
     }
 }
