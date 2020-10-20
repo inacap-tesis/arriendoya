@@ -41,8 +41,24 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="direccion">Dirección</label>
-                    <input type="text" class="form-control" id="direccion" name="direccion" required>
+                    <label for="poblacionDireccion">Población</label>
+                    <input type="text" class="form-control" id="poblacionDireccion" name="poblacionDireccion">
+                </div>
+                <div class="form-group">
+                    <label for="calleDireccion">Calle</label>
+                    <input type="text" class="form-control" id="calleDireccion" name="calleDireccion" required>
+                </div>
+                <div class="form-group">
+                    <label for="numeroDireccion">Número</label>
+                    <input type="number" min="0" class="form-control" id="numeroDireccion" name="numeroDireccion" required>
+                </div>
+                <div class="form-group">
+                    <label for="condominioDireccion">Condominio</label>
+                    <input type="text" class="form-control" id="condominioDireccion" name="condominioDireccion">
+                </div>
+                <div class="form-group">
+                    <label for="numeroDepartamentoDireccion">Número de departamento/casa</label>
+                    <input type="text" class="form-control" id="numeroDepartamentoDireccion" name="numeroDepartamentoDireccion">
                 </div>
                 <div class="form-group">
                     <label for="caracteristicas">Características</label>

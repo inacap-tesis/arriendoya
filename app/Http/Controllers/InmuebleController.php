@@ -20,7 +20,8 @@ class InmuebleController extends Controller
 
     public function misInmuebles() {
         if(Auth::check()) {
-            return view('inmueble.catalogo', ['inmuebles'=> Inmueble::all()]);
+            $inmuebles = Inmueble::all();
+            return view('inmueble.catalogo', ['inmuebles'=> $inmuebles]);
         } else {
             return redirect('/login');
         }
@@ -61,9 +62,14 @@ class InmuebleController extends Controller
     {
         $inmueble = new Inmueble();
         $inmueble->idTipoInmueble = $request->tipo;
+        $inmueble->idEstado = 1;
         $inmueble->idComuna = $request->comuna;
-        $inmueble->rutPropietario = '24765918-8';
-        $inmueble->direccion = $request->direccion;
+        $inmueble->rutPropietario = Auth::user()->rut;
+        $inmueble->poblacionDireccion = $request->poblacionDireccion;
+        $inmueble->calleDireccion = $request->calleDireccion;
+        $inmueble->numeroDireccion = $request->numeroDireccion;
+        $inmueble->condominioDireccion = $request->condominioDireccion;
+        $inmueble->numeroDepartamentoDireccion = $request->numeroDepartamentoDireccion;
         $inmueble->caracteristicas = $request->caracteristicas;
         $inmueble->save();
         return $inmueble;

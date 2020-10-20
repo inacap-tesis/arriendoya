@@ -113,7 +113,7 @@ class CreateAllTables extends Migration
 
         Schema::create('inmuebles', function (Blueprint $table) {
             $table->id();
-            $table->smallInteger('idTipo');
+            $table->smallInteger('idTipoInmueble');
             $table->smallInteger('idEstado');
             $table->smallInteger('idComuna');
             $table->string('rutPropietario', 12);
@@ -121,11 +121,11 @@ class CreateAllTables extends Migration
             $table->string('calleDireccion', 80);
             $table->smallInteger('numeroDireccion');
             $table->string('condominioDireccion', 80)->nullable();
-            $table->smallInteger('numeroDepartamentoDireccion')->nullable();
+            $table->string('numeroDepartamentoDireccion', 20)->nullable();
             $table->string('caracteristicas');
             $table->timestamps();
 
-            $table->foreign('idTipo')->references('id')->on('tipos_inmueble');
+            $table->foreign('idTipoInmueble')->references('id')->on('tipos_inmueble');
             $table->foreign('idEstado')->references('id')->on('estados_inmueble');
             $table->foreign('idComuna')->references('id')->on('comunas');
             $table->foreign('rutPropietario')->references('rut')->on('usuarios')->onDelete('cascade');

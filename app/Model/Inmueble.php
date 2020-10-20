@@ -8,10 +8,15 @@ class Inmueble extends Model
 {
     protected $table = 'inmuebles';
     protected $fillable = [
-        'idTipoInmueble', 
+        'idTipoInmueble',
+        'idEstado',
         'idComuna', 
         'rutPropietario', 
-        'direccion', 
+        'poblacionDireccion',
+        'calleDireccion',
+        'numeroDireccion',
+        'condominioDireccion',
+        'numeroDepartamentoDireccion',
         'caracteristicas'
     ];
 }
