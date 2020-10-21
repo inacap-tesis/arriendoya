@@ -39,14 +39,11 @@ Route::get('/inmueble/reactivar', function () {
 });
 
 //RF-INM-06
-Route::get('/inmueble/publicar', function () {
-    return view('inmueble.publicar');
-});
+Route::get('/inmueble/publicar/{id}', ['uses'=>'InmuebleController@prepararPublicacion']);
+Route::post('/inmueble/publicar', 'InmuebleController@publicar')->name('publicar');
 
 //RF-INM-07
-Route::get('/inmueble/no-publicar', function () {
-    return view('inmueble.no-publicar');
-});
+Route::get('/inmueble/anuncio/{id}', ['uses'=>'InmuebleController@quitarPublicacion']);
 
 //RF-INM-08
 Route::get('/interesados', function () {

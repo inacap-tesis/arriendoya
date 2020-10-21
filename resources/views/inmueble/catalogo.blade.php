@@ -6,25 +6,87 @@
             <h3 class="col-10">Mis Inmuebles</h3>
             <a href="/inmueble/registrar" class="col-2 btn btn-primary">Agregar</a>
         </div>
-        <div class="row">
-            <div class="col">
-                @foreach ($inmuebles as $inmueble)
-                <div class="card mb-3" style="max-width: 540px;">
-                    <div class="row no-gutters">
-                      <div class="col-md-4">
-                        <img src="https://i.pinimg.com/originals/5a/91/85/5a91851234dbe24a2a0630bb95dd16fe.jpg" class="card-img" alt="...">
-                      </div>
-                      <div class="col-md-8">
-                        <div class="card-body">
-                          <h5 class="card-title">{{ $inmueble->calleDireccion.' '.$inmueble->numeroDireccion }}</h5>
-                          <p class="card-text">{{ $inmueble->caracteristicas }}</p>
-                          <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                @endforeach
-            </div>
+        <div class="row row-cols-1 row-cols-md-3">
+          @foreach ($inmuebles as $inmueble)
+          @switch($inmueble->idTipoInmueble)
+              @case(1)
+                  @php $tipo = 'Casa'; @endphp
+                  @break
+              @case(2)
+                @php $tipo = 'Departamento'; @endphp
+                  @break
+              @case(3)
+                @php $tipo = 'Habitación'; @endphp  
+                  @break
+              @default
+                @php $tipo = ''; @endphp  
+          @endswitch
+          @switch($inmueble->idEstado)
+              @case(1)
+                @php
+                    $color = 'dark';
+                    $botones = [
+                      array('Modificar', '#'),
+                      array('Dar de baja', '#'),
+                      array('Publicar', '/inmueble/publicar')
+                    ]
+                @endphp
+                  @break
+              @case(2)
+                @php
+                    $color = 'primary';
+                    $botones = [
+                      array('Modificar', '#'),
+                      array('Quitar publicación', '/inmueble/anuncio'),
+                      array('Ver interesados', '#')
+                    ]
+                @endphp
+                  @break
+              @case(3)
+                  @php
+                    $color = 'danger';
+                    $botones = [
+                      array('Reactivar', '#'),
+                      array('Eliminar', '#')
+                    ]
+                @endphp
+                  @break
+              @case(4)
+                  @php
+                    $color = 'warning';
+                    $botones = [
+                      array('Modificar', '#'),
+                      array('Quitar publicación', '/inmueble/anuncio'),
+                      array('Ver interesados', '#'),
+                      array('No arrendar', '#'),
+                      array('Obtener contrato', '#'),
+                      array('Iniciar arriendo', '#')
+                    ]
+                @endphp
+                  @break
+              @case(5)
+                @php
+                    $color = 'success';
+                    $botones = [
+                      array('Ver arriendo', '#'),
+                    ]
+                @endphp
+                  @break
+              @default
+                @php
+                    $color = '';
+                    $botones = [];
+                @endphp  
+          @endswitch
+          @include('inmueble.item', [
+            'direccion' => $inmueble->calleDireccion.' '.$inmueble->numeroDireccion,
+            'caracteristicas' => $inmueble->caracteristicas,
+            'color' => $color,
+            'botones' => $botones,
+            'tipo' => $tipo,
+            'id' => $inmueble->id
+            ])
+          @endforeach
         </div>
     </div>
 @endsection

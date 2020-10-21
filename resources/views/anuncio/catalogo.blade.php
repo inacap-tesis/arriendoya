@@ -23,7 +23,20 @@
                 </div>
                 <div class="row bg-primary">
                     <div class="col">
-                        Aquí va la lista de anuncios
+                        @foreach ($anuncios as $anuncio)
+                        @if ($anuncio->estado)
+                            <div class="card" style="width: 18rem;">
+                                <div class="card-body">
+                                  <h5 class="card-title">{{ __( $anuncio->idInmueble ) }}</h5>
+                                    <h6 class="card-subtitle mb-2 text-muted">{{ __( '$'.$anuncio->canon ) }}</h6>
+                                  <p class="card-text">{{ __( $anuncio->condicionesArriendo ) }}</p>
+                                  <p class="card-text">{{ __( $anuncio->documentosRequeridos ) }}</p>
+                                  <a href="#" class="card-link">Card link</a>
+                                  <a href="#" class="card-link">Another link</a>
+                                </div>
+                            </div>
+                        @endif
+                        @endforeach
                     </div>
                 </div>
             </div>

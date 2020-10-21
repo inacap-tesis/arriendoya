@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Inmueble;
+use App\Anuncio;
 use App\Region;
 use App\Provincia;
 use App\Comuna;
@@ -25,6 +26,45 @@ class InmuebleController extends Controller
         } else {
             return redirect('/login');
         }
+    }
+
+    public function prepararPublicacion($id) {
+        $inmueble = Inmueble::find($id);
+        return view('inmueble.publicar', ['inmueble' => $inmueble]);
+    }
+
+    public function publicar(Request $request) {
+        $anuncio = Anuncio::find($request->id);
+        if(!$anuncio) {
+            $anuncio = new Anuncio();
+            $anuncio->idInmueble = $request->id;
+        }
+        $anuncio->condicionesArriendo = $request->condicionesArriendo;
+        $anuncio->documentosRequeridos = $request->documentosRequeridos;
+        $anuncio->canon = $request->canon;
+        $anuncio->fechaActivacion = Now();
+        $anuncio->estado = true;
+        if($anuncio->save()) {
+            $inmueble = Inmueble::find($request->id);
+            $inmueble->idEstado = 2;
+            if($inmueble->save()) {
+                return 'ok';
+            }
+        }
+        return 'error';
+    }
+
+    public function quitarPublicacion($id) {
+        $anuncio = Anuncio::find($id);
+        $anuncio->estado = false;
+        if($anuncio->save()) {
+            $inmueble = Inmueble::find($id);
+            $inmueble->idEstado = 1;
+            if($inmueble->save()) {
+                return 'ok';
+            }
+        }
+        return 'error';
     }
 
     /**

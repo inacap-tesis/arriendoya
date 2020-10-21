@@ -144,7 +144,7 @@ class CreateAllTables extends Migration
             $table->unsignedBigInteger('idInmueble')->primary();
             $table->string('condicionesArriendo');
             $table->string('documentosRequeridos');
-            $table->smallInteger('canon');
+            $table->mediumInteger('canon');
             $table->date('fechaActivacion');
             $table->boolean('estado');
             $table->timestamps();
@@ -168,7 +168,7 @@ class CreateAllTables extends Migration
             $table->unsignedBigInteger('idInmueble');
             $table->date('fechaInicio');
             $table->date('fechaTerminoPropuesta');
-            $table->smallInteger('canon');
+            $table->mediumInteger('canon');
             $table->smallInteger('garantia')->nullable();
             $table->string('rutInquilino', 12);
             $table->date('fechaPago');
