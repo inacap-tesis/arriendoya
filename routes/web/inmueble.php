@@ -16,17 +16,13 @@ use Illuminate\Support\Facades\Route;
 //RF-INM-01
 Route::get('/inmueble/registrar', 'InmuebleController@create');
 Route::post('/inmueble/registrar', 'InmuebleController@store');
-Route::get('/inmueble/catalogo', 'InmuebleController@misInmuebles');
+Route::get('/inmueble/catalogo', 'InmuebleController@catalogo');
 
 //RF-INM-02
-Route::get('/inmueble/modificar', function () {
-    return view('inmueble.modificar');
-});
+Route::get('/inmueble/modificar/{id}', ['uses'=>'InmuebleController@formularioModificar']);
 
 //RF-INM-03
-Route::get('/inmueble/baja', function () {
-    return view('inmueble.dar-baja');
-});
+Route::get('/inmueble/baja/{id}', ['uses'=>'InmuebleController@desactivar']);
 
 //RF-INM-04
 Route::get('/inmueble/eliminar', function () {
@@ -34,12 +30,10 @@ Route::get('/inmueble/eliminar', function () {
 });
 
 //RF-INM-05
-Route::get('/inmueble/reactivar', function () {
-    return view('inmueble.reactivar');
-});
+Route::get('/inmueble/alta/{id}', ['uses'=>'InmuebleController@activar']);
 
 //RF-INM-06
-Route::get('/inmueble/publicar/{id}', ['uses'=>'InmuebleController@prepararPublicacion']);
+Route::get('/inmueble/publicar/{id}', ['uses'=>'InmuebleController@crearAnuncio']);
 Route::post('/inmueble/publicar', 'InmuebleController@publicar')->name('publicar');
 
 //RF-INM-07

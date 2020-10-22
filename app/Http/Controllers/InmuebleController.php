@@ -20,15 +20,19 @@ class InmuebleController extends Controller
     }
 
     public function misInmuebles() {
+        $rut = Auth::user()->rut;
+        return Inmueble::where('rutPropietario', $rut)->get();
+    }
+
+    public function catalogo() {
         if(Auth::check()) {
-            $inmuebles = Inmueble::all();
-            return view('inmueble.catalogo', ['inmuebles'=> $inmuebles]);
+            return view('inmueble.catalogo', ['inmuebles'=> $this->misInmuebles()]);
         } else {
             return redirect('/login');
         }
     }
 
-    public function prepararPublicacion($id) {
+    public function crearAnuncio($id) {
         $inmueble = Inmueble::find($id);
         return view('inmueble.publicar', ['inmueble' => $inmueble]);
     }
@@ -48,7 +52,7 @@ class InmuebleController extends Controller
             $inmueble = Inmueble::find($request->id);
             $inmueble->idEstado = 2;
             if($inmueble->save()) {
-                return 'ok';
+                return view('inmueble.catalogo', ['inmuebles'=> $this->misInmuebles()]);
             }
         }
         return 'error';
@@ -61,10 +65,43 @@ class InmuebleController extends Controller
             $inmueble = Inmueble::find($id);
             $inmueble->idEstado = 1;
             if($inmueble->save()) {
-                return 'ok';
+                return view('inmueble.catalogo', ['inmuebles'=> $this->misInmuebles()]);
             }
         }
         return 'error';
+    }
+
+    public function activar($id) {
+        $inmueble = Inmueble::find($id);
+        $inmueble->idEstado = 1;
+        if($inmueble->save()) {
+            return view('inmueble.catalogo', ['inmuebles'=> $this->misInmuebles()]);
+        }
+        return 'error';
+    }
+
+    public function desactivar($id) {
+        $inmueble = Inmueble::find($id);
+        $inmueble->idEstado = 3;
+        if($inmueble->save()) {
+            return view('inmueble.catalogo', ['inmuebles'=> $this->misInmuebles()]);
+        }
+        return 'error';
+    }
+
+    public function formularioModificar($id) {
+        $inmueble = Inmueble::find($id);
+        return view('inmueble.modificar', [
+            'regiones' => Region::all(),
+            'provincias' => Provincia::all(),
+            'comunas' => Comuna::all(),
+            'tipos_inmueble' => TipoInmueble::all(),
+            'inmueble'=> $inmueble
+            ]);
+    }
+
+    public function modificar(Request $request) {
+
     }
 
     /**

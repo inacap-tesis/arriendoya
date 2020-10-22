@@ -19,4 +19,9 @@ class Inmueble extends Model
         'numeroDepartamentoDireccion',
         'caracteristicas'
     ];
+
+    public function anuncio() {
+        return $this->hasOne('App\Anuncio', 'idInmueble', 'id');
+    }
+
 }

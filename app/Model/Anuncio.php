@@ -16,4 +16,8 @@ class Anuncio extends Model
         'fechaActivacion',
         'estado'
     ];
+
+    public function inmueble() {
+        return $this->belongsTo('App\Inmueble', 'idInmueble', 'id');
+    }
 }

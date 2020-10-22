@@ -26,8 +26,8 @@
                 @php
                     $color = 'dark';
                     $botones = [
-                      array('Modificar', '#'),
-                      array('Dar de baja', '#'),
+                      array('Modificar', '/inmueble/modificar'),
+                      array('Dar de baja', '/inmueble/baja'),
                       array('Publicar', '/inmueble/publicar')
                     ]
                 @endphp
@@ -36,7 +36,7 @@
                 @php
                     $color = 'primary';
                     $botones = [
-                      array('Modificar', '#'),
+                      array('Modificar', '/inmueble/modificar'),
                       array('Quitar publicación', '/inmueble/anuncio'),
                       array('Ver interesados', '#')
                     ]
@@ -46,7 +46,7 @@
                   @php
                     $color = 'danger';
                     $botones = [
-                      array('Reactivar', '#'),
+                      array('Reactivar', '/inmueble/alta'),
                       array('Eliminar', '#')
                     ]
                 @endphp
@@ -55,7 +55,7 @@
                   @php
                     $color = 'warning';
                     $botones = [
-                      array('Modificar', '#'),
+                      array('Modificar', '/inmueble/modificar'),
                       array('Quitar publicación', '/inmueble/anuncio'),
                       array('Ver interesados', '#'),
                       array('No arrendar', '#'),
