@@ -9,7 +9,27 @@
             <ul class="list-group">
             @foreach ($botones as $boton)
             <li class="list-group-item border-{{ $color }}">
-                <a href="{{ $boton[1].'/'.$id }}" class="text-dark" style="text-decoration: unset; font-weight: bold;">{{ $boton[0] }}</a>
+              @if ($boton[0] == 'Eliminar')
+              <form id="{{ 'inm'.$id }}" style="display: none;" action="{{ $boton[1].'/'.$id }}" method="post">
+                @method('DELETE')
+                @csrf
+                <input type="hidden" name="id" value="{{$id}}">
+              </form>
+              <a href="#" class="text-dark" style="text-decoration: unset; font-weight: bold;" onclick="{{ 'forms.inm'.$id.'.submit();' }}">
+                {{ $boton[0] }}
+              </a>
+              @elseif ($boton[0] == 'Dar de baja' || $boton[0] == 'Reactivar')
+              <form id="{{ 'inm'.$id }}" style="display: none;" action="{{ $boton[1].'/'.$id }}" method="post">
+                @method('PUT')
+                @csrf
+                <input type="hidden" name="id" value="{{$id}}">
+              </form>
+              <a href="#" class="text-dark" style="text-decoration: unset; font-weight: bold;" onclick="{{ 'forms.inm'.$id.'.submit();' }}">
+                {{ $boton[0] }}
+              </a>
+              @else
+              <a href="{{ $boton[1].'/'.$id }}" class="text-dark" style="text-decoration: unset; font-weight: bold;">{{ $boton[0] }}</a>
+              @endif
             </li>
             @endforeach    
           </ul>

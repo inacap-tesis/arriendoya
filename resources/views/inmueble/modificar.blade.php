@@ -4,7 +4,8 @@
 <div class="container" style="margin-top:20px">
     @if ($inmueble)
     <h3>Modificar Inmueble</h3>
-    <form action="/inmueble/modificar" method="POST">
+    <form action="/inmueble/modificar" method="post">
+        @method('PUT')
         <input type="hidden" name="id" value="{{$inmueble->id}}">
     @else
     <h3>Registrar Inmueble</h3>
@@ -68,7 +69,7 @@
                 </div>
                 <div class="form-group">
                     <label for="caracteristicas">Características</label>
-                    <textarea class="form-control is-invalid" id="caracteristicas" name="caracteristicas" rows="3" required @if ($inmueble) value="{{$inmueble->caracteristicas}}" @endif></textarea>
+                    <textarea class="form-control is-invalid" id="caracteristicas" name="caracteristicas" rows="3" required>@if ($inmueble){{ $inmueble->caracteristicas }}@endif</textarea>
                     <div class="invalid-feedback">
                         Por favor ingrese las características del inmueble.
                     </div>
@@ -124,7 +125,7 @@
             </div>
         </div>   
         <button type="submit" class="btn btn-primary">Guardar</button>
-        <a href="/" class="btn btn-primary">Cancelar</a>
+        <a href="/inmueble/catalogo" class="btn btn-primary">Cancelar</a>
     </form>
 </div>
 @endsection

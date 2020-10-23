@@ -13,27 +13,27 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-//RF-INM-01
-Route::get('/inmueble/registrar', 'InmuebleController@create');
-Route::post('/inmueble/registrar', 'InmuebleController@store');
 Route::get('/inmueble/catalogo', 'InmuebleController@catalogo');
+
+//RF-INM-01
+Route::get('/inmueble/registrar', 'InmuebleController@formularioRegistrar');
+Route::post('/inmueble/registrar', 'InmuebleController@registrar');
 
 //RF-INM-02
 Route::get('/inmueble/modificar/{id}', ['uses'=>'InmuebleController@formularioModificar']);
+Route::put('/inmueble/modificar', ['uses'=>'InmuebleController@modificar']);
 
 //RF-INM-03
-Route::get('/inmueble/baja/{id}', ['uses'=>'InmuebleController@desactivar']);
+Route::put('/inmueble/baja/{id}', ['uses'=>'InmuebleController@desactivar']);
 
 //RF-INM-04
-Route::get('/inmueble/eliminar', function () {
-    return view('inmueble.eliminar');
-});
+Route::delete('/inmueble/eliminar/{id}', ['uses'=>'InmuebleController@eliminar']);
 
 //RF-INM-05
-Route::get('/inmueble/alta/{id}', ['uses'=>'InmuebleController@activar']);
+Route::put('/inmueble/alta/{id}', ['uses'=>'InmuebleController@activar']);
 
 //RF-INM-06
-Route::get('/inmueble/publicar/{id}', ['uses'=>'InmuebleController@crearAnuncio']);
+Route::get('/inmueble/publicar/{id}', ['uses'=>'InmuebleController@formularioPublicacion']);
 Route::post('/inmueble/publicar', 'InmuebleController@publicar')->name('publicar');
 
 //RF-INM-07
@@ -60,8 +60,8 @@ Route::get('/inmueble/no-arrendar', function () {
 });
 
 //RF-INM-12
-Route::get('/inmueble/obtener-contrato', function () {
-    return view('inmueble.obtener-contrato');
+Route::get('/inmueble/contrato/{id}', function () {
+    return view('inmueble.contrato');
 });
 
 //RF-INM-13

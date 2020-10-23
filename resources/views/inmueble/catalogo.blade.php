@@ -47,7 +47,7 @@
                     $color = 'danger';
                     $botones = [
                       array('Reactivar', '/inmueble/alta'),
-                      array('Eliminar', '#')
+                      array('Eliminar', '/inmueble/eliminar')
                     ]
                 @endphp
                   @break
@@ -59,7 +59,7 @@
                       array('Quitar publicación', '/inmueble/anuncio'),
                       array('Ver interesados', '#'),
                       array('No arrendar', '#'),
-                      array('Obtener contrato', '#'),
+                      array('Obtener contrato', '/inmueble/contrato'),
                       array('Iniciar arriendo', '#')
                     ]
                 @endphp

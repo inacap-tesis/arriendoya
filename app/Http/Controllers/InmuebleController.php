@@ -32,7 +32,7 @@ class InmuebleController extends Controller
         }
     }
 
-    public function crearAnuncio($id) {
+    public function formularioPublicacion($id) {
         $inmueble = Inmueble::find($id);
         return view('inmueble.publicar', ['inmueble' => $inmueble]);
     }
@@ -101,26 +101,26 @@ class InmuebleController extends Controller
     }
 
     public function modificar(Request $request) {
-
+        try {
+            $inmueble = Inmueble::find($request->id);
+            $inmueble->idTipoInmueble = $request->tipo;
+            $inmueble->idEstado = 1;
+            $inmueble->idComuna = $request->comuna;
+            $inmueble->rutPropietario = Auth::user()->rut;
+            $inmueble->poblacionDireccion = $request->poblacionDireccion;
+            $inmueble->calleDireccion = $request->calleDireccion;
+            $inmueble->numeroDireccion = $request->numeroDireccion;
+            $inmueble->condominioDireccion = $request->condominioDireccion;
+            $inmueble->numeroDepartamentoDireccion = $request->numeroDepartamentoDireccion;
+            $inmueble->caracteristicas = $request->caracteristicas;
+            $inmueble->save();
+            return view('inmueble.catalogo', ['inmuebles'=> $this->misInmuebles()]);
+        } catch(Exception $error) {
+            return $error;
+        }
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
+    public function formularioRegistrar() {
         return view('inmueble.registrar', [
             'regiones' => Region::all(),
             'provincias' => Provincia::all(),
@@ -129,71 +129,33 @@ class InmuebleController extends Controller
             ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        $inmueble = new Inmueble();
-        $inmueble->idTipoInmueble = $request->tipo;
-        $inmueble->idEstado = 1;
-        $inmueble->idComuna = $request->comuna;
-        $inmueble->rutPropietario = Auth::user()->rut;
-        $inmueble->poblacionDireccion = $request->poblacionDireccion;
-        $inmueble->calleDireccion = $request->calleDireccion;
-        $inmueble->numeroDireccion = $request->numeroDireccion;
-        $inmueble->condominioDireccion = $request->condominioDireccion;
-        $inmueble->numeroDepartamentoDireccion = $request->numeroDepartamentoDireccion;
-        $inmueble->caracteristicas = $request->caracteristicas;
-        $inmueble->save();
-        return $inmueble;
+    public function registrar(Request $request) {
+        try {
+            $inmueble = new Inmueble();
+            $inmueble->idTipoInmueble = $request->tipo;
+            $inmueble->idEstado = 1;
+            $inmueble->idComuna = $request->comuna;
+            $inmueble->rutPropietario = Auth::user()->rut;
+            $inmueble->poblacionDireccion = $request->poblacionDireccion;
+            $inmueble->calleDireccion = $request->calleDireccion;
+            $inmueble->numeroDireccion = $request->numeroDireccion;
+            $inmueble->condominioDireccion = $request->condominioDireccion;
+            $inmueble->numeroDepartamentoDireccion = $request->numeroDepartamentoDireccion;
+            $inmueble->caracteristicas = $request->caracteristicas;
+            $inmueble->save();
+            return view('inmueble.catalogo', ['inmuebles'=> $this->misInmuebles()]);
+        } catch(Exception $error) {
+            return $error;
+        }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Inmueble  $inmueble
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Inmueble $inmueble)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Inmueble  $inmueble
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Inmueble $inmueble)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Inmueble  $inmueble
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Inmueble $inmueble)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Inmueble  $inmueble
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Inmueble $inmueble)
-    {
-        //
+    public function eliminar($id) {
+        try {
+            $inmueble = Inmueble::find($id);
+            $inmueble->delete();
+            return view('inmueble.catalogo', ['inmuebles'=> $this->misInmuebles()]);
+        } catch(Exception $error) {
+            return $error;
+        }
     }
 }
