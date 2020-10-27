@@ -20,4 +20,9 @@ class Anuncio extends Model
     public function inmueble() {
         return $this->belongsTo('App\Inmueble', 'idInmueble', 'id');
     }
+
+    public function interesados() {
+        return $this->belongsToMany('App\Usuario', 'interes_usuario_anuncio', 'idAnuncio', 'rutUsuario');
+    }
+
 }

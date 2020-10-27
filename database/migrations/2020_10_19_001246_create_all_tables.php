@@ -88,12 +88,13 @@ class CreateAllTables extends Migration
         });
 
         Schema::create('cuentas_bancarias', function (Blueprint $table) {
-            $table->id();
+            $table->string('rutUsuario', 12)->unique();
             $table->string('numero', 60);
             $table->smallInteger('idBanco');
             $table->smallInteger('idTipo');
             $table->timestamps();
 
+            $table->foreign('rutUsuario')->references('rut')->on('usuarios')->onDelete('cascade');
             $table->foreign('idBanco')->references('id')->on('bancos')->onDelete('cascade');
             $table->foreign('idTipo')->references('id')->on('tipos_cuenta_bancaria')->onDelete('cascade');
         });
@@ -153,7 +154,6 @@ class CreateAllTables extends Migration
         });
 
         Schema::create('interes_usuario_anuncio', function (Blueprint $table) {
-            $table->id();
             $table->unsignedBigInteger('idAnuncio');
             $table->string('rutUsuario', 12);
             $table->boolean('candidato');

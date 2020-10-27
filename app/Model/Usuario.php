@@ -18,6 +18,7 @@ class Usuario extends Model implements
 {
     use Authenticatable, Authorizable, CanResetPassword, Notifiable;
 
+    protected $table = 'usuarios';
     protected $keyType = 'string';
     protected $primaryKey = 'rut';
 

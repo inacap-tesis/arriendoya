@@ -55,7 +55,9 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    <a href="#" class="dropdown-item">{{ __('Cuenta Bancaria') }}</a>
+                                    <a href="/usuario/cuenta" class="dropdown-item">{{ __('Cuenta Bancaria') }}</a>
+                                    <a href="/usuario/antecedentes" class="dropdown-item">{{ __('Antecedentes') }}</a>
+                                    <a href="/usuario/clave" class="dropdown-item">{{ __('Cambiar Clave') }}</a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">

@@ -36,9 +36,10 @@
                 @php
                     $color = 'primary';
                     $botones = [
-                      array('Modificar', '/inmueble/modificar'),
+                      array('Modificar Inmueble', '/inmueble/modificar'),
+                      array('Modificar Publicación', '/inmueble/publicar'),
                       array('Quitar publicación', '/inmueble/anuncio'),
-                      array('Ver interesados', '#')
+                      array('Ver interesados', '/anuncio/interesados')
                     ]
                 @endphp
                   @break
@@ -57,7 +58,7 @@
                     $botones = [
                       array('Modificar', '/inmueble/modificar'),
                       array('Quitar publicación', '/inmueble/anuncio'),
-                      array('Ver interesados', '#'),
+                      array('Ver interesados', '/anuncio/interesados'),
                       array('No arrendar', '#'),
                       array('Obtener contrato', '/inmueble/contrato'),
                       array('Iniciar arriendo', '#')

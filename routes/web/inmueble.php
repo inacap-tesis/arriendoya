@@ -40,9 +40,7 @@ Route::post('/inmueble/publicar', 'InmuebleController@publicar')->name('publicar
 Route::get('/inmueble/anuncio/{id}', ['uses'=>'InmuebleController@quitarPublicacion']);
 
 //RF-INM-08
-Route::get('/interesados', function () {
-    return view('interesado.index');
-});
+Route::get('/anuncio/interesados/{id}', ['uses'=>'AnuncioController@verInteresados']);
 
 //RF-INM-09
 Route::get('/arriendo/consultar', function () {
@@ -78,3 +76,10 @@ Route::get('/anuncio/filtrar', function () {
 Route::get('/anuncio/ordenar', function () {
     return view('anuncio.ordenar');
 });
+
+Route::get('/anuncio/{id}', ['uses'=>'AnuncioController@consultar']);
+
+Route::get('/anuncio/interes/{id}', ['uses'=>'AnuncioController@mostrarInteres']);
+Route::get('/anuncio/desinteres/{id}', ['uses'=>'AnuncioController@quitarInteres']);
+
+Route::post('/anuncio/candidatos', ['uses'=>'AnuncioController@definirCandidatos']);

@@ -36,7 +36,7 @@
                                     <div class="input-group-prepend">
                                       <div class="input-group-text">$</div>
                                     </div>
-                                    <input type="number" min="0" class="form-control" id="canon" name="canon" required>
+                                    <input type="number" min="0" class="form-control" id="canon" name="canon" @if ($anuncio) value="{{ $anuncio->canon }}" @endif required>
                                 </div>
                             </div>
                         </div>
@@ -45,7 +45,7 @@
                         <div class="form-group row">
                             <label for="condicionesArriendo" class="col-md-4 col-form-label text-md-right">{{ __('Condiciones del arriendo') }}</label>
                             <div class="col-md-6">
-                                <textarea class="form-control" id="condicionesArriendo" name="condicionesArriendo" rows="3" placeholder="¿Cuales son las principales condiciones que tendrá el arriendo de este inmueble?" required></textarea>
+                                <textarea class="form-control" id="condicionesArriendo" name="condicionesArriendo" rows="3" placeholder="¿Cuales son las principales condiciones que tendrá el arriendo de este inmueble?" required>@if ($anuncio){{ $anuncio->condicionesArriendo }}@endif</textarea>
                             </div>
                         </div>
 
@@ -53,7 +53,7 @@
                         <div class="form-group row">
                             <label for="documentosRequeridos" class="col-md-4 col-form-label text-md-right">{{ __('Documentos requeridos') }}</label>
                             <div class="col-md-6">
-                                <textarea class="form-control" id="documentosRequeridos" name="documentosRequeridos" rows="3" placeholder="¿Qué documentos necesitarás de los interesados en este anuncio?" required></textarea>
+                                <textarea class="form-control" id="documentosRequeridos" name="documentosRequeridos" rows="3" placeholder="¿Qué documentos necesitarás de los interesados en este anuncio?" required>@if ($anuncio){{ $anuncio->documentosRequeridos }}@endif</textarea>
                             </div>
                         </div>
 

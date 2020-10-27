@@ -20,8 +20,24 @@ class Inmueble extends Model
         'caracteristicas'
     ];
 
+    public function tipo() {
+        return $this->belongsTo('App\TipoInmueble', 'idTipoInmueble', 'id');
+    }
+
+    public function estado() {
+        return $this->belongsTo('App\EstadoInmueble', 'idEstado', 'id');
+    }
+
+    public function comuna() {
+        return $this->belongsTo('App\Comuna', 'idComuna', 'id');
+    }
+
     public function anuncio() {
         return $this->hasOne('App\Anuncio', 'idInmueble', 'id');
+    }
+
+    public function usuario() {
+        return $this->belongsTo('App\Usuario', 'rutPropietario', 'rut');
     }
 
 }

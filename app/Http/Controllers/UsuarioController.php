@@ -8,9 +8,16 @@ use App\Provincia;
 use App\Comuna;
 use App\Persona;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UsuarioController extends Controller
 {
+
+    public function cambiarClave(Request $request) {
+        return Auth::guard()->getTokenForRequest();
+        //return view('auth.passwords.reset');
+    }
+
     /**
      * Display a listing of the resource.
      *

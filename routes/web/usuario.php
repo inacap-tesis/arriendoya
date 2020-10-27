@@ -28,8 +28,8 @@ Route::get('/usuario/entrar', function () {
 });
 
 //RF-USU-04
-Route::get('/usuario/cambiar-clave', function () {
-    return view('usuario.cambiar-clave');
+Route::get('/usuario/clave', function() {
+    return 'Pendiente por implementar';
 });
 
 //RF-USU-05
@@ -43,9 +43,8 @@ Route::get('/antecedentes', function () {
 });
 
 //RF-USU-07
-Route::get('/cuenta', function () {
-    return view('cuenta.index');
-});
+Route::get('/usuario/cuenta', 'CuentaBancariaController@formularioConfigurar');
+Route::post('/usuario/cuenta', 'CuentaBancariaController@configurar');
 
 //RF-USU-08
 Route::get('/cuenta/modificar', function () {

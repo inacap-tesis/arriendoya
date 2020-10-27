@@ -22,19 +22,25 @@ class InmuebleController extends Controller
     public function misInmuebles() {
         $rut = Auth::user()->rut;
         return Inmueble::where('rutPropietario', $rut)->get();
+
     }
 
     public function catalogo() {
-        if(Auth::check()) {
-            return view('inmueble.catalogo', ['inmuebles'=> $this->misInmuebles()]);
+        $inmuebles = $this->misInmuebles();
+        if(count($inmuebles) > 0) {
+            return view('inmueble.catalogo', ['inmuebles'=> $inmuebles]);
         } else {
-            return redirect('/login');
+            return redirect('/inmueble/registrar');
         }
     }
 
     public function formularioPublicacion($id) {
+        $anuncio = Anuncio::find($id);
         $inmueble = Inmueble::find($id);
-        return view('inmueble.publicar', ['inmueble' => $inmueble]);
+        return view('inmueble.publicar', [
+            'anuncio' => $anuncio,
+            'inmueble' => $inmueble
+        ]);
     }
 
     public function publicar(Request $request) {
