@@ -59,13 +59,23 @@
                       array('Modificar', '/inmueble/modificar'),
                       array('Quitar publicación', '/inmueble/anuncio'),
                       array('Ver interesados', '/anuncio/interesados'),
+                      array('Arrendar', '/arriendo/configurar'),
+                      array('Obtener contrato', '/inmueble/contrato'),
+                    ]
+                @endphp
+                  @break
+              @case(5)
+                @php
+                    $color = 'warning';
+                    $botones = [
+                      array('Modificar Arriendo', '#'),
                       array('No arrendar', '#'),
                       array('Obtener contrato', '/inmueble/contrato'),
                       array('Iniciar arriendo', '#')
                     ]
                 @endphp
                   @break
-              @case(5)
+              @case(6)
                 @php
                     $color = 'success';
                     $botones = [

@@ -15,7 +15,8 @@ class CuentaBancariaController extends Controller
 
         $bancos = Banco::all();
         $tipos = TipoCuentaBancaria::all();
-        $cuenta = CuentaBancaria::where('rutUsuario', '=', Auth::user()->rut)->first();
+        $cuenta = CuentaBancaria::find(Auth::user()->rut);
+        //$cuenta = CuentaBancaria::where('rutUsuario', '=', Auth::user()->rut)->first();
 
         return view('cuenta.configurar', [
             'bancos' => $bancos,

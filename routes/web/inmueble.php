@@ -83,3 +83,5 @@ Route::get('/anuncio/interes/{id}', ['uses'=>'AnuncioController@mostrarInteres']
 Route::get('/anuncio/desinteres/{id}', ['uses'=>'AnuncioController@quitarInteres']);
 
 Route::post('/anuncio/candidatos', ['uses'=>'AnuncioController@definirCandidatos']);
+
+Route::get('/anuncio/interes/eliminar/{anuncio}/{usuario}', ['uses'=>'AnuncioController@eliminarInteresado']);

@@ -17,7 +17,8 @@ class EstadoInmuebleSeeder extends Seeder
             ['id' => 2, 'nombre' => 'Publicado'],
             ['id' => 3, 'nombre' => 'Dado de baja'],
             ['id' => 4, 'nombre' => 'Pendiente por arrendar'],
-            ['id' => 5, 'nombre' => 'Arrendado']
+            ['id' => 5, 'nombre' => 'Pre-Arrendado'],
+            ['id' => 6, 'nombre' => 'Arrendado']
         ]);
     }
 }

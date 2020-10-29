@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Anuncio;
 use App\FotoInmueble;
 use App\InteresAnuncio;
+use App\Inmueble;
 
 class AnuncioController extends Controller {
 
@@ -57,20 +58,40 @@ class AnuncioController extends Controller {
 
     public function verInteresados($id) {
         $anuncio = Anuncio::find($id);
+        $intereses = InteresAnuncio::where('idAnuncio', '=', $anuncio->idInmueble)->get();
         return view('anuncio.interesados', [
             'anuncio' => $anuncio,
-            'interesados' => $anuncio->interesados
+            'intereses' => $intereses
         ]);
     }
 
     public function definirCandidatos(Request $request) {
         $anuncio = Anuncio::find($request->anuncio);
-        foreach($anuncio->interesados as $interesado) {
-            if($request[$interesado->rut]){
-                return 'si';
+        $interesados = $anuncio->interesados;
+        $anuncio->interesados()->detach();
+        $proceso = false;
+        foreach($interesados as $interesado) {
+            $interes = new InteresAnuncio();
+            $interes->idAnuncio = $anuncio->idInmueble;
+            $interes->rutUsuario = $interesado->rut;
+            if($request[$interesado->rut]) {
+                $interes->candidato = true;
+                $proceso = true;
+            } else {
+                $interes->candidato = false;
             }
+            $interes->save();
         }
-        return 'no';
+        $inmueble = Inmueble::find($anuncio->idInmueble);
+        $inmueble->idEstado = $proceso ? 4 : 2;
+        $inmueble->save();
+        return redirect('/inmueble/catalogo');
+    }
+
+    public function eliminarInteresado($anuncio, $usuario) {
+        $anuncio = Anuncio::find($anuncio);
+        $anuncio->interesados()->detach($usuario);
+        return back();
     }
 
 }

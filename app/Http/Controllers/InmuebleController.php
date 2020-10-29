@@ -110,7 +110,7 @@ class InmuebleController extends Controller
         try {
             $inmueble = Inmueble::find($request->id);
             $inmueble->idTipoInmueble = $request->tipo;
-            $inmueble->idEstado = 1;
+            //$inmueble->idEstado = 1;
             $inmueble->idComuna = $request->comuna;
             $inmueble->rutPropietario = Auth::user()->rut;
             $inmueble->poblacionDireccion = $request->poblacionDireccion;

@@ -161,6 +161,7 @@ class CreateAllTables extends Migration
 
             $table->foreign('idAnuncio')->references('idInmueble')->on('anuncios')->onDelete('cascade');
             $table->foreign('rutUsuario')->references('rut')->on('usuarios')->onDelete('cascade');
+            $table->primary(['idAnuncio', 'rutUsuario']);
         });
 
         Schema::create('arriendos', function (Blueprint $table) {
@@ -169,12 +170,15 @@ class CreateAllTables extends Migration
             $table->date('fechaInicio');
             $table->date('fechaTerminoPropuesta');
             $table->mediumInteger('canon');
-            $table->smallInteger('garantia')->nullable();
+            $table->mediumInteger('garantia')->nullable();
             $table->string('rutInquilino', 12);
-            $table->date('fechaPago');
-            $table->string('urlContrato');
-            $table->smallInteger('numeroRenovacion');
-            $table->date('fechaTerminoReal');
+            $table->smallInteger('diaPago');
+            $table->boolean('estado');
+            $table->boolean('subarriendo');
+            $table->smallInteger('mesesModificacionPeriodicidad')->nullable();
+            $table->string('urlContrato')->nullable();
+            $table->smallInteger('numeroRenovacion')->nullable();
+            $table->date('fechaTerminoReal')->nullable();
             $table->timestamps();
 
             $table->foreign('idInmueble')->references('id')->on('inmuebles')->onDelete('cascade');

@@ -13,6 +13,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/arriendo/configurar/{id}/', 'ArriendoController@formularioConfigurar');
+Route::post('/arriendo/configurar', 'ArriendoController@configurar');
+
 //RF-ARR-01
 Route::get('/arriendo/recordar-pago', function () {
     return view('arriendo.recordar-pago');
