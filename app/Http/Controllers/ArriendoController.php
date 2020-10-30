@@ -12,19 +12,25 @@ use App\InteresAnuncio;
 class ArriendoController extends Controller {
 
     public function formularioConfigurar($id) {
-        $inmueble = Inmueble::find($id);
+        $arriendo = Arriendo::where([['idInmueble', '=', $id], ['estado', '=', false]])->first();
+        //$inmueble = Inmueble::find($id);
         $anuncio = Anuncio::find($id);
         $interes = InteresAnuncio::where([ ['idAnuncio', '=', $id], ['candidato', '=', true] ])->get();
         return view('arriendo.configurar', [
-            'inmueble' => $inmueble,
+            //'inmueble' => $inmueble,
             'anuncio' => $anuncio,
-            'intereses' => $interes
+            'intereses' => $interes,
+            'arriendo' => $arriendo
         ]);
     }
 
     public function configurar(Request $request) {
-        $arriendo = new Arriendo();
-        $arriendo->idInmueble = $request->inmueble;
+        if($request->arriendo) {
+            $arriendo = Arriendo::find($request->arriendo);
+        } else {
+            $arriendo = new Arriendo();
+            $arriendo->idInmueble = $request->inmueble;
+        }
         $arriendo->fechaInicio = $request->fechaInicio;
         $arriendo->fechaTerminoPropuesta = $request->fechaFin;
         $arriendo->canon = $request->canon;
@@ -45,9 +51,20 @@ class ArriendoController extends Controller {
         $arriendo->urlContrato = null;
         $arriendo->numeroRenovacion = null;
         $arriendo->fechaTerminoReal = null;
-        if($arriendo->save()){
+        if($arriendo->save() && !$request->arriendo){
             $inmueble = Inmueble::find($request->inmueble);
             $inmueble->idEstado = 5;
+            $inmueble->save();
+        }
+        return redirect('/inmueble/catalogo');
+    }
+
+    public function cancelar($id) {
+        $arriendo = Arriendo::where('idInmueble', '=', $id)->latest('created_at')->first();
+        if($arriendo) {
+            $arriendo->delete();
+            $inmueble = Inmueble::find($id);
+            $inmueble->idEstado = 4;
             $inmueble->save();
         }
         return redirect('/inmueble/catalogo');

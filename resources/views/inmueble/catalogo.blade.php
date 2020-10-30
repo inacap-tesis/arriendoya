@@ -68,8 +68,8 @@
                 @php
                     $color = 'warning';
                     $botones = [
-                      array('Modificar Arriendo', '#'),
-                      array('No arrendar', '#'),
+                      array('Modificar Arriendo', '/arriendo/configurar'),
+                      array('No arrendar', '/arriendo/cancelar'),
                       array('Obtener contrato', '/inmueble/contrato'),
                       array('Iniciar arriendo', '#')
                     ]
