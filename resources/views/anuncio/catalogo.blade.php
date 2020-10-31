@@ -7,7 +7,10 @@
                 <br>
                 <div class="row text-center">
                     <div class="col">
-                        <a href="/inmueble/catalogo" class="btn btn-primary">Publicar Anuncio</a>
+                        <a href="/inmueble/catalogo" class="btn btn-primary">{{ __($inmuebles > 0 ? 'Mis Inmuebles' : 'Publicar Anuncio') }}</a>
+                        @if ($arriendos > 0)
+                        <a href="/arriendo/catalogo" class="btn btn-primary">{{ __('Mis Arriendos') }}</a>
+                        @endif
                     </div>
                 </div>
                 <div class="row">

@@ -36,7 +36,7 @@ class Inmueble extends Model
         return $this->hasOne('App\Anuncio', 'idInmueble', 'id');
     }
 
-    public function usuario() {
+    public function propietario() {
         return $this->belongsTo('App\Usuario', 'rutPropietario', 'rut');
     }
 

@@ -16,4 +16,12 @@ class CuentaBancaria extends Model
         'idTipo'
     ];
 
+    public function banco() {
+        return $this->hasOne('App\Banco', 'id', 'idBanco');
+    }
+
+    public function tipoCuenta() {
+        return $this->hasOne('App\TipoCuentaBancaria', 'id', 'idTipo');
+    }
+
 }

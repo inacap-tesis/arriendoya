@@ -14,7 +14,10 @@ class Arriendo extends Model
         'canon', 
         'garantia',
         'rutInquilino',
-        'fechaPago',
+        'diaPago',
+        'estado',
+        'subarriendo',
+        'mesesModificacionPeriodicidad',
         'urlContrato',
         'numeroRenovacion', 
         'fechaTerminoReal'
@@ -26,5 +29,10 @@ class Arriendo extends Model
 
     public function inquilino() {
         return $this->belongsTo('App\Usuario', 'rutInquilino', 'rut');
+    }
+
+    public function deudas()
+    {
+        return $this->hasMany('App\Deuda', 'idArriendo', 'id');
     }
 }

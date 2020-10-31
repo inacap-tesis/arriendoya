@@ -18,6 +18,18 @@ Route::post('/arriendo/configurar', 'ArriendoController@configurar');
 
 Route::get('/arriendo/cancelar/{id}/', 'ArriendoController@cancelar');
 
+Route::get('/arriendo/iniciar/{id}/', 'ArriendoController@formularioIniciar');
+Route::post('/arriendo/iniciar', 'ArriendoController@iniciar');
+
+Route::get('/arriendo/catalogo', 'ArriendoController@catalogo');
+
+Route::get('/arriendo/consultar/{id}/', 'ArriendoController@consultar');
+
+Route::get('/deuda/pagar/{id}/', 'DeudaController@formularioPagar');
+Route::post('/deuda/pagar', 'DeudaController@pagar');
+
+Route::get('/deuda/comprobante/{id}/', 'DeudaController@descargarComprobante');
+
 //RF-ARR-01
 Route::get('/arriendo/recordar-pago', function () {
     return view('arriendo.recordar-pago');

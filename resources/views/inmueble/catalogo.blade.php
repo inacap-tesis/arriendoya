@@ -71,7 +71,7 @@
                       array('Modificar Arriendo', '/arriendo/configurar'),
                       array('No arrendar', '/arriendo/cancelar'),
                       array('Obtener contrato', '/inmueble/contrato'),
-                      array('Iniciar arriendo', '#')
+                      array('Iniciar arriendo', '/arriendo/iniciar')
                     ]
                 @endphp
                   @break

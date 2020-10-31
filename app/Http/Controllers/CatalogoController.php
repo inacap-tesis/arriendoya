@@ -10,6 +10,7 @@ use App\Region;
 use App\Provincia;
 use App\Comuna;
 use App\Inmueble;
+use App\Arriendo;
 
 class CatalogoController extends Controller
 {
@@ -17,8 +18,12 @@ class CatalogoController extends Controller
         
         if(Auth::check()) {
             $anuncios = Anuncio::whereNotIn('idInmueble', Inmueble::where('rutPropietario', Auth::user()->rut)->get('id'))->get();
+            $inmuebles = count(Inmueble::where([['rutPropietario', '=', Auth::user()->rut], ['idEstado', '<>', 3]])->get());
+            $arriendos = count(Arriendo::where([['rutInquilino', '=', Auth::user()->rut], ['estado', '=', true]])->get());
         } else {
             $anuncios = Anuncio::all();
+            $inmuebles = 0;
+            $arriendos = 0;
         }
         $tipos = TipoInmueble::all();
         $regiones = Region::all();
@@ -63,7 +68,9 @@ class CatalogoController extends Controller
             'provincias' => $provincias,
             'comunas' => $comunas,
             'precios' => $precios,
-            'fechas' => $fechas
+            'fechas' => $fechas,
+            'inmuebles' => $inmuebles,
+            'arriendos' => $arriendos
             ]);
     }
 }

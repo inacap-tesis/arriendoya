@@ -58,5 +58,9 @@ class Usuario extends Model implements
         'email_verified_at' => 'datetime',
     ];
 
+    public function cuentaBancaria() {
+        return $this->hasOne('App\CuentaBancaria', 'rutUsuario', 'rut');
+    }
+
 }
 

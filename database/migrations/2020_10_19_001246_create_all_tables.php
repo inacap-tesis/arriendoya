@@ -210,9 +210,10 @@ class CreateAllTables extends Migration
             $table->id();
             $table->unsignedBigInteger('idArriendo');
             $table->enum('tipo', ['canon', 'garantia']);
+            $table->string('titulo', 50);
             $table->date('fechaCompromiso');
             $table->date('fechaPago')->nullable();
-            $table->smallInteger('cantidadDiasRetraso');
+            $table->smallInteger('cantidadDiasRetraso')->nullable();
             $table->timestamps();
 
             $table->foreign('idArriendo')->references('id')->on('arriendos')->onDelete('cascade');
@@ -220,9 +221,12 @@ class CreateAllTables extends Migration
 
         Schema::create('pagos_deuda', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('idDeuda');
             $table->date('fecha');
             $table->string('urlComprobante');
             $table->timestamps();
+
+            $table->foreign('idDeuda')->references('id')->on('deudas')->onDelete('cascade');
         });
 
         Schema::create('solicitudes_finalizacion', function (Blueprint $table) {
