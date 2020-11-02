@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Antecedente;
 use Illuminate\Http\Request;
+use App\SolicitudFinalizacio;
 
-class AntecedenteController extends Controller
+class SolicitudFinalizacionController extends Controller
 {
 
-    public function listar() {
+    public function configurar() {
 
     }
 
@@ -20,12 +20,12 @@ class AntecedenteController extends Controller
         
     }
 
-    public function modificar() {
+    public function aceptar() {
         
     }
 
-    public function eliminar() {
+    public function rechazar() {
         
     }
-
+    
 }

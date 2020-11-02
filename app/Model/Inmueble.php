@@ -40,4 +40,30 @@ class Inmueble extends Model
         return $this->belongsTo('App\Usuario', 'rutPropietario', 'rut');
     }
 
+    public function pagos()
+    {
+        return $this->hasMany('App\FotoInmueble', 'idInmueble', 'id');
+    }
+
+    public function arriendos()
+    {
+        return $this->hasMany('App\Arriendo', 'idInmueble', 'id');
+    }
+
+    public function fotos()
+    {
+        return $this->hasMany('App\FotoInmueble', 'idInmueble', 'id');
+    }
+
+    public function calificaciones() {
+        return $this->hasManyThrough(
+            'App\Calificacion',
+            'App\Arriendo',
+            'idInmueble',
+            'idArriendo',
+            'id',
+            'idInmueble'
+        );
+    }
+
 }

@@ -43,17 +43,17 @@ class CreateAllTables extends Migration
 
         Schema::create('tipos_cuenta_bancaria', function (Blueprint $table) {
             $table->smallInteger('id')->primary();
-            $table->string('nombre', 50);
+            $table->string('nombre', 30);
         });
 
         Schema::create('tipos_inmueble', function (Blueprint $table) {
             $table->smallInteger('id')->primary();
-            $table->string('nombre', 50);
+            $table->string('nombre', 30);
         });
 
         Schema::create('estados_inmueble', function (Blueprint $table) {
             $table->smallInteger('id')->primary();
-            $table->string('nombre', 50);
+            $table->string('nombre', 30);
         });
 
         Schema::create('categorias_notificacion', function (Blueprint $table) {
@@ -80,7 +80,7 @@ class CreateAllTables extends Migration
         Schema::create('antecedentes', function (Blueprint $table) {
             $table->id();
             $table->string('titulo', 80);
-            $table->string('url');
+            $table->string('urlDocumento');
             $table->string('rutUsuario', 12);
             $table->timestamps();
 
@@ -101,14 +101,14 @@ class CreateAllTables extends Migration
 
         Schema::create('notificaciones', function (Blueprint $table) {
             $table->id();
-            $table->string('usuario', 12);
+            $table->string('rutUsuario', 12);
             $table->smallInteger('idCategoria');
             $table->bigInteger('idReferencia');
             $table->string('mensaje');
             $table->boolean('estado');
             $table->timestamps();
 
-            $table->foreign('usuario')->references('rut')->on('usuarios')->onDelete('cascade');
+            $table->foreign('rutUsuario')->references('rut')->on('usuarios')->onDelete('cascade');
             $table->foreign('idCategoria')->references('id')->on('categorias_notificacion')->onDelete('cascade');
         });
 
@@ -134,7 +134,7 @@ class CreateAllTables extends Migration
 
         Schema::create('fotos_inmueble', function (Blueprint $table) {
             $table->id();
-            $table->string('url');
+            $table->string('urlFoto');
             $table->unsignedBigInteger('idInmueble');
             $table->timestamps();
 
@@ -146,7 +146,7 @@ class CreateAllTables extends Migration
             $table->string('condicionesArriendo');
             $table->string('documentosRequeridos');
             $table->mediumInteger('canon');
-            $table->date('fechaActivacion');
+            $table->date('fechaPublicacion');
             $table->boolean('estado');
             $table->timestamps();
 
@@ -169,51 +169,63 @@ class CreateAllTables extends Migration
             $table->unsignedBigInteger('idInmueble');
             $table->date('fechaInicio');
             $table->date('fechaTerminoPropuesta');
+            $table->date('fechaTerminoReal')->nullable();
             $table->mediumInteger('canon');
-            $table->mediumInteger('garantia')->nullable();
             $table->string('rutInquilino', 12);
             $table->smallInteger('diaPago');
             $table->boolean('estado');
-            $table->boolean('subarriendo');
-            $table->smallInteger('mesesModificacionPeriodicidad')->nullable();
             $table->string('urlContrato')->nullable();
             $table->smallInteger('numeroRenovacion')->nullable();
-            $table->date('fechaTerminoReal')->nullable();
             $table->timestamps();
 
             $table->foreign('idInmueble')->references('id')->on('inmuebles')->onDelete('cascade');
             $table->foreign('rutInquilino')->references('rut')->on('usuarios')->onDelete('cascade');
         });
 
-        Schema::create('devoluciones_garantia', function (Blueprint $table) {
+        Schema::create('garantias', function (Blueprint $table) {
             $table->unsignedBigInteger('idArriendo')->primary();
-            $table->smallInteger('totalDevuelto');
-            $table->smallInteger('totalDescuento');
+            $table->boolean('estado');
+            $table->mediumInteger('monto');
+
+            $table->foreign('idArriendo')->references('id')->on('arriendos')->onDelete('cascade');
+        });
+
+        Schema::create('pagos_garantia', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('idGarantia');
             $table->date('fecha');
             $table->string('urlComprobante');
             $table->timestamps();
 
-            $table->foreign('idArriendo')->references('id')->on('arriendos')->onDelete('cascade');
+            $table->foreign('idGarantia')->references('idArriendo')->on('garantias')->onDelete('cascade');
+        });
+
+        Schema::create('devoluciones_garantia', function (Blueprint $table) {
+            $table->unsignedBigInteger('idGarantia')->primary();
+            $table->mediumInteger('monto');
+            $table->date('fecha');
+            $table->string('urlComprobante');
+            $table->timestamps();
+
+            $table->foreign('idGarantia')->references('idArriendo')->on('garantias')->onDelete('cascade');
         });
 
         Schema::create('descuentos_devolucion_garantia', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('idDevolucionGarantia');
-            $table->smallInteger('monto');
+            $table->mediumInteger('monto');
             $table->string('motivo');
             $table->timestamps();
 
-            $table->foreign('idDevolucionGarantia')->references('idArriendo')->on('devoluciones_garantia')->onDelete('cascade');
+            $table->foreign('idDevolucionGarantia')->references('idGarantia')->on('devoluciones_garantia')->onDelete('cascade');
         });
 
         Schema::create('deudas', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('idArriendo');
-            $table->enum('tipo', ['canon', 'garantia']);
             $table->string('titulo', 50);
             $table->date('fechaCompromiso');
-            $table->date('fechaPago')->nullable();
-            $table->smallInteger('cantidadDiasRetraso')->nullable();
+            $table->boolean('estado');
             $table->timestamps();
 
             $table->foreign('idArriendo')->references('id')->on('arriendos')->onDelete('cascade');
@@ -243,32 +255,19 @@ class CreateAllTables extends Migration
             $table->foreign('rutReceptor')->references('rut')->on('usuarios')->onDelete('cascade');
         });
 
-        Schema::create('calificaciones_inmueble', function (Blueprint $table) {
+        Schema::create('calificaciones', function (Blueprint $table) {
             $table->unsignedBigInteger('idArriendo')->primary();
-            $table->smallInteger('calificacion');
-            $table->string('comentario');
+            $table->smallInteger('notaAlInmueble');
+            $table->smallInteger('notaAlInquilino');
+            $table->smallInteger('notaAlPropietario');
+            $table->string('comentarioAlInmueble');
+            $table->string('comentarioAlInquilino');
+            $table->string('comentarioAlPropietario');
             $table->timestamps();
 
             $table->foreign('idArriendo')->references('id')->on('arriendos')->onDelete('cascade');
         });
 
-        Schema::create('calificaciones_inquilino', function (Blueprint $table) {
-            $table->unsignedBigInteger('idArriendo')->primary();
-            $table->smallInteger('calificacion');
-            $table->string('comentario');
-            $table->timestamps();
-
-            $table->foreign('idArriendo')->references('id')->on('arriendos')->onDelete('cascade');
-        });
-
-        Schema::create('calificaciones_propietario', function (Blueprint $table) {
-            $table->unsignedBigInteger('idArriendo')->primary();
-            $table->smallInteger('calificacion');
-            $table->string('comentario');
-            $table->timestamps();
-
-            $table->foreign('idArriendo')->references('id')->on('arriendos')->onDelete('cascade');
-        });
     }
 
     /**
@@ -278,15 +277,15 @@ class CreateAllTables extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('calificaciones_inmueble');
-        Schema::dropIfExists('calificaciones_inquilino');
-        Schema::dropIfExists('calificaciones_propietario');
+        Schema::dropIfExists('calificaciones');
         Schema::dropIfExists('solicitudes_finalizacion');
         Schema::dropIfExists('pagos_deuda');
         Schema::dropIfExists('deudas');
         Schema::dropIfExists('arriendos');
         Schema::dropIfExists('descuentos_devolucion_garantia');
         Schema::dropIfExists('devoluciones_garantia');
+        Schema::dropIfExists('pagos_garantia');
+        Schema::dropIfExists('garantias');
         Schema::dropIfExists('interes_usuario_anuncio');
         Schema::dropIfExists('anuncios');
         Schema::dropIfExists('fotos_inmueble');

@@ -12,4 +12,10 @@ class Region extends Model
         'abreviatura', 
         'capital'
     ];
+
+    public function provincias()
+    {
+        return $this->hasMany('App\Provincia', 'idRegion', 'id');
+    }
+
 }

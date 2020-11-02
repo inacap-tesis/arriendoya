@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Antecedente;
 use Illuminate\Http\Request;
+use App\PagoDeuda;
 
-class AntecedenteController extends Controller
+class PagoDeudaController extends Controller
 {
-
+    
     public function listar() {
 
     }
@@ -20,11 +20,7 @@ class AntecedenteController extends Controller
         
     }
 
-    public function modificar() {
-        
-    }
-
-    public function eliminar() {
+    public function descargarComprobante() {
         
     }
 

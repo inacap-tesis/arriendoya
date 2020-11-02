@@ -5,6 +5,9 @@
     <h3>Cuenta Bancaria</h3>
     <form action="/usuario/cuenta" method="POST">
         @csrf
+        @if ($cuenta)
+            @method('PUT')
+        @endif
         <div class="row">
             <div class="col-8">
                 <div class="form-group">

@@ -13,7 +13,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', 'CatalogoController@load');
+Route::get('/', 'CatalogoController@cargar');
+
+Route::get('/provincias', 'CatalogoController@seleccionarRegion');
+Route::get('/comunas', 'CatalogoController@seleccionarProvincia');
 
 Route::get('/home', function () {
     return view('home');

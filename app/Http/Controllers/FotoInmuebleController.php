@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Antecedente;
 use Illuminate\Http\Request;
+use App\FotoInmueble;
 
-class AntecedenteController extends Controller
+class FotoInmuebleController extends Controller
 {
-
+    
     public function listar() {
 
     }

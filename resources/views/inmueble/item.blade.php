@@ -10,7 +10,7 @@
             @foreach ($botones as $boton)
             <li class="list-group-item border-{{ $color }}">
               @if ($boton[0] == 'Eliminar')
-              <form id="{{ 'inm'.$id }}" style="display: none;" action="{{ $boton[1].'/'.$id }}" method="post">
+              <form id="{{ 'inm'.$id }}" style="display: none;" action="{{ $boton[1] }}" method="post">
                 @method('DELETE')
                 @csrf
                 <input type="hidden" name="id" value="{{$id}}">
@@ -19,7 +19,7 @@
                 {{ $boton[0] }}
               </a>
               @elseif ($boton[0] == 'Dar de baja' || $boton[0] == 'Reactivar')
-              <form id="{{ 'inm'.$id }}" style="display: none;" action="{{ $boton[1].'/'.$id }}" method="post">
+              <form id="{{ 'inm'.$id }}" style="display: none;" action="{{ $boton[1] }}" method="post">
                 @method('PUT')
                 @csrf
                 <input type="hidden" name="id" value="{{$id}}">

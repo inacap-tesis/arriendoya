@@ -4,8 +4,8 @@
 <div class="container">
     <form action="/arriendo/configurar" method="POST">
         @csrf
-        @method('POST')
         @if ($arriendo)
+        @method('PUT')
         <input type="hidden" name="arriendo" value="{{$arriendo->id}}">
         @else
         <input type="hidden" name="inmueble" value="{{$anuncio->idInmueble}}">

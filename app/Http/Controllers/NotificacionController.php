@@ -7,79 +7,45 @@ use Illuminate\Http\Request;
 
 class NotificacionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
+    
+    public function listar() {
+        
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+    public function eliminar() {
+        
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
+    public function registrarProblemaDeuda() {
+        
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Notificacion  $notificacion
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Notificacion $notificacion)
-    {
-        //
+    public function solucionarProblemaDeuda() {
+        
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Notificacion  $notificacion
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Notificacion $notificacion)
-    {
-        //
+    public function registrarProblemaGarantia() {
+        
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Notificacion  $notificacion
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Notificacion $notificacion)
-    {
-        //
+    public function solucionarProblemaGarantia() {
+        
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Notificacion  $notificacion
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Notificacion $notificacion)
-    {
-        //
+    public function registrarSolicitudFinalizacion() {
+        
     }
+
+    public function responderSolicitudFinalizacion() {
+        
+    }
+
+    public function reportarProblemaGarantia() {
+        
+    }
+
+    public function reportarProblemaPago() {
+        
+    }
+
 }

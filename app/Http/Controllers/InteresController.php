@@ -2,18 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Antecedente;
 use Illuminate\Http\Request;
+use App\InteresAnuncio;
 
-class AntecedenteController extends Controller
+class InteresController extends Controller
 {
-
+    
     public function listar() {
 
-    }
-
-    public function consultar() {
-        
     }
 
     public function registrar() {

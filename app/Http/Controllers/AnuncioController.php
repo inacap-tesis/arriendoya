@@ -11,14 +11,24 @@ use App\Inmueble;
 
 class AnuncioController extends Controller {
 
-    public function __construct() {
+    public function __construct(InmuebleController $_inmuebleController) {
         $this->middleware('auth', ['only' => ['mostrarInteres']]);
+    }
+
+    public function configurar($id) {
+        $anuncio = Anuncio::find($id);
+        $inmueble = Inmueble::find($id);
+        return view('anuncio.publicar', [
+            'anuncio' => $anuncio,
+            'inmueble' => $inmueble
+        ]);
     }
 
     public function consultar($id) {
         try {
             $anuncio = Anuncio::find($id);
-            $fotos = FotoInmueble::where('idInmueble', '=', $id)->get();
+            $fotos = $anuncio->inmueble->fotos;
+            //$fotos = FotoInmueble::where('idInmueble', '=', $id)->get();
             $interes = [];
             if(Auth::check()) {
                 $interes = InteresAnuncio::where([['idAnuncio', '=', $id], ['rutUsuario', '=', Auth::user()->rut]])->get();
@@ -33,6 +43,43 @@ class AnuncioController extends Controller {
         }
     }
 
+    public function activar(Request $request) {
+        $anuncio = Anuncio::find($request->id);
+        if(!$anuncio) {
+            $anuncio = new Anuncio();
+            $anuncio->idInmueble = $request->id;
+        }
+        $anuncio->condicionesArriendo = $request->condicionesArriendo;
+        $anuncio->documentosRequeridos = $request->documentosRequeridos;
+        $anuncio->canon = $request->canon;
+        $anuncio->fechaPublicacion = Now();
+        $anuncio->estado = true;
+        if($anuncio->save()) {
+            $anuncio->inmueble->idEstado = 2;
+            if($anuncio->inmueble->save()) {
+                return view('inmueble.catalogo', [
+                    'inmuebles'=> Inmueble::where('rutPropietario', Auth::user()->rut)->get()
+                ]);
+            }
+        }
+        return 'error';
+    }
+
+    public function desactivar($id) {
+        $anuncio = Anuncio::find($id);
+        $anuncio->estado = false;
+        if($anuncio->save()) {
+            $anuncio->inmueble->idEstado = 1;
+            if($anuncio->inmueble->save()) {
+                return view('inmueble.catalogo', [
+                    'inmuebles'=> Inmueble::where('rutPropietario', Auth::user()->rut)->get()
+                ]);
+            }
+        }
+        return 'error';
+    }
+
+    //Pertenere a InteresAnuncio@registrar
     public function mostrarInteres($id) {
         try {
             $interes = new InteresAnuncio();
@@ -46,6 +93,7 @@ class AnuncioController extends Controller {
         }
     }
 
+    //Pertenere a InteresAnuncio@eliminar
     public function quitarInteres($id) {
         try {
             $interes = InteresAnuncio::where([['idAnuncio', '=', $id], ['rutUsuario', '=', Auth::user()->rut]])->first();
@@ -56,6 +104,7 @@ class AnuncioController extends Controller {
         }
     }
 
+    //Pertenere a InteresAnuncio@listar
     public function verInteresados($id) {
         $anuncio = Anuncio::find($id);
         $intereses = InteresAnuncio::where('idAnuncio', '=', $anuncio->idInmueble)->get();

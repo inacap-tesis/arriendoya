@@ -34,10 +34,10 @@ class Usuario extends Model implements
         'primerApellido', 
         'segundoApellido', 
         'fechaNacimiento', 
+        'email',
         'telefono',
-        'urlFoto', 
-        'email', 
         'password',
+        'urlFoto'
     ];
 
     /**
@@ -60,6 +60,62 @@ class Usuario extends Model implements
 
     public function cuentaBancaria() {
         return $this->hasOne('App\CuentaBancaria', 'rutUsuario', 'rut');
+    }
+
+    public function antecedentes()
+    {
+        return $this->hasMany('App\Antecedente', 'rutUsuario', 'rut');
+    }
+
+    public function notificaciones()
+    {
+        return $this->hasMany('App\Notificacion', 'rutUsuario', 'rut');
+    }
+
+    public function inmuebles()
+    {
+        return $this->hasMany('App\Inmueble', 'rutPropietario', 'rut');
+    }
+
+    public function arriendos()
+    {
+        return $this->hasMany('App\Arriendo', 'rutInquilino', 'rut');
+    }
+
+    public function solicitudesFinzalizacionEnviadas()
+    {
+        return $this->hasMany('App\SolicitudFinalizacion', 'rutEmisor', 'rut');
+    }
+
+    public function solicitudesFinzalizacionRecibidas()
+    {
+        return $this->hasMany('App\SolicitudFinalizacion', 'rutReceptor', 'rut');
+    }
+
+    public function interesAnuncios() {
+        return $this->belongsToMany('App\Anuncio', 'interes_usuario_anuncio', 'rutUsuario', 'idAnuncio');
+    }
+
+    public function calificacionesComoPropietario() {
+        return $this->hasManyThrough(
+            'App\Arriendo',
+            'App\Inmueble',
+            'rutPropietario',
+            'idInmueble',
+            'rut',
+            'id'
+        )->join('calificaciones','arriendos.idInmueble','=','calificaciones.idArriendo')->select('calificaciones.*');
+    }
+
+    public function calificacionesComoInquilino() {
+        return $this->hasManyThrough(
+            'App\Calificacion',
+            'App\Arriendo',
+            'rutInquilino',
+            'idArriendo',
+            'rut',
+            'idInmueble'
+        );
     }
 
 }

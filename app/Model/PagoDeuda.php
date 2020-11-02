@@ -14,7 +14,7 @@ class PagoDeuda extends Model
     ];
 
     public function deuda() {
-        return $this->hasOne('App\Deuda', 'id', 'idDeuda');
+        return $this->belongsTo('App\Deuda', 'id', 'idDeuda');
     }
 
 }

@@ -22,7 +22,7 @@ class UsuarioSeeder extends Seeder
                 'fechaNacimiento' => Now(),
                 'telefono' => '+5684452859',
                 'urlFoto' => 'test.jpg',
-                'email' => 'segad82@gmail.com',
+                'email' => 'kevin@arriendo.cl',
                 'password' => '$2y$10$2ghGNRJlQPgcvwO5cOln6ORHdo04G/R8RvR3chn02IXA5t6g4.8Ju'
             ],
             [

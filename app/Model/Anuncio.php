@@ -13,7 +13,7 @@ class Anuncio extends Model
         'condicionesArriendo',
         'documentosRequeridos', 
         'canon', 
-        'fechaActivacion',
+        'fechaPublicacion',
         'estado'
     ];
 

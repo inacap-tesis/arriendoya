@@ -43,8 +43,9 @@ Route::get('/antecedentes', function () {
 });
 
 //RF-USU-07
-Route::get('/usuario/cuenta', 'CuentaBancariaController@formularioConfigurar');
-Route::post('/usuario/cuenta', 'CuentaBancariaController@configurar');
+Route::get('/usuario/cuenta', 'CuentaBancariaController@consultar');
+Route::post('/usuario/cuenta', 'CuentaBancariaController@registrar');
+Route::put('/usuario/cuenta', 'CuentaBancariaController@modificar');
 
 //RF-USU-08
 Route::get('/cuenta/modificar', function () {

@@ -13,7 +13,12 @@ use DateTime;
 
 class ArriendoController extends Controller {
 
-    public function formularioConfigurar($id) {
+    public function listar() {
+        $arriendos = Arriendo::where('rutInquilino', '=', Auth::user()->rut)->get();
+        return view('arriendo.catalogo', ['arriendos' => $arriendos]);
+    }
+
+    public function configurar($id) {
         $arriendo = Arriendo::where([['idInmueble', '=', $id], ['estado', '=', false]])->first();
         //$inmueble = Inmueble::find($id);
         $anuncio = Anuncio::find($id);
@@ -26,30 +31,29 @@ class ArriendoController extends Controller {
         ]);
     }
 
-    public function configurar(Request $request) {
-        if($request->arriendo) {
-            $arriendo = Arriendo::find($request->arriendo);
-        } else {
-            $arriendo = new Arriendo();
-            $arriendo->idInmueble = $request->inmueble;
-        }
+    public function consultar($id) {
+        $arriendo = Arriendo::find($id);
+        return view('arriendo.consultar', ['arriendo' => $arriendo]);
+    }
+
+    private function guardar(Arriendo $arriendo, Request $request) {
         $arriendo->fechaInicio = $request->fechaInicio;
         $arriendo->fechaTerminoPropuesta = $request->fechaFin;
         $arriendo->canon = $request->canon;
-        if($request->incluyeGarantia && $request->incluyeGarantia == 'true') {
+        /*if($request->incluyeGarantia && $request->incluyeGarantia == 'true') {
             $arriendo->garantia = $request->garantia ? $request->garantia : null;
         } else { 
             $arriendo->garantia = null;
-        }
+        }*/
         $arriendo->rutInquilino = $request->inquilino;
         $arriendo->diaPago = $request->diaPago;
         $arriendo->estado = false;
-        $arriendo->subarriendo = $request->subarrendar && $request->subarrendar == 'true' ? true : false;
-        if($request->modificarRenta && $request->modificarRenta == 'true') {
+        //$arriendo->subarriendo = $request->subarrendar && $request->subarrendar == 'true' ? true : false;
+        /*if($request->modificarRenta && $request->modificarRenta == 'true') {
             $arriendo->mesesModificacionPeriodicidad = $request->periodicidad == 1 ? 12 : 6;
         } else { 
             $arriendo->mesesModificacionPeriodicidad = null;
-        }
+        }*/
         $arriendo->urlContrato = null;
         $arriendo->numeroRenovacion = null;
         $arriendo->fechaTerminoReal = null;
@@ -58,28 +62,38 @@ class ArriendoController extends Controller {
             $inmueble->idEstado = 5;
             $inmueble->save();
         }
+    }
+
+    public function registrar(Request $request) {
+        $arriendo = new Arriendo();
+        $arriendo->idInmueble = $request->inmueble;
+        $this->guardar($arriendo, $request);
         return redirect('/inmueble/catalogo');
     }
 
-    public function cancelar($id) {
+    public function modificar(Request $request) {
+        $arriendo = Arriendo::find($request->arriendo);
+        $this->guardar($arriendo, $request);
+        return redirect('/inmueble/catalogo');
+    }
+
+    public function eliminar($id) {
         $arriendo = Arriendo::where('idInmueble', '=', $id)->latest('created_at')->first();
-        if($arriendo) {
+        $arriendo->inmueble->idEstado = 4;
+        if($arriendo->inmueble->save()) {
             $arriendo->delete();
-            $inmueble = Inmueble::find($id);
-            $inmueble->idEstado = 4;
-            $inmueble->save();
         }
         return redirect('/inmueble/catalogo');
     }
 
-    public function formularioIniciar($id) {
+    public function cargarContrato($id) {
         $arriendo = Arriendo::where([['idInmueble', '=', $id], ['estado', '=', false]])->first();
         return view('arriendo.iniciar', [
             'arriendo' => $arriendo
         ]);
     }
 
-    private function Mes($id) {
+    private function mes($id) {
         switch ($id) {
             case 1: return 'ENERO';
             case 2: return 'FEBRERO';
@@ -137,7 +151,7 @@ class ArriendoController extends Controller {
                     $deuda->idArriendo = $arriendo->id;
                     $deuda->tipo = 'canon';
                     $deuda->fechaCompromiso = $fecha->format('Y-m-d');
-                    $deuda->titulo = $this->Mes($mes).' - '.$anio;
+                    $deuda->titulo = $this->mes($mes).' - '.$anio;
                     $deuda->save();
                     $dia = $pago;
                     $fecha = new DateTime($anio.'-'.$mes.'-'.$dia);
@@ -153,14 +167,28 @@ class ArriendoController extends Controller {
         return redirect('/inmueble/catalogo');
     }
 
-    public function catalogo() {
-        $arriendos = Arriendo::where('rutInquilino', '=', Auth::user()->rut)->get();
-        return view('arriendo.catalogo', ['arriendos' => $arriendos]);
+    public function finalizar() {
+
     }
 
-    public function consultar($id) {
-        $arriendo = Arriendo::find($id);
-        return view('arriendo.consultar', ['arriendo' => $arriendo]);
+    public function finalizarForzosamente() {
+        
+    }
+
+    public function renovar() {
+        
+    }
+
+    public function preguntarRenovacion() {
+        
+    }
+
+    public function descargarContrato() {
+        
+    }
+
+    public function actualizar() {
+        
     }
 
 }

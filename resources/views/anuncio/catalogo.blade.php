@@ -41,7 +41,7 @@
                         <div class="form-group row">
                             <label for="region" class="col-md-3 col-form-label text-md-right">{{ __('Región') }}</label>
                             <div class="col-md-9">
-                                <select class="form-control" id="region" name="region" required>
+                                <select class="form-control" id="region" name="region" onchange="seleccionarRegion()" required>
                                     <option value="0" selected>...</option>
                                     @foreach ($regiones as $region)
                                     <option value="{{$region->id}}">{{$region->nombre}}</option>
@@ -53,11 +53,7 @@
                         <div class="form-group row">
                             <label for="provincia" class="col-md-3 col-form-label text-md-right">{{ __('Provincia') }}</label>
                             <div class="col-md-9">
-                                <select class="form-control" id="provincia" name="provincia" required>
-                                    <option value="0" selected>...</option>
-                                    @foreach ($provincias as $provincia)
-                                    <option value="{{$provincia->id}}">{{$provincia->nombre}}</option>
-                                    @endforeach
+                                <select class="form-control" id="provincia" name="provincia" onchange="seleccionarProvincia()" required>
                                 </select>
                             </div>
                         </div>
@@ -66,10 +62,6 @@
                             <label for="comuna" class="col-md-3 col-form-label text-md-right">{{ __('Comuna') }}</label>
                             <div class="col-md-9">
                                 <select class="form-control" id="comuna" name="comuna" required>
-                                    <option value="0" selected>...</option>
-                                    @foreach ($comunas as $comuna)
-                                    <option value="{{$comuna->id}}">{{$comuna->nombre}}</option>
-                                    @endforeach
                                 </select>
                             </div>
                         </div>
@@ -148,4 +140,69 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('scripts')
+    <script type="text/javascript">
+    
+    function seleccionarRegion() {
+        var region = $('#region').val();
+        if(region && region > 0) {
+                $.ajax({
+                url: '/provincias',
+                type: "Get",
+                dataType: 'json',//this will expect a json response
+                data: {
+                    id: $('#region').val()
+                }, 
+                success: function(response) {
+                    $('#provincia').empty();
+                    $('#provincia').append($('<option>', { 
+                        value: 0,
+                        text : '...'
+                    }));
+                    response.map(function(provincia) {
+                        $('#provincia').append($('<option>', { 
+                            value: provincia.id,
+                            text : provincia.nombre
+                        }));
+                    });
+                }
+            });
+        } else {
+            $('#provincia').empty();
+            $('#comuna').empty();
+        }
+    }
+
+    function seleccionarProvincia() {
+        var provincia = $('#provincia').val();
+        if(provincia && provincia > 0) {
+                $.ajax({
+                url: '/comunas',
+                type: "Get",
+                dataType: 'json',//this will expect a json response
+                data: {
+                    id: $('#provincia').val()
+                }, 
+                success: function(response) {
+                    $('#comuna').empty();
+                    $('#comuna').append($('<option>', { 
+                        value: 0,
+                        text : '...'
+                    }));
+                    response.map(function(comuna) {
+                        $('#comuna').append($('<option>', { 
+                            value: comuna.id,
+                            text : comuna.nombre
+                        }));
+                    });
+                }
+            });
+        } else {
+            $('#comuna').empty();
+        }
+    }
+
+    </script>
 @endsection

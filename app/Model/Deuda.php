@@ -9,15 +9,13 @@ class Deuda extends Model
     protected $table = 'deudas';
     protected $fillable = [
         'idArriendo',
-        'tipo',
         'titulo', 
         'fechaCompromiso', 
-        'fechaPago',
-        'cantidadDiasRetraso'
+        'estado'
     ];
 
     public function arriendo() {
-        return $this->hasOne('App\Arriendo', 'id', 'idArriendo');
+        return $this->belongsTo('App\Arriendo', 'id', 'idArriendo');
     }
 
     public function pagos()

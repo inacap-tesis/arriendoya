@@ -9,11 +9,13 @@ use Illuminate\Http\Request;
 class DeudaController extends Controller
 {
     
+    //Pertenece a PagoDeuda@consultar
     public function formularioPagar($id) {
         $deuda = Deuda::find($id);
         return view('deuda.pagar', ['deuda' => $deuda]);
     }
 
+    //Pertenece a PagoDeuda@registrar
     public function pagar(Request $request) {
         $deuda = Deuda::find($request->deuda);
         $actual = new \DateTime();
@@ -32,6 +34,7 @@ class DeudaController extends Controller
         return redirect('/arriendo/consultar/'.$deuda->arriendo->id);
     }
 
+    //Pertenece a PagoDeuda@descargarComprobante
     public function descargarComprobante($id) {
         return 'Pendiente acción de descargar comprobante.';
     }

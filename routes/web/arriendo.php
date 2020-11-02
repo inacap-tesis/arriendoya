@@ -13,15 +13,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/arriendo/configurar/{id}/', 'ArriendoController@formularioConfigurar');
-Route::post('/arriendo/configurar', 'ArriendoController@configurar');
+Route::get('/arriendo/configurar/{id}/', 'ArriendoController@configurar');
+Route::post('/arriendo/configurar', 'ArriendoController@registrar');
+Route::put('/arriendo/configurar', 'ArriendoController@modificar');
 
-Route::get('/arriendo/cancelar/{id}/', 'ArriendoController@cancelar');
+Route::get('/arriendo/cancelar/{id}/', 'ArriendoController@eliminar');
 
-Route::get('/arriendo/iniciar/{id}/', 'ArriendoController@formularioIniciar');
+Route::get('/arriendo/iniciar/{id}/', 'ArriendoController@cargarContrato');
 Route::post('/arriendo/iniciar', 'ArriendoController@iniciar');
 
-Route::get('/arriendo/catalogo', 'ArriendoController@catalogo');
+Route::get('/arriendo/catalogo', 'ArriendoController@listar');
 
 Route::get('/arriendo/consultar/{id}/', 'ArriendoController@consultar');
 
