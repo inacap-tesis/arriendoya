@@ -17,6 +17,7 @@ Route::get('/', 'CatalogoController@cargar');
 
 Route::get('/provincias', 'CatalogoController@seleccionarRegion');
 Route::get('/comunas', 'CatalogoController@seleccionarProvincia');
+Route::get('/catalogo/filtrar', 'CatalogoController@filtrar');
 
 Route::get('/home', function () {
     return view('home');

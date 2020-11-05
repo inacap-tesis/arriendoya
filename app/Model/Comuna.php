@@ -13,7 +13,7 @@ class Comuna extends Model
     ];
 
     public function provincia() {
-        return $this->belongsTo('App\Provincia', 'id', 'idProvincia');
+        return $this->belongsTo('App\Provincia', 'idProvincia', 'id');
     }
 
 }

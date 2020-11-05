@@ -13,7 +13,7 @@ class Provincia extends Model
     ];
 
     public function region() {
-        return $this->belongsTo('App\Region', 'id', 'idRegion');
+        return $this->belongsTo('App\Region', 'idRegion', 'id');
     }
 
     public function comunas()
