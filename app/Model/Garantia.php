@@ -8,6 +8,7 @@ class Garantia extends Model
 {
     protected $table = 'garantias';
     protected $primaryKey = 'idArriendo';
+    public $timestamps = false;
     protected $fillable = [
         'idArriendo',
         'estado',

@@ -55,8 +55,9 @@ class AnuncioController extends Controller {
         $anuncio->fechaPublicacion = Now();
         $anuncio->estado = true;
         if($anuncio->save()) {
-            $anuncio->inmueble->idEstado = 2;
-            if($anuncio->inmueble->save()) {
+            $inmueble = $anuncio->inmueble ? $anuncio->inmueble : Inmueble::find($request->id);
+            $inmueble->idEstado = 2;
+            if($inmueble->save()) {
                 return view('inmueble.catalogo', [
                     'inmuebles'=> Inmueble::where('rutPropietario', Auth::user()->rut)->get()
                 ]);

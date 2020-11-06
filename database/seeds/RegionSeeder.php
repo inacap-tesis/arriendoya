@@ -19,7 +19,7 @@ class RegionSeeder extends Seeder
     public function up() {
         DB::table('regiones')->insert([
             ['id' => 1, 'nombre' => 'Arica y Parinacota', 'abreviatura' => 'AP', 'capital' => 'Arica'],
-            ['id' => 2, 'nombre' => 'ATarapacá', 'abreviatura' => 'TA', 'capital' => 'Iquique'],
+            ['id' => 2, 'nombre' => 'Tarapacá', 'abreviatura' => 'TA', 'capital' => 'Iquique'],
             ['id' => 3, 'nombre' => 'Antofagasta', 'abreviatura' => 'AN', 'capital' => 'Antofagasta'],
             ['id' => 4, 'nombre' => 'Atacama', 'abreviatura' => 'AT', 'capital' => 'Copiapó'],
             ['id' => 5, 'nombre' => 'Coquimbo', 'abreviatura' => 'CO', 'capital' => 'La Serena'],

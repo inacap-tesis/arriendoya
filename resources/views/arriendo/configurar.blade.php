@@ -41,62 +41,33 @@
         </div>
         <div class="row">
             <div class="col">
-                <label>¿Incluye garantía?</label>
-            </div>
-            <div class="form-check col">
-              <input class="form-check-input" type="radio" name="incluyeGarantia" id="siG" value="true" @if($arriendo && $arriendo->garantia) checked @endif>
-              <label class="form-check-label" for="siG">Si</label>
-            </div>
-            <div class="form-check col">
-              <input class="form-check-input" type="radio" name="incluyeGarantia" id="noG" value="false" @if($arriendo && !$arriendo->garantia) checked @endif>
-              <label class="form-check-label" for="noG">No</label>
-            </div>
-            <div class="form-group col">
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                      <div class="input-group-text">$</div>
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <div class="input-group-text">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="conGarantia" name="conGarantia" onchange="tieneGarantia()" style="margin-top: 5px;" @if($arriendo && $arriendo->garantia) checked @endif>
+                            <label class="form-check-label" for="conGarantia">
+                                Incluye garantía
+                            </label>
+                          </div>
                     </div>
-                    <input type="number" min="0" class="form-control" id="garantia" name="garantia" placeholder="¿Cuanto es?" @if($arriendo && $arriendo->garantia) value="{{ $arriendo->garantia }}" @endif>
+                    <div class="input-group-text">$</div>
+                  </div>
+                  <input type="number" min="0" class="form-control" id="garantia" name="garantia" placeholder="¿Cuanto?" @if($arriendo && $arriendo->garantia) value="{{ $arriendo->garantia->monto }}" @else disabled @endif>
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col">
-                <label>¿Se podrá modificar la renta?</label>
-            </div>
-            <div class="form-check col">
-              <input class="form-check-input" type="radio" name="modificarRenta" id="siR" value="true" @if($arriendo && $arriendo->mesesModificacionPeriodicidad) checked @endif>
-              <label class="form-check-label" for="siR">Si</label>
-            </div>
-            <div class="form-check col">
-              <input class="form-check-input" type="radio" name="modificarRenta" id="noR" value="false" @if(!$arriendo || !$arriendo->mesesModificacionPeriodicidad) checked @endif>
-              <label class="form-check-label" for="noR">No</label>
-            </div>
-            <div class="form-group col">
-                <label for="periodicidad">Periodicidad</label>
-                <select class="form-control" id="periodicidad" name="periodicidad">
-                    <option value="1" @if($arriendo && $arriendo->mesesModificacionPeriodicidad == 12) selected @endif>Anual</option>
-                    <option value="2" @if($arriendo && $arriendo->mesesModificacionPeriodicidad == 6) selected @endif>Semestral</option>
-                </select>
-            </div>
-        </div>
-        @if ($anuncio->inmueble->idTipoInmueble != 3)
-        <div class="row">
-            <div class="col">
-                <label>¿Permite subarrendar?</label>
-            </div>
-            <div class="form-check col">
-              <input class="form-check-input" type="radio" name="subarrendar" id="siS" value="true" @if($arriendo && $arriendo->subarriendo) checked @endif>
-              <label class="form-check-label" for="siS">Si</label>
-            </div>
-            <div class="form-check col">
-              <input class="form-check-input" type="radio" name="subarrendar" id="noS" value="false" @if($arriendo && !$arriendo->subarriendo) checked @endif>
-              <label class="form-check-label" for="noS">No</label>
-            </div>
-        </div>
-        @endif
         <button type="submit" class="btn btn-primary">Aceptar</button>
         <a href="/inmueble/catalogo" class="btn btn-primary">Cancelar</a>
     </form>
 </div>
+@endsection
+
+@section('scripts')
+    <script type="text/javascript">
+    function tieneGarantia() {
+        $('#garantia').attr('disabled', !$('#conGarantia')[0].checked);
+        $('#garantia').attr('required', $('#conGarantia')[0].checked);
+    }
+    </script>
 @endsection

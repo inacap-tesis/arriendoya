@@ -25,26 +25,33 @@
                 </div>
                 <div class="form-group">
                     <label for="region">Región</label>
-                    <select class="form-control" id="region" name="region" required>
+                    <select class="form-control" id="region" name="region" onchange="seleccionarRegion()" required>
+                        <option value="0" @if (!$inmueble) selected @endif>...</option>
                         @foreach ($regiones as $region)
-                        <option value="{{$region->id}}">{{$region->nombre}}</option>
+                        <option value="{{$region->id}}" @if ($inmueble && $region->id == $inmueble->comuna->provincia->idRegion) selected @endif>{{$region->nombre}}</option>
                         @endforeach
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="provincia">Provincia</label>
-                    <select class="form-control" id="provincia" name="provincia" required>
+                    <select class="form-control" id="provincia" name="provincia" onchange="seleccionarProvincia()" required>
+                        @if ($inmueble)
+                        <option value="0">...</option>
                         @foreach ($provincias as $provincia)
-                        <option value="{{$provincia->id}}">{{$provincia->nombre}}</option>
+                        <option value="{{$provincia->id}}" @if ($provincia->id == $inmueble->comuna->idProvincia) selected @endif>{{$provincia->nombre}}</option>
                         @endforeach
+                        @endif
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="comuna">Comuna</label>
                     <select class="form-control" id="comuna" name="comuna" required>
+                        @if ($inmueble)
+                        <option value="0">...</option>
                         @foreach ($comunas as $comuna)
-                        <option value="{{$comuna->id}}" @if ($inmueble && $inmueble->idComuna == $comuna->id) selected @endif>{{$comuna->nombre}}</option>
+                        <option value="{{$comuna->id}}" @if ($comuna->id == $inmueble->idComuna) selected @endif>{{$comuna->nombre}}</option>
                         @endforeach
+                        @endif
                     </select>
                 </div>
                 <div class="form-group">
@@ -128,4 +135,8 @@
         <a href="/inmueble/catalogo" class="btn btn-primary">Cancelar</a>
     </form>
 </div>
+@endsection
+
+@section('scripts')
+<script src="{{ asset('js/location.js') }}" defer></script>
 @endsection

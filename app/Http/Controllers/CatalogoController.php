@@ -69,6 +69,14 @@ class CatalogoController extends Controller
         return self::$provincias;
     }
 
+    private static $comunas = null;
+    public static function consultarComunas() {
+        if(!self::$comunas) {
+            self::$comunas = Comuna::all();
+        }
+        return self::$comunas;
+    }
+
     private static $precios = null;
     public static function consultarPrecios() {
         if(!self::$precios) {

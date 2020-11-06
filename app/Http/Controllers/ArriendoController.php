@@ -9,6 +9,7 @@ use App\Inmueble;
 use App\Anuncio;
 use App\InteresAnuncio;
 use App\Deuda;
+use App\Garantia;
 use DateTime;
 
 class ArriendoController extends Controller {
@@ -40,24 +41,23 @@ class ArriendoController extends Controller {
         $arriendo->fechaInicio = $request->fechaInicio;
         $arriendo->fechaTerminoPropuesta = $request->fechaFin;
         $arriendo->canon = $request->canon;
-        /*if($request->incluyeGarantia && $request->incluyeGarantia == 'true') {
-            $arriendo->garantia = $request->garantia ? $request->garantia : null;
-        } else { 
-            $arriendo->garantia = null;
-        }*/
         $arriendo->rutInquilino = $request->inquilino;
         $arriendo->diaPago = $request->diaPago;
         $arriendo->estado = false;
-        //$arriendo->subarriendo = $request->subarrendar && $request->subarrendar == 'true' ? true : false;
-        /*if($request->modificarRenta && $request->modificarRenta == 'true') {
-            $arriendo->mesesModificacionPeriodicidad = $request->periodicidad == 1 ? 12 : 6;
-        } else { 
-            $arriendo->mesesModificacionPeriodicidad = null;
-        }*/
         $arriendo->urlContrato = null;
         $arriendo->numeroRenovacion = null;
         $arriendo->fechaTerminoReal = null;
         if($arriendo->save()){
+            $garantia = Garantia::find($arriendo->id);
+            if($request->conGarantia) {
+                $garantia = $garantia ? $garantia : new Garantia();
+                $garantia->idArriendo = $arriendo->id;
+                $garantia->estado = false;
+                $garantia->monto = $request->garantia;
+                $garantia->save();
+            } elseif($garantia) {
+                $garantia->delete();
+            }
             $inmueble = Inmueble::find($arriendo->idInmueble);
             $inmueble->idEstado = 5;
             $inmueble->save();
@@ -113,21 +113,18 @@ class ArriendoController extends Controller {
 
     public function iniciar(Request $request) {
         $arriendo = Arriendo::find($request->arriendo);
-        //$arriendo = Arriendo::where([['idInmueble', '=', $request->arriendo], ['estado', '=', false]])->first();
         if($arriendo) {
             $arriendo->estado = true;
             $arriendo->urlContrato = $request->documento ? $request->documento : '-';
             if($arriendo->save()) {
                 //Cambia estado de inmueble a arrendado
-                $inmueble = Inmueble::find($arriendo->idInmueble);
-                $inmueble->idEstado = 6;
-                $inmueble->save();
+                $arriendo->inmueble->idEstado = 6;
+                $arriendo->inmueble->save();
 
                 //Deshabilita el anuncio
-                $anuncio = Anuncio::find($arriendo->idInmueble);
-                $anuncio->interesados()->detach();
-                $anuncio->estado = false;
-                $anuncio->save();
+                $arriendo->inmueble->anuncio->interesados()->detach();
+                $arriendo->inmueble->anuncio->estado = false;
+                $arriendo->inmueble->anuncio->save();
 
                 //Eliminar todos los antecedentes del inquilino
 
@@ -149,9 +146,9 @@ class ArriendoController extends Controller {
                     }
                     $deuda = new Deuda();
                     $deuda->idArriendo = $arriendo->id;
-                    $deuda->tipo = 'canon';
-                    $deuda->fechaCompromiso = $fecha->format('Y-m-d');
                     $deuda->titulo = $this->mes($mes).' - '.$anio;
+                    $deuda->fechaCompromiso = $fecha->format('Y-m-d');
+                    $deuda->estado = false;
                     $deuda->save();
                     $dia = $pago;
                     $fecha = new DateTime($anio.'-'.$mes.'-'.$dia);

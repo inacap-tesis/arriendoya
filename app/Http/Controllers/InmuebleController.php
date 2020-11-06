@@ -10,6 +10,7 @@ use App\Comuna;
 use App\TipoInmueble;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\CatalogoController;
 
 class InmuebleController extends Controller
 {
@@ -34,11 +35,19 @@ class InmuebleController extends Controller
     }
 
     public function consultar($id = null) {
-        $inmueble = $id ? Inmueble::find($id) : null;
+        if($id) {
+            $inmueble = Inmueble::find($id);
+            $provincias = CatalogoController::consultarProvincias()->where('idRegion', '=', $inmueble->comuna->provincia->idRegion);
+            $comunas = CatalogoController::consultarComunas()->where('idProvincia', '=', $inmueble->comuna->idProvincia);
+        } else {
+            $inmueble = null;
+            $provincias = null;
+            $comunas = null;
+        }
         return view('inmueble.registrar', [
-            'regiones' => Region::all(),
-            'provincias' => Provincia::all(),
-            'comunas' => Comuna::all(),
+            'regiones' => CatalogoController::consultarRegiones(),
+            'provincias' => $provincias,
+            'comunas' => $comunas,
             'tipos_inmueble' => TipoInmueble::all(),
             'inmueble'=> $inmueble
             ]);
