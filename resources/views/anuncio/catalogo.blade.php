@@ -153,13 +153,13 @@
         anuncios.map(anuncio => {
             var col = $('<div></div>').addClass('col mb-3');
             var card = $('<div></div>').addClass('card');
-            card.css('width: 16.8rem;');
+            card.css('width', '16.8rem');
             var card_body = $('<div></div>').addClass('card-body');
-            var card_title = $('<h5>' + anuncio.idInmueble + '</h5>').addClass('card-title');
+            var card_title = $('<h5>' + anuncio.inmueble.calleDireccion + ' ' + anuncio.inmueble.numeroDireccion + '</h5>').addClass('card-title');
             var card_subtitle = $('<h6>$' + anuncio.canon + '</h6>').addClass('card-subtitle mb-2 text-muted');
             var card_text1 = $('<p>' + anuncio.condicionesArriendo + '</p>').addClass('card-text');
             var card_text2 = $('<p>' + anuncio.documentosRequeridos + '</p>').addClass('card-text');
-            var p = $('<p>' + anuncio.idInmueble + '</p>');
+            var p = $('<p>' + anuncio.inmueble.comuna.provincia.region.nombre + '</p>');
             var card_link = $('<a href="/anuncio/' + anuncio.idInmueble + '">Ver más...</a>').addClass('card-link');
             card_body.append(card_title, card_subtitle, card_text1, card_text2, p, card_link);
             card.append(card_body);
@@ -168,30 +168,7 @@
         });
     }
 
-    function limpiarFiltros() {
-        $('#tipo').val(0);
-        $('#region').val(0);
-        $('#provincia').empty();
-        $('#comuna').empty();
-        $('#min').val(0);
-        $('#max').val(0);
-        $('#max').val(0);
-        var fecha = $("input:radio[name=fecha]:checked");
-        if(fecha[0]){
-            fecha[0].checked = false;
-        }
-        $.ajax({
-            url: '/catalogo/filtrar',
-            type: "Get",
-            dataType: 'json',//this will expect a json response
-            data: {}, 
-            success: function(response) {
-                cargarAnuncios(response);
-            }
-        });
-    }
-
-    function filtrar() {
+    function capturarFiltros() {
 
         var tipo = $('#tipo').val();
         tipo = tipo ? parseInt(tipo) : 0;
@@ -215,20 +192,66 @@
 
         var fecha = $('input:radio[name=fecha]:checked').val();
         fecha = fecha ? parseInt(fecha) : 0;
+
+        if(tipo > 0 || region > 0 || provincia > 0 || comuna > 0 || min > 0 || max > 0 || fecha > 0) {
+            return { 
+                tipo, 
+                region, 
+                provincia,
+                comuna,
+                min,
+                max,
+                fecha
+            }
+        } else {
+            return null;
+        }
+    }
+
+    function limpiarFiltros() {
+
+        if(capturarFiltros()) {
+            $('#tipo').val(0);
+            $('#region').val(0);
+            $('#provincia').empty();
+            $('#comuna').empty();
+            $('#min').val(0);
+            $('#max').val(0);
+            $('#max').val(0);
+            var fecha = $("input:radio[name=fecha]:checked");
+            if(fecha[0]){
+                fecha[0].checked = false;
+            }
+            $.ajax({
+                url: '/catalogo/filtrar',
+                type: "Get",
+                dataType: 'json',//this will expect a json response
+                data: {}, 
+                success: function(response) {
+                    cargarAnuncios(response);
+                }
+            });
+        }
+
+    }
+
+    function filtrar() {
         
-        if(tipo > 0 || region > 0 || provincia > 0 || comuna > 0 || min > 0 || max > 0 || fecha > 0){
+        var filtros = capturarFiltros();
+        
+        if(filtros) {
             $.ajax({
                 url: '/catalogo/filtrar',
                 type: "Get",
                 dataType: 'json',//this will expect a json response
                 data: {
-                    tipo,
-                    region,
-                    provincia,
-                    comuna,
-                    min,
-                    max,
-                    fecha
+                    tipo: filtros.tipo,
+                    region: filtros.region,
+                    provincia: filtros.provincia,
+                    comuna: filtros.comuna,
+                    min: filtros.min,
+                    max: filtros.max,
+                    fecha: filtros.fecha
                 }, 
                 success: function(response) {
                     cargarAnuncios(response);

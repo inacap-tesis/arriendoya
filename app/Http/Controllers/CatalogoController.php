@@ -27,11 +27,9 @@ class CatalogoController extends Controller
     public function cargar() {
         
         if(Auth::check()) {
-            //$anuncios = Anuncio::whereNotIn('idInmueble', Inmueble::where('rutPropietario', Auth::user()->rut)->get('id'))->get();
             $inmuebles = count(Inmueble::where([['rutPropietario', '=', Auth::user()->rut], ['idEstado', '<>', 3]])->get());
             $arriendos = count(Arriendo::where([['rutInquilino', '=', Auth::user()->rut], ['estado', '=', true]])->get());
         } else {
-            //$anuncios = Anuncio::all();
             $inmuebles = 0;
             $arriendos = 0;
         }
@@ -105,8 +103,7 @@ class CatalogoController extends Controller
                 ['id' => '1', 'nombre' => 'Hoy'],
                 ['id' => '2', 'nombre' => 'Esta semana'],
                 ['id' => '3', 'nombre' => 'Este mes'],
-                ['id' => '4', 'nombre' => 'Últimos tres meses'],
-                ['id' => '5', 'nombre' => 'Más de tres meses']
+                ['id' => '4', 'nombre' => 'Últimos tres meses']
             ]);
             self::$periodosPublicacion = $lista->pluck('nombre', 'id');
         }
@@ -152,13 +149,18 @@ class CatalogoController extends Controller
             $anuncios = $this->anunciosPrecioMayor($anuncios, $max);
         }
         if($fecha > 0) {
-            return 4;
+            $anuncios = $this->anunciosPeriodo($anuncios, $fecha);
         }
-        return $anuncios;
-    }
 
-    public function eliminarFiltros() {
-        $this->cargar();
+        $lista = [];
+        foreach($anuncios as $anuncio) {
+            $tipo = $anuncio->inmueble->tipo;
+            $region = $anuncio->inmueble->comuna->provincia->region;
+            array_push($lista, $anuncio);
+        }
+        $anuncios = $lista;
+
+        return $anuncios;
     }
 
     public function ordenarPrecioMayor() {
@@ -237,14 +239,43 @@ class CatalogoController extends Controller
         return $lista;
     }
 
-    public function anunciosPeriodo($lista, $periodo) {
+    public function anunciosPeriodo($anuncios, $periodo) {
         switch ($periodo) {
-            case 1: return $lista->where('fechaPublicacion', '=', Now())->get();
-            case 2: return $lista;
-            case 3: return $lista;
-            case 4: return $lista;
-            case 5: return $lista;
+            case 1: 
+                $hoy = Now();
+                $inicio = new \DateTime($hoy->format('d-m-Y').' 00:00:00');
+                $fin = new \DateTime($hoy->format('d-m-Y').' 23:59:59');
+            break;
+            case 2:
+                $semanaActual = (int)Now()->format('W');
+                $temp = Now();
+                while((int)$temp->format('W') == $semanaActual) {
+                    $temp->modify('-1 day');
+                }
+                $temp->modify('+1 day');
+                $inicio = new \DateTime($temp->format('d-m-Y').' 00:00:00');
+                $fin = new \DateTime(Now()->format('d-m-Y').' 23:59:59');
+            break;
+            case 3:
+                $temp = Now();
+                $inicio = new \DateTime('1-'.$temp->format('m-Y').' 00:00:00');
+                $fin = new \DateTime(Now()->format('d-m-Y').' 23:59:59');
+            break;
+            case 4:
+                $temp = Now()->modify('-2 month');
+                $inicio = new \DateTime('1-'.$temp->format('m-Y').' 00:00:00');
+                $fin = new \DateTime(Now()->format('d-m-Y').' 23:59:59');
+            break;
+            default: return $anuncios;
         }
+        $lista = [];
+        foreach($anuncios as $anuncio) {
+            $fecha = new \DateTime($anuncio->fechaPublicacion);
+            if($fecha >= $inicio && $fecha <= $fin) {
+                array_push($lista, $anuncio);
+            }
+        }
+        return $lista;
     }
 
 }

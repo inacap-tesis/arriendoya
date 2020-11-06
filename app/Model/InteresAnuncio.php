@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class InteresAnuncio extends Model
 {
@@ -23,6 +24,10 @@ class InteresAnuncio extends Model
     public function usuario()
     {
         return $this->belongsTo('App\Usuario', 'rutUsuario');
+    }
+
+    public function delete() {
+        return DB::delete('delete from '.$this->table.' where idAnuncio = '.$this->idAnuncio.' and rutUsuario = "'.$this->rutUsuario.'"');
     }
 
 }
