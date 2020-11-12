@@ -21,20 +21,21 @@ class CatalogoController extends Controller
         } else {
             $anuncios = Anuncio::all();
         }
-        return $anuncios;
+        return $anuncios->where('estado', '=', true);
     }
 
     public function cargar() {
         
         if(Auth::check()) {
-            $inmuebles = count(Inmueble::where([['rutPropietario', '=', Auth::user()->rut], ['idEstado', '<>', 3]])->get());
+            //['idEstado', '<>', 3]
+            $inmuebles = count(Inmueble::where([['rutPropietario', '=', Auth::user()->rut]])->get());
             $arriendos = count(Arriendo::where([['rutInquilino', '=', Auth::user()->rut], ['estado', '=', true]])->get());
         } else {
             $inmuebles = 0;
             $arriendos = 0;
         }
 
-        return view('anuncio.catalogo', [
+        return view('catalogo.inicio', [
             'anuncios' => $this->consultarAnuncios(),
             'tipos' => CatalogoController::consultarTiposInmueble(),
             'regiones' => CatalogoController::consultarRegiones(),
@@ -118,6 +119,24 @@ class CatalogoController extends Controller
         return self::$periodosPublicacion;
     }
 
+    public static function consultarMes($id) {
+        switch ($id) {
+            case 1: return 'ENERO';
+            case 2: return 'FEBRERO';
+            case 3: return 'MARZO';
+            case 4: return 'ABRIL';
+            case 5: return 'MAYO';
+            case 6: return 'JUNIO';
+            case 7: return 'JULIO';
+            case 8: return 'AGOSTO';
+            case 9: return 'SEPTIEMBRE';
+            case 10: return 'OCTUBRE';
+            case 11: return 'NOVIEMBRE';
+            case 12: return 'DICIEMBRE';
+            default: return '';
+        }
+    }
+
     public function seleccionarRegion(Request $request) {
         return CatalogoController::consultarRegiones()->find($request->id)->provincias;
     }
@@ -129,6 +148,10 @@ class CatalogoController extends Controller
     public function filtrar(Request $request) {
 
         $anuncios = $this->consultarAnuncios();
+
+        if($request->tipoOrden) {
+            $anuncios = $this->ordenar($anuncios, $request->tipoOrden);
+        }
 
         $tipo = (int)$request->tipo;
         $region = (int)$request->region;
@@ -169,22 +192,6 @@ class CatalogoController extends Controller
         $anuncios = $lista;
 
         return $anuncios;
-    }
-
-    public function ordenarPrecioMayor() {
-        
-    }
-
-    public function ordenarPrecioMenor() {
-        
-    }
-
-    public function ordenarFechaMayor() {
-        
-    }
-
-    public function ordenarFechaMenor() {
-        
     }
 
     public function anunciosTipo($anuncios, $tipo) {
@@ -230,7 +237,7 @@ class CatalogoController extends Controller
     public function anunciosPrecioMenor($anuncios, $precioMenor) {
         $lista = [];
         foreach($anuncios as $anuncio) {
-            if($anuncio->canon > $precioMenor) {
+            if($anuncio->canon >= $precioMenor) {
                 array_push($lista, $anuncio);
             }
         }
@@ -240,7 +247,7 @@ class CatalogoController extends Controller
     public function anunciosPrecioMayor($anuncios, $precioMayor) {
         $lista = [];
         foreach($anuncios as $anuncio) {
-            if($anuncio->canon < $precioMayor) {
+            if($anuncio->canon <= $precioMayor) {
                 array_push($lista, $anuncio);
             }
         }
@@ -284,6 +291,14 @@ class CatalogoController extends Controller
             }
         }
         return $lista;
+    }
+
+    public function ordenar($lista, $tipo) {
+        if($tipo == 'precio') {
+            return $lista->sortBy('canon');
+        } else {
+            return $lista->sortBy('fechaPublicacion');
+        }
     }
 
 }

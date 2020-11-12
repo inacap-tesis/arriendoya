@@ -43,7 +43,7 @@ class Arriendo extends Model
 
     public function solicitudesFinalizacion()
     {
-        return $this->hasMany('App\SolicitudFinalizacion', 'idArriendo', 'id');
+        return $this->hasMany('App\SolicitudFinalizacion', 'idArriendo', 'id')->orderBy('created_at', 'desc');
     }
 
 }

@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <form action="/arriendo/iniciar" method="post">
+    <form action="/arriendo/iniciar" method="post" enctype="multipart/form-data">
         @csrf
         @method('POST')
         <input type="hidden" name="arriendo" value="{{ $arriendo->id }}">

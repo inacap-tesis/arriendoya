@@ -9,13 +9,13 @@
             <ul class="list-group">
             @foreach ($botones as $boton)
             <li class="list-group-item border-{{ $color }}">
-              @if ($boton[0] == 'Eliminar')
-              <form id="{{ 'inm'.$id }}" style="display: none;" action="{{ $boton[1] }}" method="post">
+              @if ($boton[0] == 'Eliminar' || $boton[0] == 'No arrendar')
+              <form id="{{ 'delete'.$id }}" style="display: none;" action="{{ $boton[1] }}" method="post">
                 @method('DELETE')
                 @csrf
                 <input type="hidden" name="id" value="{{$id}}">
               </form>
-              <a href="#" class="text-dark" style="text-decoration: unset; font-weight: bold;" onclick="{{ 'forms.inm'.$id.'.submit();' }}">
+              <a href="#" class="text-dark" style="text-decoration: unset; font-weight: bold;" onclick="{{ 'forms.delete'.$id.'.submit();' }}">
                 {{ $boton[0] }}
               </a>
               @elseif ($boton[0] == 'Dar de baja' || $boton[0] == 'Reactivar')

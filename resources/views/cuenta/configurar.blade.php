@@ -3,10 +3,10 @@
 @section('content')
 <div class="container">
     <h3>Cuenta Bancaria</h3>
-    <form action="/usuario/cuenta" method="POST">
+    <form action="/cuenta" method="POST">
         @csrf
         @if ($cuenta)
-            @method('PUT')
+        @method('PUT')
         @endif
         <div class="row">
             <div class="col-8">

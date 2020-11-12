@@ -15,12 +15,12 @@ class Deuda extends Model
     ];
 
     public function arriendo() {
-        return $this->belongsTo('App\Arriendo', 'id', 'idArriendo');
+        return $this->belongsTo('App\Arriendo', 'idArriendo', 'id');
     }
 
     public function pagos()
     {
-        return $this->hasMany('App\PagoDeuda', 'idDeuda', 'id');
+        return $this->hasMany('App\PagoDeuda', 'idDeuda', 'id')->orderBy('id','DESC');
     }
 
 }

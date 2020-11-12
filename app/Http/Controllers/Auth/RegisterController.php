@@ -58,7 +58,7 @@ class RegisterController extends Controller
             'segundoApellido' => ['string', 'max:30', 'nullable'],
             'fechaNacimiento' => ['date'],
             'telefono' => ['string', 'max:12'],
-            'urlFoto' => ['required', 'string', 'max:255'],
+            'urlFoto' => ['required', 'file', 'mimes:jpeg,jpg,png'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:usuarios'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
@@ -80,7 +80,7 @@ class RegisterController extends Controller
             'segundoApellido' => $data['segundoApellido'],
             'fechaNacimiento' => $data['fechaNacimiento'],
             'telefono' => $data['telefono'],
-            'urlFoto' => $data['urlFoto'],
+            'urlFoto' => $data['urlFoto']->store('usuarios'),
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);

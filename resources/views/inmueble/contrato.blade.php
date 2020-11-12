@@ -7,7 +7,7 @@
     <div class="row text-center">
         <div class="col-4">
             <h5>Descargar formato</h5>
-            <a href="#">
+            <a href="/arriendo/formato">
                 <img src="{{ asset('/images/imagotipo.png') }}" alt="NotarioExpress" style="max-width: 250px; margin: 20px;">
             </a>
         </div>

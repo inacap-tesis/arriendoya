@@ -49,14 +49,21 @@
                                 </li>
                             @endif
                         @else
+                            <a href="#" class="btn" style="margin-right: 10px; display: flex; align-items: center;">
+                                <svg class="bi" width="30" height="30" fill="currentColor">
+                                    <use xlink:href="{{ asset('icons/bootstrap-icons.svg').'#bell' }}"/>
+                                </svg>
+                                <span class="badge badge-danger">{{ count(Auth::user()->notificaciones) }}</span>
+                            </a>
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->primerNombre.' '.Auth::user()->primerApellido }}
+                                    <img src="{{ asset('storage/'.Auth::user()->urlFoto) }}" alt="" height="50" class="rounded-circle" style="margin: 0px 5px 0px 10px">
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    <a href="/usuario/cuenta" class="dropdown-item">{{ __('Cuenta Bancaria') }}</a>
-                                    <a href="/usuario/antecedentes" class="dropdown-item">{{ __('Antecedentes') }}</a>
+                                    <a href="/cuenta" class="dropdown-item">{{ __('Cuenta Bancaria') }}</a>
+                                    <a href="/antecedentes" class="dropdown-item">{{ __('Antecedentes') }}</a>
                                     <a href="/usuario/clave" class="dropdown-item">{{ __('Cambiar Clave') }}</a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();

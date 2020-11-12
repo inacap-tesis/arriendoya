@@ -21,7 +21,7 @@ class UsuarioSeeder extends Seeder
                 'segundoApellido' => 'Gonzalez',
                 'fechaNacimiento' => Now(),
                 'telefono' => '+5684452859',
-                'urlFoto' => 'test.jpg',
+                'urlFoto' => 'usuarios/kevin.jpg',
                 'email' => 'kevin@arriendo.cl',
                 'password' => '$2y$10$2ghGNRJlQPgcvwO5cOln6ORHdo04G/R8RvR3chn02IXA5t6g4.8Ju'
             ],
@@ -33,7 +33,7 @@ class UsuarioSeeder extends Seeder
                 'segundoApellido' => 'Artunduaga',
                 'fechaNacimiento' => Now(),
                 'telefono' => '+5684452859',
-                'urlFoto' => 'test.jpg',
+                'urlFoto' => 'usuarios/ceyda.jpg',
                 'email' => 'ceyda@arriendo.cl',
                 'password' => '$2y$10$2ghGNRJlQPgcvwO5cOln6ORHdo04G/R8RvR3chn02IXA5t6g4.8Ju'
             ],
@@ -45,7 +45,7 @@ class UsuarioSeeder extends Seeder
                 'segundoApellido' => 'Calderon',
                 'fechaNacimiento' => Now(),
                 'telefono' => '+5684452859',
-                'urlFoto' => 'test.jpg',
+                'urlFoto' => 'usuarios/andrea.jpg',
                 'email' => 'andrea@arriendo.cl',
                 'password' => '$2y$10$2ghGNRJlQPgcvwO5cOln6ORHdo04G/R8RvR3chn02IXA5t6g4.8Ju'
             ],
@@ -57,7 +57,7 @@ class UsuarioSeeder extends Seeder
                 'segundoApellido' => 'Palomino',
                 'fechaNacimiento' => Now(),
                 'telefono' => '+5684452859',
-                'urlFoto' => 'test.jpg',
+                'urlFoto' => 'usuarios/jose.jpg',
                 'email' => 'jose@arriendo.cl',
                 'password' => '$2y$10$2ghGNRJlQPgcvwO5cOln6ORHdo04G/R8RvR3chn02IXA5t6g4.8Ju'
             ]

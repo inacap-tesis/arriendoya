@@ -13,7 +13,21 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/arriendo/configurar/{id}/', 'ArriendoController@configurar');
+Route::get('/arriendos', 'ArriendoController@listar');
+Route::get('/arriendo/configurar/{id}', 'ArriendoController@configurar');
+Route::get('/arriendo/propietario/{id}', 'ArriendoController@consultaPropietario'); //RF-INM-09
+Route::get('/arriendo/inquilino/{id}', 'ArriendoController@consultaInquilino'); //RF-INM-09
+Route::post('/arriendo', 'ArriendoController@registrar'); //RF-INM-10
+Route::put('/arriendo', 'ArriendoController@modificar');
+Route::delete('/arriendo', 'ArriendoController@eliminar'); //RF-INM-11
+Route::get('/arriendo/cargarContrato/{id}', 'ArriendoController@cargarContrato');
+Route::post('/arriendo/iniciar', 'ArriendoController@iniciar'); //RF-INM-13
+Route::get('/arriendo/descargarContrato/{id}', 'ArriendoController@descargarContrato'); //RF-ARR-05
+Route::get('/arriendo/formato', 'ArriendoController@obtenerContrato'); //RF-ARR-05
+
+
+
+/*Route::get('/arriendo/configurar/{id}/', 'ArriendoController@configurar');
 Route::post('/arriendo/configurar', 'ArriendoController@registrar');
 Route::put('/arriendo/configurar', 'ArriendoController@modificar');
 
@@ -28,8 +42,11 @@ Route::get('/arriendo/consultar/{id}/', 'ArriendoController@consultar');
 
 Route::get('/deuda/pagar/{id}/', 'DeudaController@formularioPagar');
 Route::post('/deuda/pagar', 'DeudaController@pagar');
-
 Route::get('/deuda/comprobante/{id}/', 'DeudaController@descargarComprobante');
+
+Route::get('/garantia/pagar/{id}/', 'PagoGarantiaController@consultar');
+Route::post('/garantia/pagar', 'PagoGarantiaController@registrar');
+Route::get('/garantia/comprobante/{id}/', 'PagoGarantiaController@descargarComprobante');
 
 //RF-ARR-01
 Route::get('/arriendo/recordar-pago', function () {
@@ -64,4 +81,4 @@ Route::get('/arriendo/finalizacion/solicitar', function () {
 //RF-ARR-07
 Route::get('/arriendo/solicitud/responder', function () {
     return view('arriendo.responder-solicitar-finalizacion');
-});
+});*/

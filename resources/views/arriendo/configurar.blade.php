@@ -2,13 +2,13 @@
 
 @section('content')
 <div class="container">
-    <form action="/arriendo/configurar" method="POST">
+    <form action="/arriendo" method="POST">
         @csrf
         @if ($arriendo)
         @method('PUT')
-        <input type="hidden" name="arriendo" value="{{$arriendo->id}}">
+        <input type="hidden" name="arriendo" value="{{ $arriendo->id }}">
         @else
-        <input type="hidden" name="inmueble" value="{{$anuncio->idInmueble}}">
+        <input type="hidden" name="inmueble" value="{{ $anuncio }}">
         @endif
         <div class="form-group">
             <label for="inquilino">Inquilino</label>
@@ -58,7 +58,7 @@
             </div>
         </div>
         <button type="submit" class="btn btn-primary">Aceptar</button>
-        <a href="/inmueble/catalogo" class="btn btn-primary">Cancelar</a>
+        <a href="/inmuebles" class="btn btn-primary">Cancelar</a>
     </form>
 </div>
 @endsection

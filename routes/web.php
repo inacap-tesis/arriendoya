@@ -13,9 +13,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', 'CatalogoController@cargar');
+Route::redirect('/', '/catalogo');
 
-Route::get('/provincias', 'CatalogoController@seleccionarRegion');
+/*Route::get('/provincias', 'CatalogoController@seleccionarRegion');
 Route::get('/comunas', 'CatalogoController@seleccionarProvincia');
 Route::get('/catalogo/filtrar', 'CatalogoController@filtrar');
 
@@ -29,6 +29,6 @@ Route::get('/welcome', function () {
 
 Route::get('/index', function () {
     return view('index');
-});
+});*/
 
 Auth::routes();

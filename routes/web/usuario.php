@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+/*
 //RF-USU-01
 Route::get('/usuario/registrar', 'UsuarioController@create');
 Route::post('/usuario/registrar', 'UsuarioController@store');
@@ -52,6 +53,15 @@ Route::get('/cuenta/modificar', function () {
     return view('cuenta.modificar');
 });
 
+Route::get('/usuario/antecedentes/{rut}', 'AntecedenteController@listar');
+
+Route::get('/usuario/antecedentes', 'AntecedenteController@listar');
+Route::get('/usuario/antecedente', 'AntecedenteController@consultar');
+Route::get('/antecedente/modificar/{id}', 'AntecedenteController@consultar');
+Route::post('/usuario/antecedente', 'AntecedenteController@registrar');
+Route::get('/antecedente/descargar/{id}', 'AntecedenteController@descargar');
+Route::get('/antecedente/eliminar/{id}', 'AntecedenteController@eliminar');
+
 //RF-USU-09
 Route::get('/antecedente/consultar', function () {
     return view('antecedente.consultar');
@@ -75,4 +85,4 @@ Route::get('/antecedente/eliminar', function () {
 //RF-USU-13
 Route::get('/notificaciones', function () {
     return view('notificacion.index');
-});
+});*/

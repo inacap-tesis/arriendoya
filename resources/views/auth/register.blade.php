@@ -8,7 +8,7 @@
                 <div class="card-header">{{ __('Registrarte') }}</div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route('register') }}">
+                    <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data">
                         @csrf
                         
                         <!--rut-->
@@ -125,8 +125,8 @@
                             
                             <div class="input-group col-md-6">
                                 <div class="custom-file">
-                                    <input id="urlFoto" type="file" class="form-control custom-file-input @error('urlFoto') is-invalid @enderror" name="urlFoto" value="{{ old('urlFoto') }}" required autocomplete="urlFoto" autofocus>
-                                    <label for="urlFoto" class="custom-file-label">{{ __('Buscar foto') }}</label>
+                                    <input id="urlFoto" onchange="cambiaFoto()" type="file" class="form-control custom-file-input @error('urlFoto') is-invalid @enderror" name="urlFoto" required autocomplete="urlFoto" autofocus>
+                                    <label id="fotoStr" for="urlFoto" class="custom-file-label">{{ __('Buscar foto') }}</label>
 
                                     @error('urlFoto')
                                         <span class="invalid-feedback" role="alert">
@@ -190,4 +190,30 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+<script type="text/javascript">
+    function cambiaFoto() {
+        file = $("#urlFoto")[0].files[0];
+        $('#fotoStr').text(file ? file.name : 'Buscar foto');
+
+        // Creamos el objeto de la clase FileReader
+        //let reader = new FileReader();
+
+        // Leemos el archivo subido y se lo pasamos a nuestro fileReader
+        //reader.readAsDataURL(file);
+
+        // Le decimos que cuando este listo ejecute el código interno
+        /*reader.onload = function(){
+          let preview = document.getElementById('preview'),
+                  image = document.createElement('img');
+        
+          image.src = reader.result;
+        
+          preview.innerHTML = '';
+          preview.append(image);
+        };*/
+    }
+</script>
 @endsection

@@ -10,11 +10,16 @@
             <br>
         </div>
         <div class="col text-right">
+          <form action="/interes" method="POST">
+            <input type="hidden" name="id" value="{{ $anuncio->idInmueble }}">
+            @csrf
             @if (count($interes) > 0)
-            <a href="{{ '/anuncio/desinteres/'.$anuncio->idInmueble }}" class="btn btn-danger">Quitar interes</a>
+            @method('DELETE')
+            <button type="submit" class="btn btn-danger">Quitar interes</button>
             @else
-            <a href="{{ '/anuncio/interes/'.$anuncio->idInmueble }}" class="btn btn-success">Estoy interesado</a>
+            <button type="submit" class="btn btn-primary">Estoy interesado</button>
             @endif
+          </form>
         </div>
     </div>
     <div class="row">
@@ -40,20 +45,28 @@
         <div class="col-7">
             <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
                 <ol class="carousel-indicators">
+                  @if (count($anuncio->inmueble->fotos) > 0)
+                  @for ($i = 0; $i < count($anuncio->inmueble->fotos); $i++)
+                  <li data-target="#carouselExampleIndicators" data-slide-to="{{ $i }}" @if($i == 0) class="active" @endif></li>
+                  @endfor
+                  @else
                   <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-                  <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-                  <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                  @endif
                 </ol>
                 <div class="carousel-inner">
+                  @if (count($anuncio->inmueble->fotos) > 0)
+                  @php $primero = true; @endphp
+                  @foreach ($anuncio->inmueble->fotos as $foto)
+                  <div class="carousel-item @if($primero) active @endif">
+                    <img src="{{ asset('storage/'.$foto->urlFoto) }}" class="d-block w-100 rounded" alt="...">
+                  </div>
+                  @php $primero = false; @endphp
+                  @endforeach
+                  @else
                   <div class="carousel-item active">
                     <img src="https://www.hogares.cl/wp-content/uploads/2018/06/SLA_3734.jpg" class="d-block w-100" alt="...">
                   </div>
-                  <div class="carousel-item">
-                    <img src="https://i.pinimg.com/originals/04/2d/73/042d736ae635b16c71172d771ea11545.jpg" class="d-block w-100" alt="...">
-                  </div>
-                  <div class="carousel-item">
-                    <img src="https://blog.ibaquedano.cl/wp-content/uploads/2019/04/Qu%C3%A9-tipo-de-departamento-necesito.jpg" class="d-block w-100" alt="...">
-                  </div>
+                  @endif
                 </div>
                 <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
                   <span class="carousel-control-prev-icon" aria-hidden="true"></span>

@@ -13,7 +13,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/inmueble/catalogo', 'InmuebleController@listar');
+Route::get('/inmuebles', 'InmuebleController@listar');
+Route::get('/inmueble', 'InmuebleController@configurar');
+Route::get('/inmueble/{id}', 'InmuebleController@configurar');
+Route::post('/inmueble', 'InmuebleController@registrar'); //RF-INM-01
+Route::put('/inmueble', 'InmuebleController@modificar'); //RF-INM-02
+Route::delete('/inmueble', 'InmuebleController@eliminar'); //RF-INM-04
+Route::put('/inmueble/activar', 'InmuebleController@activar'); //RF-INM-05
+Route::put('/inmueble/desactivar', 'InmuebleController@desactivar'); //RF-INM-03
+Route::get('/inmueble/contrato/{id}', function () {
+    return view('inmueble.contrato');
+}); //RF-INM-12
+
+/*Route::get('/inmueble/catalogo', 'InmuebleController@listar');
 
 //RF-INM-01
 Route::get('/inmueble/registrar', 'InmuebleController@consultar');
@@ -84,4 +96,4 @@ Route::get('/anuncio/desinteres/{id}', ['uses'=>'AnuncioController@quitarInteres
 
 Route::post('/anuncio/candidatos', ['uses'=>'AnuncioController@definirCandidatos']);
 
-Route::get('/anuncio/interes/eliminar/{anuncio}/{usuario}', ['uses'=>'AnuncioController@eliminarInteresado']);
+Route::get('/anuncio/interes/eliminar/{anuncio}/{usuario}', ['uses'=>'AnuncioController@eliminarInteresado']);*/

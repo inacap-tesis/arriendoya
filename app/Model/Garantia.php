@@ -25,7 +25,7 @@ class Garantia extends Model
 
     public function pagos()
     {
-        return $this->hasMany('App\PagoGarantia', 'idGarantia', 'idArriendo');
+        return $this->hasMany('App\PagoGarantia', 'idGarantia', 'idArriendo')->orderBy('id','DESC');
     }
 
 }

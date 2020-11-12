@@ -11,7 +11,11 @@ use Illuminate\Support\Facades\Auth;
 class CuentaBancariaController extends Controller
 {
 
-    public function consultar() {
+    public function __construct() {
+        $this->middleware('auth');
+    }
+
+    public function configurar() {
 
         $bancos = Banco::all();
         $tipos = TipoCuentaBancaria::all();
@@ -31,7 +35,7 @@ class CuentaBancariaController extends Controller
         $cuenta->idBanco = $request->banco;
         $cuenta->idTipo = $request->tipo;
         $cuenta->save();
-        return back();
+        return redirect('/');
     }
 
     public function modificar(Request $request) {
@@ -40,7 +44,7 @@ class CuentaBancariaController extends Controller
         $cuenta->idBanco = $request->banco;
         $cuenta->idTipo = $request->tipo;
         $cuenta->save();
-        return back();
+        return redirect('/');
     }
 
 }

@@ -16,7 +16,7 @@ class SolicitudFinalizacion extends Model
     ];
 
     public function arriendo() {
-        return $this->belongsTo('App\Arriendo', 'idInmueble', 'idArriendo');
+        return $this->belongsTo('App\Arriendo', 'id', 'idArriendo');
     }
 
     public function emisor() {
@@ -26,5 +26,4 @@ class SolicitudFinalizacion extends Model
     public function receptor() {
         return $this->belongsTo('App\Usuario', 'rut', 'rutReceptor');
     }
-
 }
