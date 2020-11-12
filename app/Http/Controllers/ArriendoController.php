@@ -12,6 +12,7 @@ use App\Deuda;
 use App\Garantia;
 use DateTime;
 use App\Http\Controllers\CatalogoController;
+use Illuminate\Support\Str;
 
 class ArriendoController extends Controller {
 
@@ -115,6 +116,7 @@ class ArriendoController extends Controller {
             if($request['documento']) {
                 $arriendo->urlContrato = $request->file('documento')->store('contratos');
             }
+            //Cambia estado del arriendo
             if($arriendo->save()) {
                 //Cambia estado de inmueble a arrendado
                 $arriendo->inmueble->idEstado = 6;
@@ -147,12 +149,13 @@ class ArriendoController extends Controller {
                         }
                         $anio = (int)$fecha->format('Y');
                     }
+                    $periodoInicio = $fecha->format('d').' '.Str::substr(CatalogoController::consultarMes((int)$fecha->format('m')), 0, 3);
+                    $periodoFin = ($pago - 1).' '.Str::substr(CatalogoController::consultarMes($mes), 0, 3);
                     $deuda = new Deuda();
                     $deuda->idArriendo = $arriendo->id;
-                    $deuda->titulo = CatalogoController::consultarMes($mes).' - '.$anio;
                     $deuda->fechaCompromiso = $fecha->format('Y-m-d');
                     $deuda->estado = false;
-                    $deuda->save();
+                    
                     $dia = $pago;
                     $fecha = new DateTime($anio.'-'.$mes.'-'.$dia);
                     $mes++;
@@ -160,6 +163,13 @@ class ArriendoController extends Controller {
                         $anio++;
                         $mes = 1;
                     }
+                    if($fecha >= $fin) {
+
+                        $_mes = ((int)$fecha->format('d')) > ((int)$fin->format('d')) ? $mes - 1 : $mes - 2;
+                        $periodoFin = $fin->format('d').' '.Str::substr(CatalogoController::consultarMes($_mes), 0, 3);
+                    }
+                    $deuda->titulo = $periodoInicio.' - '.$periodoFin;
+                    $deuda->save();
                 }
                 
             }
