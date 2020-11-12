@@ -15,8 +15,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/arriendos', 'ArriendoController@listar');
 Route::get('/arriendo/configurar/{id}', 'ArriendoController@configurar');
-Route::get('/arriendo/propietario/{id}', 'ArriendoController@consultaPropietario'); //RF-INM-09
-Route::get('/arriendo/inquilino/{id}', 'ArriendoController@consultaInquilino'); //RF-INM-09
+Route::get('/arriendo/{id}', 'ArriendoController@consultar'); //RF-INM-09
 Route::post('/arriendo', 'ArriendoController@registrar'); //RF-INM-10
 Route::put('/arriendo', 'ArriendoController@modificar');
 Route::delete('/arriendo', 'ArriendoController@eliminar'); //RF-INM-11

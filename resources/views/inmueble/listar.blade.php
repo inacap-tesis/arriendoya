@@ -87,7 +87,7 @@
                 @php
                     $color = 'success';
                     $botones = [
-                      array('Ver arriendo', '/arriendo/propietario'),
+                      array('Ver arriendo', '/arriendo'),
                     ]
                 @endphp
                   @break

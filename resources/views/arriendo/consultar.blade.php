@@ -15,10 +15,10 @@
     <div class="row border border-primary">
         <div class="col">
             <p>
-                {{ __($arriendo->inmueble->propietario->primerNombre.' '.$arriendo->inmueble->propietario->segundoNombre.' '.$arriendo->inmueble->propietario->primerApellido.' '.$arriendo->inmueble->propietario->segundoApellido) }}
+                {{ __($usuario->primerNombre.' '.$usuario->segundoNombre.' '.$usuario->primerApellido.' '.$usuario->segundoApellido) }}
             </p>
-            <p>{{ __( $arriendo->inmueble->propietario->telefono) }}</p>
-            <p>{{ __( $arriendo->inmueble->propietario->email) }}</p>
+            <p>{{ __( $usuario->telefono) }}</p>
+            <p>{{ __( $usuario->email) }}</p>
         </div>
         <div class="col">
             <p>{{ __('Fecha de inicio: '.$arriendo->fechaInicio) }}</p>

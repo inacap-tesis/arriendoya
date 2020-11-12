@@ -30,6 +30,7 @@ class Kernel extends ConsoleKernel
                 //Recordar pago de renta a inquilinos cuando la fecha de compromiso esté a x días de cumplirse.
                 //Consultar por renovación de arriendo cuando esté a 30, 15, 5, 2 y un día antes de finalizar.
                 //Finalizar arriendos que cumplan la fecha propuesta.
+                //Informar morosidad a los inquilinos cuando la fecha de compromiso de pagos sea mayor que la fecha actual.
                 echo $arriendo. PHP_EOL;
             }
         })->everyMinute(); //->daily();

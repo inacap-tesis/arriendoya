@@ -34,14 +34,18 @@ class ArriendoController extends Controller {
         ]);
     }
 
-    public function consultaInquilino($id) {
+    public function consultar($id) {
         $arriendo = Arriendo::find($id);
-        return view('arriendo.vistaInquilino', ['arriendo' => $arriendo]);
-    }
-
-    public function consultaPropietario($id) {
-        $arriendo = Inmueble::find($id)->arriendos->where('estado', '=', true)->first();
-        return view('arriendo.vistaPropietario', ['arriendo' => $arriendo]);
+        if($arriendo == null) {
+            $arriendo = Inmueble::find($id)->arriendos->where('estado', '=', true)->first();
+            $infoUsuario = $arriendo->inquilino;
+        } else {
+            $infoUsuario = $arriendo->inmueble->propietario;
+        }
+        return view('arriendo.consultar', [
+            'arriendo' => $arriendo,
+            'usuario' => $infoUsuario
+        ]);
     }
 
     private function guardar(Arriendo $arriendo, Request $request) {
