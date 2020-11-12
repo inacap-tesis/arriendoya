@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\SolicitudFinalizacion;
 use App\Arriendo;
 use App\Http\Controllers\NotificacionController;
+use App\Http\Controllers\DeudaController;
 
 class SolicitudFinalizacionController extends Controller
 {
@@ -43,9 +44,17 @@ class SolicitudFinalizacionController extends Controller
 
     public function responder(Request $request) {
         $solicitud = SolicitudFinalizacion::find($request->id);
-        $solicitud->respuesta = $request->respuesta == 'true';
+        if($request->respuesta == 'true') {
+            $solicitud->respuesta = true;
+            $solicitud->arriendo->fechaTerminoPropuesta = $solicitud->fechaPropuesta;
+            $solicitud->arriendo->save();
+            //Actualizar las deudas
+            DeudaController::modificarPeriodo($solicitud->arriendo);
+        } else {
+            $solicitud->respuesta = false;
+        }
         $solicitud->save();
-        return $solicitud->idArriendo;
+        return $solicitud->arriendo->id;
     }
     
 }

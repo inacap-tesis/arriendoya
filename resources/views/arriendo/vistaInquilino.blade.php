@@ -28,9 +28,10 @@
             <ul>
                 <a href="{{ __('/arriendo/descargarContrato/'.$arriendo->id) }}" class="btn btn-primary">Descargar Contrato</a>
                 @php
-                    $solicitudesRecibidas = $arriendo->solicitudesFinalizacion->where('rutReceptor',Auth::user()->rut)->whereNull('respuesta');
-                    $solicitudesEmitidas = $arriendo->solicitudesFinalizacion->where('rutEmisor', Auth::user()->rut)->whereNull('respuesta');
-                    $solicitudesRechazadas = $arriendo->solicitudesFinalizacion->where('rutEmisor', Auth::user()->rut)->first();
+                $deudas = $arriendo->deudas;
+                $solicitudesRecibidas = $arriendo->solicitudesFinalizacion->where('rutReceptor',Auth::user()->rut)->whereNull('respuesta');
+                $solicitudesEmitidas = $arriendo->solicitudesFinalizacion->where('rutEmisor', Auth::user()->rut)->whereNull('respuesta');
+                $solicitudesRechazadas = $arriendo->solicitudesFinalizacion->where('rutEmisor', Auth::user()->rut)->first();
                 @endphp
                 @if (count($solicitudesRecibidas) > 0)
                 <!-- Button trigger modal -->
@@ -39,7 +40,7 @@
                 </button>
                 @elseif(count($solicitudesEmitidas) == 0)
                 <!-- Button trigger modal -->
-                <button type="button" class="btn btn-primary" onclick="solicitarFinalizacion({{ $arriendo }})">
+                <button type="button" class="btn btn-primary" onclick="solicitarFinalizacion()">
                     Solicitar Finalización
                 </button>
                 @endif
@@ -125,26 +126,25 @@
 @endsection
 @section('scripts')
 <script type="text/javascript">
-    function solicitarFinalizacion(arriendo) {
-        
+    function solicitarFinalizacion() {
         $('#titleModal').text('Solicitar finalización de arriendo');
         
         var motivoDiv = $('<div class="form-group"></div>');
         var motivoLabel = $('<label for="motivo">Motivo</label>');
         var motivoTextarea = $('<textarea class="form-control" id="motivo" name="motivo" rows="3" required></textarea>');
-        var motivoMessage = $('<div class="invalid-feedback">Campo requerido</div>');
+        var motivoMessage = $('<div id="msgMotivo" class="invalid-feedback"></div>');
         motivoDiv.append(motivoLabel, motivoTextarea, motivoMessage);
 
         var fechaDiv = $('<div class="form-group"></div>');
         var fechaLabel = $('<label for="fecha">Fecha propuesta</label>');
         var fechaInput = $('<input type="date" class="form-control" id="fecha" name="fecha" required>');
-        var fechaMessage = $('<div class="invalid-feedback">Campo requerido</div>');
+        var fechaMessage = $('<div id="msgFecha" class="invalid-feedback"></div>');
         fechaDiv.append(fechaLabel, fechaInput, fechaMessage);
 
         $('#bodyModal').empty();
         $('#bodyModal').append(motivoDiv, fechaDiv);
 
-        var btnAceptar = $('<button type="submit" class="btn btn-primary" onclick="solicitar(' + arriendo.id + ')">Aceptar</button>');
+        var btnAceptar = $('<button type="submit" class="btn btn-primary" onclick="solicitar({{ $arriendo }})">Aceptar</button>');
         var btnCancelar = $('<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>');
         $('#footerModal').empty();
         $('#footerModal').append(btnAceptar, btnCancelar);
@@ -152,31 +152,59 @@
         $('#ventanaModal').modal('toggle');
     }
 
-    function solicitar(id) {
+    function solicitar(arriendo) {
+        
+        var valid = true;
+
+        $('#msgMotivo').empty();
+        $('#msgFecha').empty();
+        $('#motivo').removeClass('is-invalid');
+        $('#fecha').removeClass('is-invalid');
+
         var motivo = $('#motivo').val();
         if(!motivo) {
+            $('#msgMotivo').text('Es necesario indicar el motivo.');
             $('#motivo').addClass('is-invalid');
-        } else {
-            $('#motivo').removeClass('is-invalid');
+            valid = false; 
         }
 
         var fecha = $('#fecha').val();
         if(!fecha) {
+            $('#msgFecha').text('La fecha de obligatoria.');
             $('#fecha').addClass('is-invalid');
-        } else {
-            $('#fecha').removeClass('is-invalid');
+            valid = false;
         }
 
-        if(motivo && fecha) {
+        fecha = new Date(fecha + ' 00:00:00');
+        var max = new Date(arriendo.fechaTerminoPropuesta + ' 00:00:00');
+        var min = new Date();
+        var temp = false;
+        for (var i = 0; i < arriendo.deudas.length; i++) {
+            if(temp) {
+                min = new Date(arriendo.deudas[i].fechaCompromiso + ' 23:59:59');
+                min.setDate(min.getDate() - 1);
+                break;
+            }
+            temp = arriendo.deudas[i].estado;
+        }
+
+        if(fecha < min || fecha > max) {
+            $('#msgFecha').text('La fecha debe ser mayor que ' + min.toLocaleDateString('es') + ' y menor que ' + max.toLocaleDateString('es'));
+            $('#fecha').addClass('is-invalid');
+            valid = false;
+        }
+
+        if(valid) {
+            fecha = $('#fecha').val();
             $.ajax({
                 url: '/solicitud',
                 type: "POST",
                 dataType: 'json',//this will expect a json response
                 data: {
                   '_token': '{{ csrf_token() }}',
-                  id,
-                  motivo,
-                  fecha
+                  id: arriendo.id,
+                  motivo: motivo,
+                  fecha: fecha
                 }, 
                 success: function(response) {
                     $('#ventanaModal').modal('toggle');
