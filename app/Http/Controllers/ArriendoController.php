@@ -35,13 +35,8 @@ class ArriendoController extends Controller {
     }
 
     public function consultar($id) {
-        $arriendo = Arriendo::find($id);
-        if($arriendo == null) {
-            $arriendo = Inmueble::find($id)->arriendos->where('estado', '=', true)->first();
-            $infoUsuario = $arriendo->inquilino;
-        } else {
-            $infoUsuario = $arriendo->inmueble->propietario;
-        }
+        $arriendo = Inmueble::find($id)->arriendos->where('estado', '=', true)->first();
+        $infoUsuario = Auth::user()->rut == $arriendo->inquilino->rut ? $arriendo->inmueble->propietario : $arriendo->inquilino;
         return view('arriendo.consultar', [
             'arriendo' => $arriendo,
             'usuario' => $infoUsuario

@@ -112,10 +112,24 @@
                 <td>{{ date('d-m-Y', strtotime($deuda->fechaCompromiso)) }}</td>
                 <td>{{ $deuda->estado ? number_format($cantidadDiasRetraso, 0, ',', '.') : '-' }}</td>
                 <td>
+                    @if ($arriendo->inquilino->rut == Auth::user()->rut)
+                    
+                    <!--Opciones de inquilino-->
                     @if ($deuda->estado)
-                    <a href="{{ '/deuda/pago/comprobante/'.$deuda->id }}" class="btn btn-primary">Descargar Comprobante</a>
+                    <a href="{{ '/deuda/pago/comprobante/'.$deuda->pagos->first()->id }}" class="btn btn-primary">Descargar Comprobante</a>
                     @else
                     <a href="{{ '/deuda/pago/'.$deuda->id }}" class="btn btn-primary">Pagar Renta</a>
+                    @endif
+                    
+                    @else
+
+                    <!--Opciones de propietario-->
+                    @if ($deuda->estado)
+                    <a href="{{ '/deuda/pago/comprobante/'.$deuda->pagos->first()->id }}" class="btn btn-primary">Descargar Comprobante</a>
+                    @php $pagos = $deuda->pagos; @endphp
+                    <a href="#" class="btn btn-primary" onclick="reportarProblema({{ $deuda }})">Reportar Problema</a>
+                    @endif
+
                     @endif
                 </td>
             </tr>
@@ -208,7 +222,7 @@
                 }, 
                 success: function(response) {
                     $('#ventanaModal').modal('toggle');
-                    window.location.href = "/arriendo/inquilino/" + response;
+                    window.location.href = "/arriendo/" + response;
                     console.log(response);
                 }
             });
@@ -246,10 +260,71 @@
             }, 
             success: function(response) {
                 $('#ventanaModal').modal('toggle');
-                window.location.href = "/arriendo/inquilino/" + response;
+                window.location.href = "/arriendo/" + response;
                 console.log(response);
             }
         });
+    }
+
+    function reportarProblema(deuda) {
+        $('#titleModal').text('Reportar problema con el pago de renta sobre el periodo ' + deuda.titulo);
+        
+        var motivoDiv = $('<div class="form-group"></div>');
+        var motivoLabel = $('<label for="motivo">¿Qué problema tiene con el pago?</label>');
+        var motivoTextarea = $('<textarea class="form-control" id="motivo" name="motivo" rows="3" required></textarea>');
+        var motivoMessage = $('<div id="msgMotivo" class="invalid-feedback"></div>');
+        motivoDiv.append(motivoLabel, motivoTextarea, motivoMessage);
+
+        var p = $('<p>Por favor considere los siguientes comprobantes:</p>');
+        var ul = $('<ul></ul>');
+        $index = deuda.pagos.length;
+        deuda.pagos.map(pago => {
+            var fecha = new Date(pago.fecha + ' 00:00:00');
+            var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            var li = $('<li><a href="/deuda/pago/comprobante/' + pago.id + '">#' + $index + ' Enviado el ' + fecha.toLocaleDateString('es', options) + '</a></li>');
+            ul.append(li);
+            $index--;
+        });
+
+        $('#bodyModal').empty();
+        $('#bodyModal').append(motivoDiv, p, ul);
+
+        var btnAceptar = $('<button type="submit" class="btn btn-primary" onclick="reportar(' + deuda.id + ')">Aceptar</button>');
+        var btnCancelar = $('<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>');
+        $('#footerModal').empty();
+        $('#footerModal').append(btnAceptar, btnCancelar);
+
+        $('#ventanaModal').modal('toggle');
+    }
+
+    function reportar(id) {
+
+        $('#msgMotivo').empty();
+        $('#motivo').removeClass('is-invalid');
+
+        var motivo = $('#motivo').val();
+        if(!motivo) {
+            $('#msgMotivo').text('Es necesario explicar el problema.');
+            $('#motivo').addClass('is-invalid');
+        }
+
+        if(motivo) {
+            $.ajax({
+                url: '/deuda/pago/problema',
+                type: "POST",
+                dataType: 'json',//this will expect a json response
+                data: {
+                  '_token': '{{ csrf_token() }}',
+                  id,
+                  motivo
+                }, 
+                success: function(response) {
+                    $('#ventanaModal').modal('toggle');
+                    window.location.href = "/arriendo/" + response;
+                    console.log(response);
+                }
+            });
+        }
     }
 </script>
 @endsection

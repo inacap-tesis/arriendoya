@@ -32,27 +32,26 @@ class PagoDeudaController extends Controller
             $pago->save();
         }
 
-        return redirect('/arriendo/inquilino/'.$deuda->arriendo->id);
+        return redirect('/arriendo/'.$deuda->arriendo->inmueble->id);
     }
 
     public function descargarComprobante($id) {
-        $deuda = Deuda::find($id);
-        $pago = $deuda->pagos->first();
+        $pago = PagoDeuda::find($id);
         $url = base_path().'/storage/app/public/'.$pago->urlComprobante;
         $extension = pathinfo(storage_path($url), PATHINFO_EXTENSION);
-        $fecha = new \DateTime($deuda->fechaCompromiso);
-        $fecha->modify('+1 month');
-        $mes = CatalogoController::consultarMes((int)$fecha->format('m'));
-        //$headers = array('Content-Type: application/pdf');
-        return \Response::download($url, $mes.'.'.$extension);
+        return \Response::download($url, 'comprobante.'.$extension);
     }
 
-    public function reportarProblema($id) {
-        return view('notificacion.configurar', [
+    public function reportarProblema(Request $request) {
+        $deuda = Deuda::find($request->id);
+        $deuda->estado = false;
+        $deuda->save();
+        return $deuda->arriendo->inmueble->id;
+        /*return view('notificacion.configurar', [
             'id' => $id,
             'tipo' => 1,
             'rut' => Deuda::find($id)->arriendo->inquilino->rut
-        ]);
+        ]);*/
     }
 
 }

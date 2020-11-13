@@ -17,5 +17,5 @@ Route::get('/deuda/listar', 'DeudaController@listar');
 Route::get('/deuda/pago/{id}', 'PagoDeudaController@configurar');
 Route::post('/deuda/pago', 'PagoDeudaController@registrar');
 Route::get('/deuda/pago/comprobante/{id}', 'PagoDeudaController@descargarComprobante');
-Route::get('/deuda/pago/problema/reportar/{id}', 'PagoDeudaController@reportarProblema');
-Route::get('/deuda/pago/problema/consultar', 'PagoDeudaController@consultarProblema');
+Route::post('/deuda/pago/problema', 'PagoDeudaController@reportarProblema');
+Route::get('/deuda/pago/problema', 'PagoDeudaController@consultarProblema');

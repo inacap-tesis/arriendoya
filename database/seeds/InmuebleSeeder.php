@@ -41,7 +41,7 @@ class InmuebleSeeder extends Seeder
                 'idTipoInmueble' => 3,
                 'idEstado' => 1,
                 'idComuna' => 17,
-                'rutPropietario' => '24765918-8',
+                'rutPropietario' => '23397132-6',
                 'poblacionDireccion' => '',
                 'calleDireccion' => 'Maipú',
                 'numeroDireccion' => 5641,

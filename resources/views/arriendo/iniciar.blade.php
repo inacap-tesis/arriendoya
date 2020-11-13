@@ -13,7 +13,7 @@
             </div>
         </div>
         <button type="submit" class="btn btn-primary">Guardar</button>
-        <a href="/inmueble/catalogo" class="btn btn-primary">Cancelar</a>
+        <a href="/inmuebles" class="btn btn-primary">Cancelar</a>
     </form>
 </div>
 @endsection

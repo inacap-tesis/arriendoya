@@ -17,7 +17,7 @@
                       @if ($arriendo->garantia)
                       <p class="card-text">{{ __( 'Garantía: $'.$arriendo->garantia ) }}</p>
                       @endif
-                      <a href="{{ '/arriendo/'.$arriendo->id }}" class="card-link">Consultar</a>
+                      <a href="{{ '/arriendo/'.$arriendo->inmueble->id }}" class="card-link">Consultar</a>
                     </div>
                 </div>
             </div>
