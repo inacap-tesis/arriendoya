@@ -22,11 +22,13 @@
         </div>
         <div class="col">
             <p>{{ __('Fecha de inicio: '.$arriendo->fechaInicio) }}</p>
-            <p>{{ __('Fecha de término: '.$arriendo->fechaTerminoPropuesta) }}</p>
+            <p>{{ __('Fecha de término: '.$arriendo->fechaTerminoReal) }}</p>
         </div>
         <div class="col">
             <ul>
+                @if ($arriendo->urlContrato)
                 <a href="{{ __('/arriendo/descargarContrato/'.$arriendo->id) }}" class="btn btn-primary">Descargar Contrato</a>
+                @endif
                 @php
                 $deudas = $arriendo->deudas;
                 $solicitudesRecibidas = $arriendo->solicitudesFinalizacion->where('rutReceptor',Auth::user()->rut)->whereNull('respuesta');
@@ -45,8 +47,7 @@
                 </button>
                 @endif
                 @if ($solicitudesRechazadas && $solicitudesRechazadas->respuesta == 'false')
-                {{$solicitudesRechazadas->respuesta}}
-                <a href="#" class="btn btn-primary">Finalizar Forzosamente</a>
+                <a href="#" class="btn btn-primary" onclick="finalizarForzosamente({{ $arriendo }})">Finalizar Forzosamente</a>
                 @endif
             </ul>
         </div>
@@ -190,7 +191,7 @@
         }
 
         fecha = new Date(fecha + ' 00:00:00');
-        var max = new Date(arriendo.fechaTerminoPropuesta + ' 00:00:00');
+        var max = new Date(arriendo.fechaTerminoReal + ' 00:00:00');
         var min = new Date();
         var temp = false;
         for (var i = 0; i < arriendo.deudas.length; i++) {
@@ -223,7 +224,6 @@
                 success: function(response) {
                     $('#ventanaModal').modal('toggle');
                     window.location.href = "/arriendo/" + response;
-                    console.log(response);
                 }
             });
         }
@@ -261,7 +261,6 @@
             success: function(response) {
                 $('#ventanaModal').modal('toggle');
                 window.location.href = "/arriendo/" + response;
-                console.log(response);
             }
         });
     }
@@ -321,10 +320,51 @@
                 success: function(response) {
                     $('#ventanaModal').modal('toggle');
                     window.location.href = "/arriendo/" + response;
-                    console.log(response);
                 }
             });
         }
+    }
+
+    function finalizarForzosamente(arriendo) {
+        $('#titleModal').text('Finalizar Forzosamente');
+
+        var p1 = $('<p>Antes de continuar, permítanos recomendarle lo siguiente:</p>');
+        var ul = $('<ul></ul>');
+        var fecha = new Date(arriendo.solicitudes_finalizacion[0].fechaPropuesta + ' 00:00:00');
+        var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        ul.append($('<li>Si acepta, el arriendo finalizará el ' + fecha.toLocaleDateString('es', options) + ', de acuerdo a la última solicitud rechazada.</li>'));
+        ul.append($('<li>Recomendación 1</li>'));
+        ul.append($('<li>Recomendación 2</li>'));
+        ul.append($('<li>Recomendación n</li>'));
+        ul.append($('<li>Recomendación .</li>'));
+        ul.append($('<li>Recomendación .</li>'));
+        var p2 = $('<p>¿Está seguro de finalizar el arriendo forzosamente?</p>');
+
+        $('#bodyModal').empty();
+        $('#bodyModal').append(p1, ul, p2);
+
+        var btnSi = $('<button type="submit" class="btn btn-primary" onclick="finalizar(' + arriendo.id + ')">Si</button>');
+        var btnNo = $('<button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>');
+        $('#footerModal').empty();
+        $('#footerModal').append(btnSi, btnNo);
+
+        $('#ventanaModal').modal('toggle');
+    }
+
+    function finalizar(id) {
+        $.ajax({
+            url: '/arriendo/finalizar',
+            type: "POST",
+            dataType: 'json',//this will expect a json response
+            data: {
+              '_token': '{{ csrf_token() }}',
+              id
+            }, 
+            success: function(response) {
+                $('#ventanaModal').modal('toggle');
+                window.location.href = "/arriendo/" + response;
+            }
+        });
     }
 </script>
 @endsection

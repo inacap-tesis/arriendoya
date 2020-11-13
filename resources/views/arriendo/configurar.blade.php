@@ -24,7 +24,7 @@
         </div>
         <div class="form-group">
             <label for="fechaFin">Fecha término del arriendo</label>
-            <input type="date" class="form-control" id="fechaFin" name="fechaFin" @if($arriendo) value="{{ $arriendo->fechaTerminoPropuesta }}" @endif required>
+            <input type="date" class="form-control" id="fechaFin" name="fechaFin" @if($arriendo) value="{{ $arriendo->fechaTerminoReal }}" @endif required>
         </div>
         <div class="form-group">
             <label for="canon">{{ __('Renta mensual') }}</label>

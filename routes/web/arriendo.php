@@ -22,7 +22,8 @@ Route::delete('/arriendo', 'ArriendoController@eliminar'); //RF-INM-11
 Route::get('/arriendo/cargarContrato/{id}', 'ArriendoController@cargarContrato');
 Route::post('/arriendo/iniciar', 'ArriendoController@iniciar'); //RF-INM-13
 Route::get('/arriendo/descargarContrato/{id}', 'ArriendoController@descargarContrato'); //RF-ARR-05
-Route::get('/arriendo/formato', 'ArriendoController@obtenerContrato'); //RF-ARR-05
+Route::get('/arriendo/formato', 'ArriendoController@obtenerContrato'); //RF-INM-12
+Route::post('/arriendo/finalizar', 'ArriendoController@finalizarForzosamente'); //RF-ARR-12
 
 
 

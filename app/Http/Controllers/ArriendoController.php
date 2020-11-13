@@ -52,7 +52,7 @@ class ArriendoController extends Controller {
         $arriendo->estado = false;
         $arriendo->urlContrato = null;
         $arriendo->numeroRenovacion = null;
-        $arriendo->fechaTerminoReal = null;
+        $arriendo->fechaTerminoReal = $request->fechaFin;
         if($arriendo->save()){
             $garantia = Garantia::find($arriendo->id);
             if($request->conGarantia) {
@@ -142,8 +142,14 @@ class ArriendoController extends Controller {
 
     }
 
-    public function finalizarForzosamente() {
-        
+    public function finalizarForzosamente(Request $request) {
+        $arriendo = Arriendo::find($request->id);
+        $arriendo->fechaTerminoReal = $arriendo->solicitudesFinalizacion->first()->fechaPropuesta;
+        $arriendo->save();
+        //Actualizar las deudas
+        DeudaController::modificarPeriodo($arriendo);
+        //Notificar a la contraparte
+        return $arriendo->inmueble->id;
     }
 
     public function renovar() {

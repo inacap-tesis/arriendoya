@@ -44,8 +44,8 @@
                 @php
                     $color = 'primary';
                     $botones = [
-                      array('Modificar Inmueble', '/inmueble'),
-                      array('Modificar Publicación', '/anuncio/configurar'),
+                      array('Modificar inmueble', '/inmueble'),
+                      array('Modificar anuncio', '/anuncio/configurar'),
                       array('Quitar publicación', '/anuncio/desactivar'),
                       array('Ver interesados', '/interesados')
                     ]
@@ -64,8 +64,8 @@
                   @php
                     $color = 'warning';
                     $botones = [
-                      array('Modificar', '/inmueble'),
-                      array('Quitar publicación', '/anuncio/desactivar'),
+                      array('Modificar inmueble', '/inmueble'),
+                      array('Quitar anuncio', '/anuncio/desactivar'),
                       array('Ver interesados', '/interesados'),
                       array('Configurar arriendo', '/arriendo/configurar'),
                       array('Obtener contrato', '/inmueble/contrato'),
@@ -76,7 +76,7 @@
                 @php
                     $color = 'warning';
                     $botones = [
-                      array('Modificar Arriendo', '/arriendo/configurar'),
+                      array('Modificar ariendo', '/arriendo/configurar'),
                       array('No arrendar', '/arriendo'),
                       array('Obtener contrato', '/inmueble/contrato'),
                       array('Iniciar arriendo', '/arriendo/cargarContrato')

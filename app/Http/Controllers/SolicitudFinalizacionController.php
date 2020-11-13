@@ -39,7 +39,7 @@ class SolicitudFinalizacionController extends Controller
         $notificacion->estado = true;
         $notificacion->save();*/
 
-        return $request->id;
+        return $arriendo->inmueble->id;
     }
 
     public function responder(Request $request) {
@@ -47,6 +47,7 @@ class SolicitudFinalizacionController extends Controller
         if($request->respuesta == 'true') {
             $solicitud->respuesta = true;
             $solicitud->arriendo->fechaTerminoPropuesta = $solicitud->fechaPropuesta;
+            $solicitud->arriendo->fechaTerminoReal = $solicitud->fechaPropuesta;
             $solicitud->arriendo->save();
             //Actualizar las deudas
             DeudaController::modificarPeriodo($solicitud->arriendo);
@@ -54,7 +55,7 @@ class SolicitudFinalizacionController extends Controller
             $solicitud->respuesta = false;
         }
         $solicitud->save();
-        return $solicitud->arriendo->id;
+        return $solicitud->arriendo->inmueble->id;
     }
     
 }

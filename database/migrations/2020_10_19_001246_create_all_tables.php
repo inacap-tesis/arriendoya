@@ -169,7 +169,7 @@ class CreateAllTables extends Migration
             $table->unsignedBigInteger('idInmueble');
             $table->date('fechaInicio');
             $table->date('fechaTerminoPropuesta');
-            $table->date('fechaTerminoReal')->nullable();
+            $table->date('fechaTerminoReal');
             $table->mediumInteger('canon');
             $table->string('rutInquilino', 12);
             $table->smallInteger('diaPago');

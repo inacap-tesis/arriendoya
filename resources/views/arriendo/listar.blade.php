@@ -11,7 +11,7 @@
                       <h5 class="card-title">{{ __( 'Dirección: '.$arriendo->inmueble->calleDireccion.' '.$arriendo->inmueble->numeroDireccion ) }}</h5>
                       <h6 class="card-subtitle mb-2 text-muted">{{ __( 'Canon: $'.$arriendo->canon ) }}</h6>
                       <p class="card-text">{{ __( 'Fecha inicio: '.$arriendo->fechaInicio ) }}</p>
-                      <p class="card-text">{{ __( 'Fecha término: '.$arriendo->fechaTerminoPropuesta ) }}</p>
+                      <p class="card-text">{{ __( 'Fecha término: '.$arriendo->fechaTerminoReal ) }}</p>
                       <p class="card-text">{{ __( 'Día de pago: El '.$arriendo->diaPago.' de cada mes.' ) }}</p>
                       <p class="card-text">{{ __( ($arriendo->subarriendo ? 'Se': 'No se').' permite subarrendar.' ) }}</p>
                       @if ($arriendo->garantia)
