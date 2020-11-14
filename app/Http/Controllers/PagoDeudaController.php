@@ -17,11 +17,16 @@ class PagoDeudaController extends Controller
 
     public function configurar($id) {
         $deuda = Deuda::find($id);
-        return view('deuda.pagar', ['deuda' => $deuda]);
+        return view('pago.configurar', [
+            'deuda' => $deuda,
+            'monto' =>$deuda->arriendo->canon,
+            'tipo' => 'deuda',
+            'id' => $deuda->id
+            ]);
     }
 
     public function registrar(Request $request) {
-        $deuda = Deuda::find($request->deuda);
+        $deuda = Deuda::find($request->id);
         $deuda->estado = true;
         if($deuda->save()) {
             $pago = new PagoDeuda();
@@ -47,11 +52,6 @@ class PagoDeudaController extends Controller
         $deuda->estado = false;
         $deuda->save();
         return $deuda->arriendo->inmueble->id;
-        /*return view('notificacion.configurar', [
-            'id' => $id,
-            'tipo' => 1,
-            'rut' => Deuda::find($id)->arriendo->inquilino->rut
-        ]);*/
     }
 
 }

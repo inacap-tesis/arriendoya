@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\CatalogoController;
 use Illuminate\Support\Str;
 use DateTime;
-use DateInterval;
 
 class DeudaController extends Controller
 {
@@ -86,7 +85,7 @@ class DeudaController extends Controller
                 $anio++;
                 $mes = 1;
             }
-            $fecha = new DateTime($anio.'-'.$mes.'-'.$pago);            
+            $fecha = new DateTime($anio.'-'.$mes.'-'.$pago);
             $periodoInicio = $fecha->format('d').' '.Str::substr(CatalogoController::consultarMes($mes), 0, 3);
 
             $fechaFin = DeudaController::fechaFin($fecha, $pago);

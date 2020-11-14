@@ -18,4 +18,4 @@ Route::get('/deuda/pago/{id}', 'PagoDeudaController@configurar');
 Route::post('/deuda/pago', 'PagoDeudaController@registrar');
 Route::get('/deuda/pago/comprobante/{id}', 'PagoDeudaController@descargarComprobante');
 Route::post('/deuda/pago/problema', 'PagoDeudaController@reportarProblema');
-Route::get('/deuda/pago/problema', 'PagoDeudaController@consultarProblema');
+//Route::get('/deuda/pago/problema', 'PagoDeudaController@consultarProblema');

@@ -58,83 +58,40 @@
                 <th scope="col">Periodo</th>
                 <th scope="col">Fecha de pago</th>
                 <th scope="col">Fecha de compromiso</th>
-                <th scope="col">Días de retraso</th>
+                <th scope="col">Días retraso</th>
                 <th scope="col">Opciones</th>
             </tr>
         </thead>
         <tbody>
+            
             @if ($arriendo->garantia)
-            @php
-            if($arriendo->garantia->estado) {
-                $fechaPago = $arriendo->garantia->pagos->first()->fecha;
-                $pagado = new \DateTime($fechaPago);
-                $compromiso = new \DateTime($arriendo->fechaInicio);
-                if($pagado == $compromiso) {
-                    $cantidadDiasRetraso = 0;
-                } else {
-                    $diferencia = $pagado->diff($compromiso);
-                    $cantidadDiasRetraso = (($diferencia->y * 12) * 30) + ($diferencia->m * 30) + $diferencia->d;
-                    $cantidadDiasRetraso *= ($pagado > $compromiso ? 1 : -1);
-                }
-            }
-            @endphp
-            <tr @if ($arriendo->garantia->estado) class="table-success" @else class="table-active" @endif>
-                <th scope="row">{{ __('Garantía') }}</th>
-                <td>{{ $arriendo->garantia->estado ? date('d-m-Y', strtotime($fechaPago)) : 'Pendiente' }}</td>
-                <td>{{ date('d-m-Y', strtotime($arriendo->fechaInicio)) }}</td>
-                <td>{{ $arriendo->garantia->estado ? number_format($cantidadDiasRetraso, 0, ',', '.') : '-' }}</td>
-                <td>
-                    @if ($arriendo->garantia->estado)
-                    <a href="{{ '/garantia/pago/comprobante/'.$arriendo->garantia->id }}" class="btn btn-primary">Descargar Comprobante</a>
-                    @else
-                    <a href="{{ '/garantia/pagar/'.$arriendo->garantia->idArriendo }}" class="btn btn-primary">Pagar Garantía</a>
-                    @endif
-                </td>
-            </tr>
+            <!--Garantía-->
+            @include('arriendo.periodo', [
+                'periodo' => $arriendo->garantia,
+                'compromiso' => $arriendo->fechaInicio,
+                'titulo' => 'Garantía',
+                'tipo' => 'garantia',
+                'idPeriodo' => $arriendo->id,
+                'permitirPagar' => true
+            ])
+            @php $permitirPagar = $arriendo->garantia->estado; @endphp
+            @else
+            @php $permitirPagar = true; @endphp
             @endif
+
             @foreach ($arriendo->deudas as $deuda)
-            @php
-            if($deuda->estado) {
-                $fechaPago = $deuda->pagos->first()->fecha;
-                $pagado = new \DateTime($fechaPago);
-                $compromiso = new \DateTime($deuda->fechaCompromiso);
-                if($pagado == $compromiso) {
-                    $cantidadDiasRetraso = 0;
-                } else {
-                    $diferencia = $pagado->diff($compromiso);
-                    $cantidadDiasRetraso = (($diferencia->y * 12) * 30) + ($diferencia->m * 30) + $diferencia->d;
-                    $cantidadDiasRetraso *= ($pagado > $compromiso ? 1 : -1);
-                }
-            }
-            @endphp
-            <tr @if ($deuda->estado) class="table-success" @else class="table-active" @endif>
-                <th scope="row">{{ $deuda->titulo }}</th>
-                <td>{{ $deuda->estado ? date('d-m-Y', strtotime($fechaPago)) : 'Pendiente' }}</td>
-                <td>{{ date('d-m-Y', strtotime($deuda->fechaCompromiso)) }}</td>
-                <td>{{ $deuda->estado ? number_format($cantidadDiasRetraso, 0, ',', '.') : '-' }}</td>
-                <td>
-                    @if ($arriendo->inquilino->rut == Auth::user()->rut)
-                    
-                    <!--Opciones de inquilino-->
-                    @if ($deuda->estado)
-                    <a href="{{ '/deuda/pago/comprobante/'.$deuda->pagos->first()->id }}" class="btn btn-primary">Descargar Comprobante</a>
-                    @else
-                    <a href="{{ '/deuda/pago/'.$deuda->id }}" class="btn btn-primary">Pagar Renta</a>
-                    @endif
-                    
-                    @else
-
-                    <!--Opciones de propietario-->
-                    @if ($deuda->estado)
-                    <a href="{{ '/deuda/pago/comprobante/'.$deuda->pagos->first()->id }}" class="btn btn-primary">Descargar Comprobante</a>
-                    @php $pagos = $deuda->pagos; @endphp
-                    <a href="#" class="btn btn-primary" onclick="reportarProblema({{ $deuda }})">Reportar Problema</a>
-                    @endif
-
-                    @endif
-                </td>
-            </tr>
+            <!--Deuda-->
+            @include('arriendo.periodo', [
+                'periodo' => $deuda,
+                'compromiso' => $deuda->fechaCompromiso,
+                'titulo' => $deuda->titulo,
+                'tipo' => 'deuda',
+                'idPeriodo' => $deuda->id,
+                'permitirPagar' => $permitirPagar
+            ])
+            @php $permitirPagar = $deuda->estado; @endphp
             @endforeach
+
         </tbody>
     </table>
 </div>
@@ -265,8 +222,9 @@
         });
     }
 
-    function reportarProblema(deuda) {
-        $('#titleModal').text('Reportar problema con el pago de renta sobre el periodo ' + deuda.titulo);
+    function reportarProblema(idPeriodo, pagos, tipo) {
+        console.log('ok');
+        $('#titleModal').text('Reportar problema con el pago');
         
         var motivoDiv = $('<div class="form-group"></div>');
         var motivoLabel = $('<label for="motivo">¿Qué problema tiene con el pago?</label>');
@@ -276,11 +234,11 @@
 
         var p = $('<p>Por favor considere los siguientes comprobantes:</p>');
         var ul = $('<ul></ul>');
-        $index = deuda.pagos.length;
-        deuda.pagos.map(pago => {
+        $index = pagos.length;
+        pagos.map(pago => {
             var fecha = new Date(pago.fecha + ' 00:00:00');
             var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            var li = $('<li><a href="/deuda/pago/comprobante/' + pago.id + '">#' + $index + ' Enviado el ' + fecha.toLocaleDateString('es', options) + '</a></li>');
+            var li = $('<li><a href="/' + tipo + '/pago/comprobante/' + pago.id + '">#' + $index + ' Enviado el ' + fecha.toLocaleDateString('es', options) + '</a></li>');
             ul.append(li);
             $index--;
         });
@@ -288,7 +246,8 @@
         $('#bodyModal').empty();
         $('#bodyModal').append(motivoDiv, p, ul);
 
-        var btnAceptar = $('<button type="submit" class="btn btn-primary" onclick="reportar(' + deuda.id + ')">Aceptar</button>');
+        _tipo = "'" + tipo + "'";
+        var btnAceptar = $('<button type="submit" class="btn btn-primary" onclick="reportar(' + idPeriodo + ',' + _tipo + ')">Aceptar</button>');
         var btnCancelar = $('<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>');
         $('#footerModal').empty();
         $('#footerModal').append(btnAceptar, btnCancelar);
@@ -296,7 +255,7 @@
         $('#ventanaModal').modal('toggle');
     }
 
-    function reportar(id) {
+    function reportar(id, tipo) {
 
         $('#msgMotivo').empty();
         $('#motivo').removeClass('is-invalid');
@@ -309,7 +268,7 @@
 
         if(motivo) {
             $.ajax({
-                url: '/deuda/pago/problema',
+                url: '/' + tipo + '/pago/problema',
                 type: "POST",
                 dataType: 'json',//this will expect a json response
                 data: {

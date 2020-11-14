@@ -35,7 +35,7 @@
                     </tr>
                     <tr>
                         <th scope="row">Valor</th>
-                        <td>{{ '$ '.number_format($deuda->arriendo->canon, 0, ',', '.') }}</td>
+                        <td>{{ '$ '.number_format($monto, 0, ',', '.') }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -44,10 +44,10 @@
     <div class="row">
         <div class="col-3"></div>
         <div class="col-6">
-            <form action="/deuda/pago" method="post" enctype="multipart/form-data">
+            <form action="{{ '/'.$tipo.'/pago' }}" method="post" enctype="multipart/form-data">
                 @csrf
                 @method('POST')
-                <input type="hidden" name="deuda" value="{{ $deuda->id }}">
+                <input type="hidden" name="id" value="{{ $id }}">
                 <div class="input-group mb-3">
                     <div class="custom-file">
                         <input type="file" class="custom-file-input" id="documento" name="documento" required>
@@ -55,7 +55,7 @@
                     </div>
                 </div>
                 <button type="submit" class="btn btn-primary">Pagar</button>
-                <a href="{{ '/arriendo/inquilino/'.$deuda->arriendo->id }}" class="btn btn-primary">Cancelar</a>
+                <a href="{{ '/arriendo/'.$deuda->arriendo->inmueble->id }}" class="btn btn-primary">Cancelar</a>
             </form>
         </div>
     </div>

@@ -19,3 +19,5 @@ Route::get('/garantia/pago/comprobante/{id}', 'PagoGarantiaController@descargarC
 Route::get('/garantia/devolucion/configurar', 'DevolucionGarantiaController@configurar');
 Route::post('/garantia/devolucion/registrar', 'DevolucionGarantiaController@registrar');
 Route::get('/garantia/devolucion/descargarComprobante', 'DevolucionGarantiaController@descargarComprobante');
+
+Route::post('/garantia/pago/problema', 'PagoGarantiaController@reportarProblema');

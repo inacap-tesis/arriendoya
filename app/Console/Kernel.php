@@ -5,6 +5,7 @@ namespace App\Console;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use App\Arriendo;
+use DateTime;
 
 class Kernel extends ConsoleKernel
 {
@@ -25,13 +26,48 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->call(function () { 
-            foreach(Arriendo::all() as $arriendo) {
-                //Recordar pago de renta a inquilinos cuando la fecha de compromiso esté a x días de cumplirse.
-                //Consultar por renovación de arriendo cuando esté a 30, 15, 5, 2 y un día antes de finalizar.
+        $schedule->call(function () {
+            $fechaActual = new DateTime();
+            foreach(Arriendo::where('estado', true)->get() as $arriendo) {
+                $fecha = new DateTime($arriendo->fechaTerminoReal);
+
                 //Finalizar arriendos que cumplan la fecha propuesta.
-                //Informar morosidad a los inquilinos cuando la fecha de compromiso de pagos sea mayor que la fecha actual.
-                echo $arriendo. PHP_EOL;
+                if($fecha < $fechaActual) {
+                    $arriendo->estado = false;
+                    $arriendo->save();
+                    $arriendo->inmueble->idEstado = 1;
+                    $arriendo->inmueble->save();
+                    echo 'Finalizó el arriendo '.$arriendo->id. PHP_EOL;
+                    continue;
+                }
+
+                $intervalo = $fechaActual->diff($fecha);
+                $diasDiferencia = (int)$intervalo->format('%R%a');
+
+                //Recordar pago de renta a inquilinos cuando la fecha de compromiso esté a 5 días de cumplirse.
+                if($diasDiferencia < 6) {
+                    //Enviar notificación
+                }
+                
+                //Consultar por renovación de arriendo cuando esté a 30, 15, 5, 2 y un día antes de finalizar.
+                if($diasDiferencia == 30 || $diasDiferencia == 15 || $diasDiferencia == 5 || $diasDiferencia < 3) {
+                    if($arriendo->inquilino->notificaciones->where('idCategoria ', 15)->where('estado', true)->count() == 0) {
+                        //Enviar notificación a inquilino
+                    }
+                    if($arriendo->inmueble->propietario->notificaciones->where('idCategoria ', 15)->where('estado', true)->count() == 0) {
+                        //Enviar notificación a propietario
+                    }
+                }
+
+                //Informar morosidad a los inquilinos cuando la fecha de compromiso de pagos sea menor que la fecha actual.
+                $deuda = $arriendo->deudas->where('estado', false)->first();
+                if($deuda) {
+                    $fecha = new DateTime($deuda->fechaCompromiso);
+                    if($fecha < $fechaActual){
+                        //Enviar notificación
+                    }
+                }
+                //echo $fecha->format('Y-m-d'). PHP_EOL;
             }
         })->everyMinute(); //->daily();
         //$schedule->command('inspire')->hourly();
