@@ -20,12 +20,12 @@ class ArriendoController extends Controller {
     }
 
     public function listar() {
-        $arriendos = Arriendo::where('rutInquilino', '=', Auth::user()->rut)->get();
+        $arriendos = Auth::user()->arriendos;
         return view('arriendo.listar', ['arriendos' => $arriendos]);
     }
 
     public function configurar($id) {
-        $arriendo = Arriendo::where([['idInmueble', '=', $id], ['estado', '=', false]])->first();
+        $arriendo = Arriendo::where([['idInmueble', '=', $id], ['estado', '=', false]])->orderBy('fechaTerminoReal','DESC')->first();
         $interes = InteresAnuncio::where([ ['idAnuncio', '=', $id], ['candidato', '=', true] ])->get();
         return view('arriendo.configurar', [
             'anuncio' => $id,
@@ -35,7 +35,7 @@ class ArriendoController extends Controller {
     }
 
     public function consultar($id) {
-        $arriendo = Inmueble::find($id)->arriendos->where('estado', '=', true)->first();
+        $arriendo = Arriendo::find($id);
         $infoUsuario = Auth::user()->rut == $arriendo->inquilino->rut ? $arriendo->inmueble->propietario : $arriendo->inquilino;
         return view('arriendo.consultar', [
             'arriendo' => $arriendo,
@@ -84,7 +84,7 @@ class ArriendoController extends Controller {
     }
 
     public function eliminar(Request $request) {
-        $arriendo = Arriendo::where('idInmueble', '=', $request->id)->latest('created_at')->first();
+        $arriendo = Arriendo::where('idInmueble', '=', $request->id)->orderBy('fechaTerminoReal','DESC')->first();
         $arriendo->inmueble->idEstado = 4;
         if($arriendo->inmueble->save()) {
             $arriendo->delete();
@@ -93,7 +93,7 @@ class ArriendoController extends Controller {
     }
 
     public function cargarContrato($id) {
-        $arriendo = Arriendo::where([['idInmueble', '=', $id], ['estado', '=', false]])->first();
+        $arriendo = Arriendo::where([['idInmueble', '=', $id], ['estado', '=', false]])->orderBy('fechaTerminoReal','DESC')->first();
         return view('arriendo.iniciar', [
             'arriendo' => $arriendo
         ]);

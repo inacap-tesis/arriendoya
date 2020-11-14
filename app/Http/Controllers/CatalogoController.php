@@ -27,9 +27,9 @@ class CatalogoController extends Controller
     public function cargar() {
         
         if(Auth::check()) {
-            //['idEstado', '<>', 3]
-            $inmuebles = count(Inmueble::where([['rutPropietario', '=', Auth::user()->rut]])->get());
-            $arriendos = count(Arriendo::where([['rutInquilino', '=', Auth::user()->rut], ['estado', '=', true]])->get());
+            $inmuebles = Auth::user()->inmuebles->count();
+            $arriendos = Auth::user()->arriendos->where('estado', true)->count();
+            $arriendos += Auth::user()->arriendos->where('estado', false)->where('calificacion.notaAlArriendo', 0)->count();
         } else {
             $inmuebles = 0;
             $arriendos = 0;

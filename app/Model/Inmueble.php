@@ -47,7 +47,7 @@ class Inmueble extends Model
 
     public function arriendos()
     {
-        return $this->hasMany('App\Arriendo', 'idInmueble', 'id');
+        return $this->hasMany('App\Arriendo', 'idInmueble', 'id')->orderBy('fechaTerminoReal','DESC');
     }
 
     public function fotos()

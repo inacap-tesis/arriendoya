@@ -19,7 +19,8 @@ class DatabaseSeeder extends Seeder
             CategoriaNotificacionSeeder::class,
             EstadoInmuebleSeeder::class,
             UsuarioSeeder::class,
-            InmuebleSeeder::class
+            InmuebleSeeder::class,
+            ArriendoSeeder::class
         ]);
     }
 }

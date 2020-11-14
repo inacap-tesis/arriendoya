@@ -16,6 +16,10 @@
         <br>
         <div class="row row-cols-1 row-cols-md-3">
           @foreach ($inmuebles as $inmueble)
+          @php 
+          $id = $inmueble->id;
+          $esArriendo = false;
+          @endphp
           @switch($inmueble->idTipoInmueble)
               @case(1)
                   @php $tipo = 'Casa'; @endphp
@@ -85,12 +89,30 @@
                   @break
               @case(6)
                 @php
+                    $id = $inmueble->arriendos->first()->id;
+                    $esArriendo = true;
                     $color = 'success';
                     $botones = [
-                      array('Ver arriendo', '/arriendo'),
+                      array('Ver arriendo', '/arriendo')
                     ]
                 @endphp
                   @break
+              @case(7)
+                  @php
+                    $id = $inmueble->arriendos->first()->id;
+                    $esArriendo = true;
+                    $color = 'success';
+                    $botones = [];
+                    $arriendo = $inmueble->arriendos->where('idInmueble', '=', $inmueble->id)->first();
+                    if($arriendo->garantia && !$arriendo->garantia->devolucionGarantia) {
+                      array_push($botones, array('Devolver garantía', '#'));
+                    }
+                    if(!$arriendo->calificacion || $arriendo->calificacion->notaAlInquilino == 0) {
+                      array_push($botones, array('Calificar inquilino', '/calificacion'));
+                    }
+
+                  @endphp
+                    @break
               @default
                 @php
                     $color = '';
@@ -99,11 +121,12 @@
           @endswitch
           @include('inmueble.item', [
             'direccion' => $inmueble->calleDireccion.' '.$inmueble->numeroDireccion,
-            'caracteristicas' => $inmueble->caracteristicas,
+            'elemento' => $esArriendo ? $inmueble->arriendos->first() : $inmueble,
+            'esArriendo' => $esArriendo,
             'color' => $color,
             'botones' => $botones,
             'tipo' => $tipo,
-            'id' => $inmueble->id
+            'id' => $id
             ])
           @endforeach
         </div>

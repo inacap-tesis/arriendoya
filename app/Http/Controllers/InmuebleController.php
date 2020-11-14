@@ -21,7 +21,7 @@ class InmuebleController extends Controller
     }
 
     public function listar() {
-        $inmuebles = Inmueble::where('rutPropietario', Auth::user()->rut)->get();
+        $inmuebles = Auth::user()->inmuebles;
         return view('inmueble.listar', ['inmuebles'=> $inmuebles]);
     }
 

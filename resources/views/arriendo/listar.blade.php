@@ -2,26 +2,55 @@
 
 @section('content')
 <div class="container">
-    <div class="row row-cols-1 row-cols-md-3 bg-secondary">
+    <div class="row">
+        <h3 class="col">Mis Arriendos</h3>
+    </div>
+    <br>
+    <div class="row row-cols-1 row-cols-md-3">
         @foreach ($arriendos as $arriendo)
-        @if ($arriendo->estado)
-            <div class="col mb-3">
-                <div class="card" style="width: 16.8rem;">
-                    <div class="card-body">
-                      <h5 class="card-title">{{ __( 'Dirección: '.$arriendo->inmueble->calleDireccion.' '.$arriendo->inmueble->numeroDireccion ) }}</h5>
-                      <h6 class="card-subtitle mb-2 text-muted">{{ __( 'Canon: $'.$arriendo->canon ) }}</h6>
-                      <p class="card-text">{{ __( 'Fecha inicio: '.$arriendo->fechaInicio ) }}</p>
-                      <p class="card-text">{{ __( 'Fecha término: '.$arriendo->fechaTerminoReal ) }}</p>
-                      <p class="card-text">{{ __( 'Día de pago: El '.$arriendo->diaPago.' de cada mes.' ) }}</p>
-                      <p class="card-text">{{ __( ($arriendo->subarriendo ? 'Se': 'No se').' permite subarrendar.' ) }}</p>
-                      @if ($arriendo->garantia)
-                      <p class="card-text">{{ __( 'Garantía: $'.$arriendo->garantia ) }}</p>
-                      @endif
-                      <a href="{{ '/arriendo/'.$arriendo->inmueble->id }}" class="card-link">Consultar</a>
-                    </div>
-                </div>
-            </div>
-        @endif
+
+        @switch($arriendo->inmueble->idTipoInmueble)
+            @case(1)
+                @php $tipo = 'Casa'; @endphp
+                @break
+            @case(2)
+              @php $tipo = 'Departamento'; @endphp
+                @break
+            @case(3)
+              @php $tipo = 'Habitación'; @endphp  
+                @break
+            @default
+              @php $tipo = ''; @endphp  
+        @endswitch
+
+        @php
+            $color = 'danger';
+            $botones = [];
+            if($arriendo->estado) {
+                $color = 'success';
+                array_push($botones, array('Ver arriendo', '/arriendo'));
+            } elseif(!$arriendo->calificacion || $arriendo->calificacion->notaAlArriendo == 0) {
+                array_push($botones, array('Calificar arriendo', '/calificacion'));
+                if($arriendo->garantia && $arriendo->garantia->devolucionGarantia) {
+                    array_push($botones, array('Descargar comprobante', '#'));
+                }
+            } elseif($arriendo->garantia && $arriendo->garantia->devolucionGarantia) {
+                array_push($botones, array('Descargar comprobante', '#'));
+            } else {
+                continue;
+            }
+        @endphp
+
+        @include('inmueble.item', [
+            'direccion' => $arriendo->inmueble->calleDireccion.' '.$arriendo->inmueble->numeroDireccion,
+            'elemento' => $arriendo,
+            'esArriendo' => true,
+            'color' => $color,
+            'botones' => $botones,
+            'tipo' => $tipo,
+            'id' => $arriendo->id
+        ])
+
         @endforeach
     </div>
 </div>

@@ -4,8 +4,19 @@
             {{ $tipo.' en '.$direccion }}
         </div>
         <div class="card-body">
+          @if ($esArriendo)
+          <h6 class="card-subtitle mb-2 text-muted">{{ __( 'Canon: $'.$elemento->canon ) }}</h6>
+          <p class="card-text">{{ __( 'Fecha inicio: '.$elemento->fechaInicio ) }}</p>
+          <p class="card-text">{{ __( 'Fecha término: '.$elemento->fechaTerminoReal ) }}</p>
+          <p class="card-text">{{ __( 'Día de pago: El '.$elemento->diaPago.' de cada mes.' ) }}</p>
+          <p class="card-text">{{ __( ($elemento->subarriendo ? 'Se': 'No se').' permite subarrendar.' ) }}</p>
+          @if ($elemento->garantia)
+          <p class="card-text">{{ __( 'Garantía: $'.$elemento->garantia ) }}</p>
+          @endif
+          @else
           <h6 class="card-title" style="text-decoration: underline;">Características:</h6>
-          <p class="card-text">{{ $caracteristicas }}</p>
+          <p class="card-text">{{ $elemento->caracteristicas }}</p>
+          @endif
             <ul class="list-group">
             @foreach ($botones as $boton)
             <li class="list-group-item border-{{ $color }}">
@@ -26,6 +37,11 @@
               </form>
               <a href="#" class="text-dark" style="text-decoration: unset; font-weight: bold;" onclick="{{ 'forms.inm'.$id.'.submit();' }}">
                 {{ $boton[0] }}
+              </a>
+              @elseif ($boton[0] == 'Devolver garantía' || $boton[0] == 'Calificar inquilino' || $boton[0] == 'Calificar arriendo')
+              <a href="{{ $boton[1].'/'.$id }}" class="text-dark" style="text-decoration: unset; font-weight: bold;">
+                {{ $boton[0] }}
+                <span class="badge badge-danger">pendiente</span>
               </a>
               @else
               <a href="{{ $boton[1].'/'.$id }}" class="text-dark" style="text-decoration: unset; font-weight: bold;">{{ $boton[0] }}</a>

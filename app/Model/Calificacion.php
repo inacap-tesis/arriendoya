@@ -10,12 +10,10 @@ class Calificacion extends Model
     protected $primaryKey = 'idArriendo';
     protected $fillable = [
         'idArriendo',
-        'notaAlInmueble',
+        'notaAlArriendo',
         'notaAlInquilino', 
-        'notaAlPropietario', 
-        'comentarioAlInmueble',
-        'comentarioAlInquilino',
-        'comentarioAlPropietario'
+        'comentarioAlArriendo',
+        'comentarioAlInquilino'
     ];
 
     public function arriendo() {

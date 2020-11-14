@@ -13,7 +13,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/calificacion/inquilino/configurar', 'CalificacionController@configurarParaInquilino');
+Route::get('/calificacion/{arriendo}', 'CalificacionController@configurar');
+Route::post('/calificacion', 'CalificacionController@calificar');
+
 Route::get('/calificacion/arriendo/configurar', 'CalificacionController@configurarParaArriendo');
 Route::post('/calificacion/inquilino/registrar', 'CalificacionController@paraInquilino');
 Route::post('/calificacion/arriendo/registrar', 'CalificacionController@paraArriendo');

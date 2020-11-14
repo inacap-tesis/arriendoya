@@ -15,7 +15,7 @@ class InmuebleSeeder extends Seeder
         DB::table('inmuebles')->insert([
             [
                 'idTipoInmueble' => 1,
-                'idEstado' => 1,
+                'idEstado' => 6,
                 'idComuna' => 17,
                 'rutPropietario' => '23397132-4',
                 'poblacionDireccion' => 'Bonilla',

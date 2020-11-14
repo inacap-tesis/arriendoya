@@ -257,12 +257,11 @@ class CreateAllTables extends Migration
 
         Schema::create('calificaciones', function (Blueprint $table) {
             $table->unsignedBigInteger('idArriendo')->primary();
-            $table->smallInteger('notaAlInmueble');
-            $table->smallInteger('notaAlInquilino');
-            $table->smallInteger('notaAlPropietario');
-            $table->string('comentarioAlInmueble');
-            $table->string('comentarioAlInquilino');
-            $table->string('comentarioAlPropietario');
+            $table->smallInteger('cumplimientoInquilino');
+            $table->smallInteger('notaAlArriendo')->nullable();
+            $table->smallInteger('notaAlInquilino')->nullable();
+            $table->string('comentarioAlArriendo')->nullable();
+            $table->string('comentarioAlInquilino')->nullable();
             $table->timestamps();
 
             $table->foreign('idArriendo')->references('id')->on('arriendos')->onDelete('cascade');

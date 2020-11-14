@@ -5,6 +5,7 @@ namespace App\Console;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use App\Arriendo;
+use App\Calificacion;
 use DateTime;
 
 class Kernel extends ConsoleKernel
@@ -27,16 +28,25 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->call(function () {
+
             $fechaActual = new DateTime();
+
             foreach(Arriendo::where('estado', true)->get() as $arriendo) {
+                
                 $fecha = new DateTime($arriendo->fechaTerminoReal);
 
                 //Finalizar arriendos que cumplan la fecha propuesta.
                 if($fecha < $fechaActual) {
                     $arriendo->estado = false;
                     $arriendo->save();
-                    $arriendo->inmueble->idEstado = 1;
+                    $arriendo->inmueble->idEstado = 7;
                     $arriendo->inmueble->save();
+                    $calificacion = new Calificacion();
+                    $calificacion->idArriendo = $arriendo->id;
+                    //Calcular nota al inquilino
+                    $calificacion->cumplimientoInquilino = 0;
+                    $calificacion->save();
+                    //Enviar notificación a ambas partes
                     echo 'Finalizó el arriendo '.$arriendo->id. PHP_EOL;
                     continue;
                 }
@@ -67,7 +77,6 @@ class Kernel extends ConsoleKernel
                         //Enviar notificación
                     }
                 }
-                //echo $fecha->format('Y-m-d'). PHP_EOL;
             }
         })->everyMinute(); //->daily();
         //$schedule->command('inspire')->hourly();

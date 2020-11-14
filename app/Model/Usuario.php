@@ -74,12 +74,12 @@ class Usuario extends Model implements
 
     public function inmuebles()
     {
-        return $this->hasMany('App\Inmueble', 'rutPropietario', 'rut');
+        return $this->hasMany('App\Inmueble', 'rutPropietario', 'rut')->orderBy('id','DESC');
     }
 
     public function arriendos()
     {
-        return $this->hasMany('App\Arriendo', 'rutInquilino', 'rut');
+        return $this->hasMany('App\Arriendo', 'rutInquilino', 'rut')->orderBy('fechaTerminoReal','DESC');
     }
 
     public function solicitudesFinzalizacionEnviadas()
