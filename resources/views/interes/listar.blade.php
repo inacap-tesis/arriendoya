@@ -25,7 +25,7 @@
     </div>
     @include('layouts.modal', [
       'static' => false,
-      'size' => ''
+      'size' => 'modal-lg'
       ])
     <br>
       <table class="table">
@@ -46,12 +46,13 @@
               <input style="width:20px; height:20px;" class="form-check-input" type="checkbox" name="{{ $interes->usuario->rut }}" id="{{ $interes->usuario->rut }}" @if ($interes->candidato) checked @endif>
             </td>
             <td class="text-right">
-              <a href="{{ '/usuario/calificaciones/'.$interes->usuario->rut }}" class="btn btn-primary">
+              <!-- Button trigger modal -->
+              <button type="button" class="btn btn-primary" onclick="mostrarCalificaciones({{ $interes->usuario }})">
                 Calificaciones
                 <svg class="bi" width="20" height="20" fill="currentColor">
                   <use xlink:href="{{ asset('icons/bootstrap-icons.svg').'#bookmark-star-fill' }}"/>
                 </svg>
-              </a>
+              </button>
               <!-- Button trigger modal -->
               <button type="button" class="btn btn-primary" onclick="mostrarAntecedentes({{ $interes->usuario }})">
                 Antecedentes
@@ -110,6 +111,66 @@
             });
             $('#bodyModal').empty();
             $('#bodyModal').append(ul);
+            $('#ventanaModal').modal('toggle');
+          }
+      });
+    }
+
+    function mostrarCalificaciones(usuario) {
+      nombre = usuario.primerNombre + ' ' + usuario.segundoNombre + ' ' + usuario.primerApellido + ' ' + usuario.segundoApellido;
+      $('#titleModal').text('Calificaciones de ' + nombre);
+      $.ajax({
+          url: '/calificaciones/' + usuario.rut,
+          type: "GET",
+          dataType: 'json',//this will expect a json response
+          data: {}, 
+          success: function(response) {
+            var accordion = $('<div class="accordion" id="calificaciones"></div>');
+            var primero = true;
+            response.map(calificacion => {
+              var propietario = calificacion.arriendo.inmueble.propietario;
+              var nota = calificacion.notaAlInquilino;
+              var comentario = calificacion.comentarioAlInquilino;
+              var notaSistema = calificacion.cumplimientoInquilino;
+
+              var card = $('<div class="card"></div>');
+              var header = $('<div class="card-header" id="__' + calificacion.idArriendo + '"></div>');
+              var titulo = $('<h2 class="mb-0"></h2>');
+              var btn = $('<button class="btn btn-block text-left" type="button" data-toggle="collapse" data-target="#_' + calificacion.idArriendo + '" aria-expanded="true" aria-controls="_' + calificacion.idArriendo + '"></button>');
+              var nombre = propietario.primerNombre + ' ' + propietario.primerApellido;
+              var url = '{{ asset("") }}' + 'storage/' + propietario.urlFoto;
+              var foto = $('<img src="' + url + '" alt="" height="45" class="rounded-circle" style="margin: 0px 10px 0px 0px">');
+              var row = $('<div class="row"></div>');
+              var col1 = $('<div class="col"></div>');
+              col1.append(foto, nombre);
+              var subRow = $('<div style="margin-top: 6px;" class="row justify-content-end"></div>');
+              var divNotaSistema = $('<div class="btn text-white bg-' + (notaSistema < 3 ? 'danger' : 'success') + '"><b>' + notaSistema + '</b>  <span class="badge badge-secondary">Cumplimiento</span></div>');
+              if(nota > 0) {
+                var divNotaPropietario = $('<div style="margin-right: 5px;" class="btn text-white bg-' + (nota < 3 ? 'danger' : 'success') + '"><b>' + nota + '</b>  <span class="badge badge-secondary">Conformidad</span></div>');
+                subRow.append(divNotaPropietario, divNotaSistema);
+              } else {
+                subRow.append(divNotaSistema);
+              }
+              var col2 = $('<div class="col text-right"></div>');
+              col2.append(subRow);
+              row.append(col1, col2);
+              btn.append(row);
+              titulo.append(btn);
+              header.append(titulo);
+              if(primero) {
+                var collapse = $('<div id="_' + calificacion.idArriendo + '" class="collapse show" aria-labelledby="__' + calificacion.idArriendo + '" data-parent="#calificaciones"></div>');
+                primero = false;
+              } else {
+                var collapse = $('<div id="_' + calificacion.idArriendo + '" class="collapse" aria-labelledby="__' + calificacion.idArriendo + '" data-parent="#calificaciones"></div>');
+              }
+              var contenido = $('<div class="card-body"></div>');
+              contenido.append($('<i>" ' + comentario + ' "</i>'));
+              collapse.append(contenido);
+              card.append(header, collapse);
+              accordion.append(card);
+            });
+            $('#bodyModal').empty();
+            $('#bodyModal').append(accordion);
             $('#ventanaModal').modal('toggle');
           }
       });

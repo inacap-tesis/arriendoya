@@ -6,9 +6,19 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Calificacion;
 use App\Arriendo;
+use App\Usuario;
 
 class CalificacionController extends Controller
 {
+
+    public function consultar($rut) {
+        $usuario = Usuario::find($rut);
+        $calificaciones = $usuario->calificacionesComoInquilino;
+        foreach($calificaciones as $calificacio) {
+            $propietario = $calificacio->arriendo->inmueble->propietario;
+        }
+        return $calificaciones;
+    }
 
     public function configurar($id) {
         $arriendo = Arriendo::find($id);

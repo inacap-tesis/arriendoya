@@ -21,14 +21,14 @@ class ArriendoSeeder extends Seeder
                 'fechaTerminoPropuesta' => '2018-12-01',
                 'fechaTerminoReal' => '2018-12-01',
                 'canon' => 300000,
-                'rutInquilino' => '23397132-6',
+                'rutInquilino' => '24765918-8',
                 'diaPago' => 10,
-                'estado' => false,
+                'estado' => true,
                 'urlContrato' => null,
                 'numeroRenovacion' => null
             ],
             [
-                'idInmueble' => 1,
+                'idInmueble' => 2,
                 'fechaInicio' => '2018-12-01',
                 'fechaTerminoPropuesta' => '2019-12-01',
                 'fechaTerminoReal' => '2019-12-01',

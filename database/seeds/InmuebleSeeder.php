@@ -27,7 +27,7 @@ class InmuebleSeeder extends Seeder
             ],
             [
                 'idTipoInmueble' => 2,
-                'idEstado' => 1,
+                'idEstado' => 6,
                 'idComuna' => 17,
                 'rutPropietario' => '23397132-5',
                 'poblacionDireccion' => 'Nicolas Tirado',

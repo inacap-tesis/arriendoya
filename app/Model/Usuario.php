@@ -114,8 +114,8 @@ class Usuario extends Model implements
             'rutInquilino',
             'idArriendo',
             'rut',
-            'idInmueble'
-        );
+            'id'
+        )->orderBy('idArriendo', 'DESC');
     }
 
 }

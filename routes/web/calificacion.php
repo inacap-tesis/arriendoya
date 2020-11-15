@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/calificaciones/{usuario}', 'CalificacionController@consultar');
 Route::get('/calificacion/{arriendo}', 'CalificacionController@configurar');
 Route::post('/calificacion', 'CalificacionController@calificar');
 
