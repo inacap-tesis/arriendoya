@@ -44,7 +44,9 @@ class DevolucionGarantiaController extends Controller
 
     public function descargarComprobante($id) {
         $devolucion = DevolucionGarantia::find($id);
-        dd($devolucion->garantia->arriendo->calificacion->notaAlInquilino);
+        $url = base_path().'/storage/app/public/'.$devolucion->urlComprobante;
+        $extension = pathinfo(storage_path($url), PATHINFO_EXTENSION);
+        return \Response::download($url, 'comprobante.'.$extension);
     }
     
 }
