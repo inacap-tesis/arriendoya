@@ -72,6 +72,7 @@ class DeudaController extends Controller
         $deuda->idArriendo = $arriendo->id;
         $deuda->fechaCompromiso = $fecha->format('Y-m-d');
         $deuda->estado = false;
+        $deuda->diasRetraso = -1;
         $deuda->titulo = $periodoInicio.' - '.$periodoFin;
         $deuda->save();
 
@@ -93,13 +94,13 @@ class DeudaController extends Controller
                 $periodoFin = $fin->format('d').' '.Str::substr(CatalogoController::consultarMes((int)$fin->format('m')), 0, 3);
             } else {
                 $periodoFin = $fechaFin->format('d').' '.Str::substr(CatalogoController::consultarMes((int)$fechaFin->format('m')), 0, 3);
-                //$periodoFin = DeudaController::periodoFin($fecha, $pago);
             }
 
             $deuda = new Deuda();
             $deuda->idArriendo = $arriendo->id;
             $deuda->fechaCompromiso = $fecha->format('Y-m-d');
             $deuda->estado = false;
+            $deuda->diasRetraso = -1;
             $deuda->titulo = $periodoInicio.' - '.$periodoFin;
             $deuda->save();
             $cant++;
@@ -108,25 +109,12 @@ class DeudaController extends Controller
         return $cant;
     }
 
-    //Pertenece a PagoDeuda@registrar
-    /*public function pagar(Request $request) {
-        $deuda = Deuda::find($request->deuda);
-        $deuda->estado = true;
-        /*$actual = new \DateTime();
-        $compromiso = new \DateTime($deuda->fechaCompromiso);
-        $diferencia = $actual->diff($compromiso);
-        $deuda->cantidadDiasRetraso = (($diferencia->y * 12) * 30) + ($diferencia->m * 30) + $diferencia->d;
-        $deuda->fechaPago = $actual->format('Y-m-d');*/
-        /*if($deuda->save()) {
-            $pago = new PagoDeuda();
-            $pago->idDeuda = $deuda->id;
-            $actual = new \DateTime();
-            $pago->fecha = $actual->format('Y-m-d');
-            $pago->urlComprobante = $request->documento;
-            $pago->save();
-        }
+    public static function recordarPago(Deuda $deuda) {
+        //Enviar notificación
+    }
 
-        return redirect('/arriendo/consultar/'.$deuda->arriendo->id);
-    }*/
+    public static function informarMorosidad(Deuda $deuda) {
+        //Enviar notificación
+    }
 
 }

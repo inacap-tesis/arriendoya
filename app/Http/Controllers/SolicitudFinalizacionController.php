@@ -39,7 +39,7 @@ class SolicitudFinalizacionController extends Controller
         $notificacion->estado = true;
         $notificacion->save();*/
 
-        return $arriendo->inmueble->id;
+        return $arriendo->id;
     }
 
     public function responder(Request $request) {
@@ -55,7 +55,7 @@ class SolicitudFinalizacionController extends Controller
             $solicitud->respuesta = false;
         }
         $solicitud->save();
-        return $solicitud->arriendo->inmueble->id;
+        return $solicitud->arriendo->id;
     }
     
 }

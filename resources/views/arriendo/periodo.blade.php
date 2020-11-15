@@ -1,6 +1,6 @@
 @php
 $fechaCompromiso = new \DateTime($compromiso);
-if($periodo->estado) {
+/*if($periodo->estado) {
     $fechaPago = new \DateTime($periodo->pagos->first()->fecha);
     if($fechaPago == $fechaCompromiso) {
         $cantidadDiasRetraso = 'Ninguno';
@@ -10,14 +10,14 @@ if($periodo->estado) {
         $cantidadDiasRetraso = $temp > 0 ? number_format($temp, 0, ',', '.') : 'Ninguno';
     }
     
-}
+}*/
 @endphp
 
 <tr @if ($periodo->estado) class="table-success" @else class="table-active" @endif>
     <th scope="row">{{ $titulo }}</th>
-    <td>{{ $periodo->estado ? $fechaPago->format('d-m-Y') : 'Pendiente' }}</td>
+    <td>{{ $periodo->estado ? $periodo->pagos->first()->fecha : 'Pendiente' }}</td>
     <td>{{ $fechaCompromiso->format('d-m-Y') }}</td>
-    <td>{{ $periodo->estado ? $cantidadDiasRetraso : '-' }}</td>
+    <td>{{ $periodo->estado ? $periodo->diasRetraso : '-' }}</td>
     <td>
         @if ($arriendo->inquilino->rut == Auth::user()->rut)
         

@@ -19,7 +19,7 @@ class Garantia extends Model
         return $this->belongsTo('App\Arriendo', 'idArriendo', 'id');
     }
 
-    public function devolucionGarantia() {
+    public function devolucion() {
         return $this->hasOne('App\DevolucionGarantia', 'idGarantia', 'idArriendo');
     }
 

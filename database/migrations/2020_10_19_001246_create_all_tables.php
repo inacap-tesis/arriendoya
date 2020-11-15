@@ -186,6 +186,7 @@ class CreateAllTables extends Migration
             $table->unsignedBigInteger('idArriendo')->primary();
             $table->boolean('estado');
             $table->mediumInteger('monto');
+            $table->smallInteger('diasRetraso');
 
             $table->foreign('idArriendo')->references('id')->on('arriendos')->onDelete('cascade');
         });
@@ -226,6 +227,7 @@ class CreateAllTables extends Migration
             $table->string('titulo', 50);
             $table->date('fechaCompromiso');
             $table->boolean('estado');
+            $table->smallInteger('diasRetraso');
             $table->timestamps();
 
             $table->foreign('idArriendo')->references('id')->on('arriendos')->onDelete('cascade');

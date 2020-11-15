@@ -20,24 +20,32 @@ class PagoDeudaController extends Controller
         return view('pago.configurar', [
             'deuda' => $deuda,
             'monto' =>$deuda->arriendo->canon,
-            'tipo' => 'deuda',
+            'url' => '/deuda/pago',
             'id' => $deuda->id
             ]);
     }
 
     public function registrar(Request $request) {
+        
         $deuda = Deuda::find($request->id);
-        $deuda->estado = true;
-        if($deuda->save()) {
-            $pago = new PagoDeuda();
-            $pago->idDeuda = $deuda->id;
-            $actual = new \DateTime();
-            $pago->fecha = $actual->format('Y-m-d');
-            $pago->urlComprobante = $request->file('documento')->store('pagosDeuda');
-            $pago->save();
-        }
 
-        return redirect('/arriendo/'.$deuda->arriendo->inmueble->id);
+        $pago = new PagoDeuda();
+        $pago->idDeuda = $deuda->id;
+        $actual = new \DateTime();
+        $pago->fecha = $actual->format('Y-m-d');
+        $pago->urlComprobante = $request->file('documento')->store('pagosDeuda');
+        $pago->save();
+
+        $fechaCompromiso = new \DateTime($deuda->fechaCompromiso);
+        $fechaPago = new \DateTime($pago->fecha);
+        $intervalo = $fechaCompromiso->diff($fechaPago);
+        $dias = (int)$intervalo->format('%R%a');
+        
+        $deuda->diasRetraso = $dias > 0 ? $dias : 0;
+        $deuda->estado = true;
+        $deuda->save();
+
+        return redirect('/arriendo/'.$deuda->arriendo->id);
     }
 
     public function descargarComprobante($id) {
@@ -51,7 +59,7 @@ class PagoDeudaController extends Controller
         $deuda = Deuda::find($request->id);
         $deuda->estado = false;
         $deuda->save();
-        return $deuda->arriendo->inmueble->id;
+        return $deuda->arriendo->id;
     }
 
 }

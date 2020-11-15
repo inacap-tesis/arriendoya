@@ -99,13 +99,13 @@
                   @break
               @case(7)
                   @php
-                    $id = $inmueble->arriendos->first()->id;
                     $esArriendo = true;
                     $color = 'success';
                     $botones = [];
-                    $arriendo = $inmueble->arriendos->where('idInmueble', '=', $inmueble->id)->first();
-                    if($arriendo->garantia && !$arriendo->garantia->devolucionGarantia) {
-                      array_push($botones, array('Devolver garantía', '#'));
+                    $arriendo = $inmueble->arriendos->first();
+                    $id = $arriendo->id;
+                    if($arriendo->garantia && !$arriendo->garantia->devolucion) {
+                      array_push($botones, array('Devolver garantía', '/garantia/devolucion'));
                     }
                     if(!$arriendo->calificacion || $arriendo->calificacion->notaAlInquilino == 0) {
                       array_push($botones, array('Calificar inquilino', '/calificacion'));

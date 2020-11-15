@@ -20,7 +20,8 @@ class DatabaseSeeder extends Seeder
             EstadoInmuebleSeeder::class,
             UsuarioSeeder::class,
             InmuebleSeeder::class,
-            ArriendoSeeder::class
+            ArriendoSeeder::class,
+            GarantiaSeeder::class
         ]);
     }
 }

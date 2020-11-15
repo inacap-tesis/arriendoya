@@ -38,7 +38,7 @@ class Arriendo extends Model
 
     public function deudas()
     {
-        return $this->hasMany('App\Deuda', 'idArriendo', 'id');
+        return $this->hasMany('App\Deuda', 'idArriendo', 'id')->orderBy('created_at', 'desc');
     }
 
     public function solicitudesFinalizacion()

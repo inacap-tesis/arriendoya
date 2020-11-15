@@ -30,8 +30,10 @@ class CalificacionController extends Controller
         if($request->esPropietario == '1') {
             $arriendo->calificacion->notaAlInquilino = (int)$request->nota;
             $arriendo->calificacion->comentarioAlInquilino = $request->comentario;
-            $arriendo->inmueble->idEstado = 1;
-            $arriendo->inmueble->save();
+            if(!$arriendo->garantia || $arriendo->garantia->devolucion) {
+                $arriendo->inmueble->idEstado = 1;
+                $arriendo->inmueble->save();
+            }
         } else {
             $arriendo->calificacion->notaAlArriendo = (int)$request->nota;
             $arriendo->calificacion->comentarioAlArriendo = $request->comentario;

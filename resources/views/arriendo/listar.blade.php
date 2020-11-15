@@ -31,11 +31,11 @@
                 array_push($botones, array('Ver arriendo', '/arriendo'));
             } elseif(!$arriendo->calificacion || $arriendo->calificacion->notaAlArriendo == 0) {
                 array_push($botones, array('Calificar arriendo', '/calificacion'));
-                if($arriendo->garantia && $arriendo->garantia->devolucionGarantia) {
-                    array_push($botones, array('Descargar comprobante', '#'));
+                if($arriendo->garantia && $arriendo->garantia->devolucion) {
+                    array_push($botones, array('Descargar comprobante', '/garantia/devolucion/comprobante'));
                 }
-            } elseif($arriendo->garantia && $arriendo->garantia->devolucionGarantia) {
-                array_push($botones, array('Descargar comprobante', '#'));
+            } elseif($arriendo->garantia && $arriendo->garantia->devolucion) {
+                array_push($botones, array('Descargar comprobante', '/garantia/devolucion/comprobante'));
             } else {
                 continue;
             }

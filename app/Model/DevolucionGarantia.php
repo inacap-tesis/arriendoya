@@ -16,7 +16,7 @@ class DevolucionGarantia extends Model
     ];
 
     public function garantia() {
-        return $this->belongsTo('App\Garantia', 'id', 'idGarantia');
+        return $this->belongsTo('App\Garantia', 'idGarantia', 'idArriendo');
     }
 
     public function descuentos()

@@ -44,7 +44,7 @@
     <div class="row">
         <div class="col-3"></div>
         <div class="col-6">
-            <form action="{{ '/'.$tipo.'/pago' }}" method="post" enctype="multipart/form-data">
+            <form action="{{ $url }}" method="post" enctype="multipart/form-data">
                 @csrf
                 @method('POST')
                 <input type="hidden" name="id" value="{{ $id }}">
@@ -55,7 +55,7 @@
                     </div>
                 </div>
                 <button type="submit" class="btn btn-primary">Pagar</button>
-                <a href="{{ '/arriendo/'.$deuda->arriendo->inmueble->id }}" class="btn btn-primary">Cancelar</a>
+                <a href="{{ '/arriendo/'.$deuda->arriendo->id }}" class="btn btn-primary">Cancelar</a>
             </form>
         </div>
     </div>

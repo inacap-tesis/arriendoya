@@ -16,8 +16,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/garantia/pago/{id}', 'PagoGarantiaController@configurar');
 Route::post('/garantia/pago/', 'PagoGarantiaController@registrar');
 Route::get('/garantia/pago/comprobante/{id}', 'PagoGarantiaController@descargarComprobante');
-Route::get('/garantia/devolucion/configurar', 'DevolucionGarantiaController@configurar');
-Route::post('/garantia/devolucion/registrar', 'DevolucionGarantiaController@registrar');
-Route::get('/garantia/devolucion/descargarComprobante', 'DevolucionGarantiaController@descargarComprobante');
-
 Route::post('/garantia/pago/problema', 'PagoGarantiaController@reportarProblema');
+
+Route::get('/garantia/devolucion/{id}', 'DevolucionGarantiaController@configurar');
+Route::post('/garantia/devolucion', 'DevolucionGarantiaController@registrar');
+Route::get('/garantia/devolucion/comprobante/{id}', 'DevolucionGarantiaController@descargarComprobante');
