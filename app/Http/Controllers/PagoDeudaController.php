@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Notifications\DeudaNotificacion;
 use Illuminate\Http\Request;
 use App\Deuda;
 use App\PagoDeuda;
 use App\Notificacion;
-use App\Http\Controllers\CatalogoController;
 
 class PagoDeudaController extends Controller
 {
@@ -35,6 +35,8 @@ class PagoDeudaController extends Controller
         $pago->fecha = $actual->format('Y-m-d');
         $pago->urlComprobante = $request->file('documento')->store('pagosDeuda');
         $pago->save();
+        //Notificar al propietario
+        $deuda->arriendo->inmueble->propietario->notify(new DeudaNotificacion($deuda, $deuda->arriendo->inquilino, 3));
 
         $fechaCompromiso = new \DateTime($deuda->fechaCompromiso);
         $fechaPago = new \DateTime($pago->fecha);
@@ -59,6 +61,8 @@ class PagoDeudaController extends Controller
         $deuda = Deuda::find($request->id);
         $deuda->estado = false;
         $deuda->save();
+        //Notificar al inquilino
+        $deuda->arriendo->inquilino->notify(new DeudaNotificacion($deuda, $deuda->arriendo->inmueble->propietario, 4, $request->motivo));
         return $deuda->arriendo->id;
     }
 

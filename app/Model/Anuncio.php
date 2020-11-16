@@ -25,4 +25,9 @@ class Anuncio extends Model
         return $this->belongsToMany('App\Usuario', 'interes_usuario_anuncio', 'idAnuncio', 'rutUsuario');
     }
 
+    public function intereses()
+    {
+        return $this->hasMany('App\InteresAnuncio', 'idAnuncio', 'idInmueble');
+    }
+
 }

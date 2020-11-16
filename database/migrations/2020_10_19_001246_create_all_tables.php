@@ -56,10 +56,10 @@ class CreateAllTables extends Migration
             $table->string('nombre', 30);
         });
 
-        Schema::create('categorias_notificacion', function (Blueprint $table) {
+        /*Schema::create('categorias_notificacion', function (Blueprint $table) {
             $table->smallInteger('id')->primary();
             $table->string('nombre', 50);
-        });
+        });*/
 
         Schema::create('usuarios', function (Blueprint $table) {
             $table->string('rut', 12)->primary();
@@ -99,7 +99,7 @@ class CreateAllTables extends Migration
             $table->foreign('idTipo')->references('id')->on('tipos_cuenta_bancaria')->onDelete('cascade');
         });
 
-        Schema::create('notificaciones', function (Blueprint $table) {
+        /*Schema::create('notificaciones', function (Blueprint $table) {
             $table->id();
             $table->string('rutUsuario', 12);
             $table->smallInteger('idCategoria');
@@ -110,7 +110,7 @@ class CreateAllTables extends Migration
 
             $table->foreign('rutUsuario')->references('rut')->on('usuarios')->onDelete('cascade');
             $table->foreign('idCategoria')->references('id')->on('categorias_notificacion')->onDelete('cascade');
-        });
+        });*/
 
         Schema::create('inmuebles', function (Blueprint $table) {
             $table->id();
@@ -291,11 +291,11 @@ class CreateAllTables extends Migration
         Schema::dropIfExists('anuncios');
         Schema::dropIfExists('fotos_inmueble');
         Schema::dropIfExists('inmuebles');
-        Schema::dropIfExists('notificaciones');
+        //Schema::dropIfExists('notificaciones');
         Schema::dropIfExists('cuentas_bancarias');
         Schema::dropIfExists('antecedentes');
         Schema::dropIfExists('usuarios');
-        Schema::dropIfExists('categorias_notificacion');
+        //Schema::dropIfExists('categorias_notificacion');
         Schema::dropIfExists('estados_inmueble');
         Schema::dropIfExists('tipos_inmueble');
         Schema::dropIfExists('tipos_cuenta_bancaria');

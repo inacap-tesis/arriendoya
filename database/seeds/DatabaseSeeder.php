@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
             RegionSeeder::class,
             TipoCuentaBancoSeeder::class,
             TipoInmuebleSeeder::class,
-            CategoriaNotificacionSeeder::class,
+            //CategoriaNotificacionSeeder::class,
             EstadoInmuebleSeeder::class,
             UsuarioSeeder::class,
             InmuebleSeeder::class,

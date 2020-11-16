@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Calificacion;
 use App\Arriendo;
 use App\Usuario;
+use App\Notifications\CalificacionNotificacion;
 
 class CalificacionController extends Controller
 {
@@ -44,11 +45,17 @@ class CalificacionController extends Controller
                 $arriendo->inmueble->idEstado = 1;
                 $arriendo->inmueble->save();
             }
+            $arriendo->calificacion->save();
+            //Notificar al inquilino
+            $arriendo->inquilino->notify(new CalificacionNotificacion($arriendo->calificacion, $arriendo->inmueble->propietario, 1));
         } else {
             $arriendo->calificacion->notaAlArriendo = (int)$request->nota;
             $arriendo->calificacion->comentarioAlArriendo = $request->comentario;
+            $arriendo->calificacion->save();
+            //Notificar al propietario
+            $arriendo->inmueble->propietario->notify(new CalificacionNotificacion($arriendo->calificacion, $arriendo->inquilino, 2));
         }
-        $arriendo->calificacion->save();
+
         return (int)$request->esPropietario;
     }
 

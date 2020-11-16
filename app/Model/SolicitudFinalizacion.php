@@ -20,10 +20,10 @@ class SolicitudFinalizacion extends Model
     }
 
     public function emisor() {
-        return $this->belongsTo('App\Usuario', 'rut', 'rutEmisor');
+        return $this->belongsTo('App\Usuario', 'rutEmisor', 'rut');
     }
 
     public function receptor() {
-        return $this->belongsTo('App\Usuario', 'rut', 'rutReceptor');
+        return $this->belongsTo('App\Usuario', 'rutReceptor', 'rut');
     }
 }

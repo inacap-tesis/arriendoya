@@ -49,11 +49,11 @@
                                 </li>
                             @endif
                         @else
-                            <a href="#" class="btn" style="margin-right: 10px; display: flex; align-items: center;">
+                            <a href="/notificaciones" class="btn" style="margin-right: 10px; display: flex; align-items: center;">
                                 <svg class="bi" width="30" height="30" fill="currentColor">
                                     <use xlink:href="{{ asset('icons/bootstrap-icons.svg').'#bell' }}"/>
                                 </svg>
-                                <span class="badge badge-danger">{{ count(Auth::user()->notificaciones) }}</span>
+                                <span class="badge badge-danger">{{ Auth::user()->unreadNotifications->count() }}</span>
                             </a>
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>

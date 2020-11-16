@@ -2,18 +2,29 @@
 
 namespace App\Http\Controllers;
 
-use App\Notificacion;
-use App\Deuda;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class NotificacionController extends Controller
 {
-    
-    public function listar() {
-        
+
+    public function __construct() {
+        $this->middleware('auth');
     }
 
-    public function registrar($usuario, $tipo, $ref, $mensaje) {
+    public function leida(Request $request) {
+        $notificacion = Auth::user()->notifications->find($request->id);
+        $notificacion->markAsRead();
+        return $request;
+    }
+
+    public function eliminar(Request $request) {
+        $notificacion = Auth::user()->notifications->find($request->id);
+        $notificacion->delete();
+        return $request;
+    }
+
+    /*public function registrar($usuario, $tipo, $ref, $mensaje) {
         $notificacion = new Notificacion();
         $notificacion->rutUsuario = $usuario;
         $notificacion->idCategoria = $tipo;
@@ -66,6 +77,6 @@ class NotificacionController extends Controller
 
     public function reportarProblemaPago() {
         
-    }
+    }*/
 
 }

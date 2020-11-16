@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Notifications\AnuncioNotificacion;
+use App\Notifications\ArriendoNotificacion;
+use App\Notifications\CalificacionNotificacion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Arriendo;
@@ -121,12 +124,27 @@ class ArriendoController extends Controller {
             }
             //Cambia estado del arriendo
             if($arriendo->save()) {
+
+                //Notificar al inquilino
+                $arriendo->inquilino->notify(new ArriendoNotificacion($arriendo, $arriendo->inmueble->propietario, 1));
+                //Notificar al propietario
+                $arriendo->inmueble->propietario->notify(new ArriendoNotificacion($arriendo, $arriendo->inquilino, 1));
+
                 //Cambia estado de inmueble a arrendado
                 $arriendo->inmueble->idEstado = 6;
                 $arriendo->inmueble->save();
 
                 //Deshabilita el anuncio
-                $arriendo->inmueble->anuncio->interesados()->detach();
+                $propietario = $arriendo->inmueble->propietario;
+                $interesInquilino = $arriendo->inmueble->anuncio->intereses->where('rutUsuario', $arriendo->inquilino->rut)->first();
+                $arriendo->inmueble->anuncio->intereses->each(function (InteresAnuncio $interes) use ($propietario, $interesInquilino) {
+                    //Notificar a todos los interesados, la baja del anuncio.
+                    if($interes->usuario->rut != $interesInquilino->usuario->rut) {
+                        $interes->usuario->notify(new AnuncioNotificacion($interes->anuncio, $propietario, 6));
+                        $interes->delete();
+                    }
+                });
+                $interesInquilino->delete();
                 $arriendo->inmueble->anuncio->estado = false;
                 $arriendo->inmueble->anuncio->save();
 
@@ -176,28 +194,33 @@ class ArriendoController extends Controller {
         $arriendo->inmueble->save();
         $calificacion = new Calificacion();
         $calificacion->idArriendo = $arriendo->id;
+        
         //Calcular nota al inquilino
         $conRetraso = $arriendo->deudas->where('diasRetraso', '>', 0)->count();
         $noPagos = $arriendo->deudas->where('diasRetraso', -1)->count();
-        echo $arriendo->deudas->count().'-'.$conRetraso.'-'.$noPagos. PHP_EOL;
-        $calificacion->cumplimientoInquilino = 0;
+        $periodos = $arriendo->deudas->count();
+        $nota = (($periodos - $conRetraso - ($noPagos * 1.5)) / $periodos) * 5;
+        $calificacion->cumplimientoInquilino = $nota < 0 ? 1 : $nota;
         $calificacion->save();
-        //Enviar notificación a ambas partes
+        
+        //Notificar al inquilino
+        $arriendo->inquilino->notify(new ArriendoNotificacion($arriendo, $arriendo->inmueble->propietario, 3));
+        $arriendo->inquilino->notify(new CalificacionNotificacion($arriendo->calificacion, $arriendo->inmueble->propietario, 3));
+        //Notificar al propietario
+        $arriendo->inmueble->propietario->notify(new ArriendoNotificacion($arriendo, $arriendo->inquilino, 3));
         echo 'Finalizó el arriendo '.$arriendo->id. PHP_EOL;
         return;
     }
 
     public function renovar() {
-        
+
     }
 
     public static function preguntarRenovacion($arriendo) {
-        if($arriendo->inquilino->notificaciones->where('idCategoria ', 15)->where('estado', true)->count() == 0) {
-            //Enviar notificación a inquilino
-        }
-        if($arriendo->inmueble->propietario->notificaciones->where('idCategoria ', 15)->where('estado', true)->count() == 0) {
-            //Enviar notificación a propietario
-        }
+        //Notificar al inquilino
+        $arriendo->inquilino->notify(new ArriendoNotificacion($arriendo, $arriendo->inmueble->propietario, 2));
+        //Notificar al propietario
+        $arriendo->inmueble->propietario->notify(new ArriendoNotificacion($arriendo, $arriendo->inquilino, 2));
     }
 
     public static function actualizar($arriendo, $fechaActual) {

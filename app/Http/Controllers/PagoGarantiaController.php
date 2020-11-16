@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Notifications\GarantiaNotificacion;
 use Illuminate\Http\Request;
 use App\PagoGarantia;
 use App\Garantia;
+use App\Http\Controllers\GarantiaController;
 
 class PagoGarantiaController extends Controller
 {
@@ -33,6 +35,8 @@ class PagoGarantiaController extends Controller
         $pago->fecha = $actual->format('Y-m-d');
         $pago->urlComprobante = $request->file('documento')->store('pagosGarantia');
         $pago->save();
+        //Notificar al propietario
+        $garantia->arriendo->inmueble->propietario->notify(new GarantiaNotificacion($garantia, $garantia->arriendo->inquilino, 3));
 
         $fechaCompromiso = new \DateTime($garantia->arriendo->fechaInicio);
         $fechaPago = new \DateTime($pago->fecha);
@@ -57,6 +61,8 @@ class PagoGarantiaController extends Controller
         $garantia = Garantia::find($request->id);
         $garantia->estado = false;
         $garantia->save();
+        //Notificar al inquilino
+        $garantia->arriendo->inquilino->notify(new GarantiaNotificacion($garantia, $garantia->arriendo->inmueble->propietario, 4, $request->motivo));
         return $garantia->arriendo->id;
     }
 

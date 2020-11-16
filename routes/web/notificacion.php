@@ -13,6 +13,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/notificaciones{rut}', 'NotificacionController@listar');
-Route::get('/notificacion/{id}', 'NotificacionController@consultar');
-Route::post('/notificacion', 'NotificacionController@registrar');
+//Route::get('/notificaciones{rut}', 'NotificacionController@listar');
+//Route::get('/notificacion/{id}', 'NotificacionController@consultar');
+//Route::post('/notificacion', 'NotificacionController@registrar');
+
+Route::get('/notificaciones', function() {
+    return view('notificacion.listar');
+});
+Route::put('/notificacion', 'NotificacionController@leida');
+Route::delete('/notificacion', 'NotificacionController@eliminar');

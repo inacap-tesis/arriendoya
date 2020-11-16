@@ -1,17 +1,4 @@
-@php
-$fechaCompromiso = new \DateTime($compromiso);
-/*if($periodo->estado) {
-    $fechaPago = new \DateTime($periodo->pagos->first()->fecha);
-    if($fechaPago == $fechaCompromiso) {
-        $cantidadDiasRetraso = 'Ninguno';
-    } else {
-        $intervalo = $fechaCompromiso->diff($fechaPago);
-        $temp = (int)$intervalo->format('%R%a');
-        $cantidadDiasRetraso = $temp > 0 ? number_format($temp, 0, ',', '.') : 'Ninguno';
-    }
-    
-}*/
-@endphp
+@php $fechaCompromiso = new \DateTime($compromiso); @endphp
 
 <tr @if ($periodo->estado) class="table-success" @else class="table-active" @endif>
     <th scope="row">{{ $titulo }}</th>

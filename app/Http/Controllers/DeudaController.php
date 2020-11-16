@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Notifications\DeudaNotificacion;
 use App\Deuda;
 use App\Arriendo;
 use App\PagoDeuda;
@@ -110,11 +111,13 @@ class DeudaController extends Controller
     }
 
     public static function recordarPago(Deuda $deuda) {
-        //Enviar notificación
+        //Notificar al inquilino
+        $deuda->arriendo->inquilino->notify(new DeudaNotificacion($deuda, $deuda->arriendo->inmueble->propietario, 2));
     }
 
     public static function informarMorosidad(Deuda $deuda) {
-        //Enviar notificación
+        //Notificar al inquilino
+        $deuda->arriendo->inquilino->notify(new DeudaNotificacion($deuda, $deuda->arriendo->inmueble->propietario, 1));
     }
 
 }

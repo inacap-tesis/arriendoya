@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Notifications\AnuncioNotificacion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\InteresAnuncio;
@@ -11,11 +12,8 @@ use App\Inmueble;
 class InteresController extends Controller
 {
 
-    private $notificacionController = null;
-
     public function __construct() {
         $this->middleware('auth');
-        $this->notificacionController = new NotificacionController();
     }
 
     public function listar($anuncio) {
@@ -33,47 +31,43 @@ class InteresController extends Controller
         $interes->candidato = false;
         $interes->save();
 
-        //Generar notificación a propietario de tipo 1
+        //Notificar a propietario
+        $interes->anuncio->inmueble->propietario->notify(new AnuncioNotificacion($interes->anuncio, $interes->usuario, 1));
 
         return redirect('/anuncio/'.$request->id);
     }
-
-    /*
-    public function eliminarInteresado($anuncio, $usuario) {
-        $anuncio = Anuncio::find($anuncio);
-        $anuncio->interesados()->detach($usuario);
-        return back();
-    }
-    */
 
     public function eliminar(Request $request) {
         if($request->id) {
             $interes = InteresAnuncio::where([['idAnuncio', '=', $request->id], ['rutUsuario', '=', Auth::user()->rut]])->first();
             $interes->delete();
+            //Notificar a propietario
+            $interes->anuncio->inmueble->propietario->notify(new AnuncioNotificacion($interes->anuncio, $interes->usuario, 2));
             return redirect('/anuncio/'.$request->id);
         } else {
             $interes = InteresAnuncio::where([['idAnuncio', '=', $request->anuncio], ['rutUsuario', '=', $request->usuario]])->first();
             $interes->delete();
+            //Notificar a inquilino
+            $interes->usuario->notify(new AnuncioNotificacion($interes->anuncio, Auth::user(), 3));
             return $interes;
         }
     }
 
     public function definirCandidatos(Request $request) {
         $anuncio = Anuncio::find($request->anuncio);
-        $interesados = $anuncio->interesados;
-        $anuncio->interesados()->detach();
         $proceso = false;
-        foreach($interesados as $interesado) {
-            $interes = new InteresAnuncio();
-            $interes->idAnuncio = $anuncio->idInmueble;
-            $interes->rutUsuario = $interesado->rut;
-            if($request[$interesado->rut]) {
+        foreach($anuncio->intereses as $interes){
+            $candidato = $interes->candidato;
+            if($request[$interes->usuario->rut]) {
                 $interes->candidato = true;
                 $proceso = true;
             } else {
                 $interes->candidato = false;
             }
-            $interes->save();
+            if($interes->modificar() && $candidato != $interes->candidato) {
+                //Notificar a inquilino
+                $interes->usuario->notify(new AnuncioNotificacion($interes->anuncio, Auth::user(), $interes->candidato ? 4 : 5));
+            }
         }
         $inmueble = Inmueble::find($anuncio->idInmueble);
         $inmueble->idEstado = $proceso ? 4 : 2;

@@ -30,4 +30,8 @@ class InteresAnuncio extends Model
         return DB::delete('delete from '.$this->table.' where idAnuncio = '.$this->idAnuncio.' and rutUsuario = "'.$this->rutUsuario.'"');
     }
 
+    public function modificar() {
+        return DB::update('update '.$this->table.' set candidato = '.($this->candidato ? 'true' : 'false').' where idAnuncio = '.$this->idAnuncio.' and rutUsuario = "'.$this->rutUsuario.'"');
+    }
+
 }

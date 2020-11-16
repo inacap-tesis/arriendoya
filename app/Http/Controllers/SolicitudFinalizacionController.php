@@ -6,8 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\SolicitudFinalizacion;
 use App\Arriendo;
-use App\Http\Controllers\NotificacionController;
 use App\Http\Controllers\DeudaController;
+use App\Notifications\SolicitudFinalizacionNotificacion;
 
 class SolicitudFinalizacionController extends Controller
 {
@@ -21,23 +21,19 @@ class SolicitudFinalizacionController extends Controller
         $arriendo = Arriendo::find($request->id);
         $solicitud->idArriendo = $arriendo->id;
         $solicitud->rutEmisor = Auth::user()->rut;
-        if(Auth::user()->rut == $arriendo->inquilino->rut) {
-            $solicitud->rutReceptor = $arriendo->inmueble->propietario->rut;
-        } else {
-            $solicitud->rutReceptor = $arriendo->inquilino->rut;
-        }
         $solicitud->fechaPropuesta = $request->fecha;
         $solicitud->respuesta = null;
-        $solicitud->save();
-
-        //Generar notificación de tipo 13
-        /*$notificacion = new Notificacion();
-        $notificacion->rutUsuario = $solicitud->rutReceptor;
-        $notificacion->idCategoria = 13;
-        $notificacion->idReferencia = $solicitud->id;
-        $notificacion->mensaje = $request->motivo;
-        $notificacion->estado = true;
-        $notificacion->save();*/
+        if(Auth::user()->rut == $arriendo->inquilino->rut) {
+            $solicitud->rutReceptor = $arriendo->inmueble->propietario->rut;
+            $solicitud->save();
+            //Notificar al propietario
+            $arriendo->inmueble->propietario->notify(new SolicitudFinalizacionNotificacion($solicitud, $arriendo->inquilino, 1, $request->motivo));
+        } else {
+            $solicitud->rutReceptor = $arriendo->inquilino->rut;
+            $solicitud->save();
+            //Notificar al inquilino
+            $arriendo->inquilino->notify(new SolicitudFinalizacionNotificacion($solicitud, $arriendo->inmueble->propietario, 1, $request->motivo));
+        }
 
         return $arriendo->id;
     }
@@ -55,6 +51,8 @@ class SolicitudFinalizacionController extends Controller
             $solicitud->respuesta = false;
         }
         $solicitud->save();
+        //Notificar respuesta al usuario
+        $solicitud->emisor->notify(new SolicitudFinalizacionNotificacion($solicitud, $solicitud->receptor, 2));
         return $solicitud->arriendo->id;
     }
     
