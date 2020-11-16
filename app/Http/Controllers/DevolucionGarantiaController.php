@@ -13,6 +13,12 @@ class DevolucionGarantiaController extends Controller
 
     public function configurar($id) {
         $garantia = Garantia::find($id);
+        if(!$garantia) {
+            $arriendo = Arriendo::find($id)->first();
+            $garantia = $arriendo->inmueble->arriendos
+                        ->where('rutInquilino', $arriendo->inquilino->rut)
+                        ->where('numeroRenovacion', 0)->first()->garantia;
+        }
         return view('devolucion.configurar', [
             'deuda' => $garantia,
             'monto' =>$garantia->monto,

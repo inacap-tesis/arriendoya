@@ -24,8 +24,9 @@ class ArriendoSeeder extends Seeder
                 'rutInquilino' => '24765918-8',
                 'diaPago' => 10,
                 'estado' => true,
+                'renovar' => false,
                 'urlContrato' => null,
-                'numeroRenovacion' => null
+                'numeroRenovacion' => 0
             ],
             [
                 'idInmueble' => 2,
@@ -36,8 +37,9 @@ class ArriendoSeeder extends Seeder
                 'rutInquilino' => '24765918-8',
                 'diaPago' => 1,
                 'estado' => true,
+                'renovar' => true,
                 'urlContrato' => null,
-                'numeroRenovacion' => null
+                'numeroRenovacion' => 0
             ]
         ]);
         $arriendos = Arriendo::all();

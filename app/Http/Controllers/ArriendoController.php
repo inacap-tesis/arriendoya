@@ -25,7 +25,10 @@ class ArriendoController extends Controller {
     }
 
     public function listar() {
-        $arriendos = Auth::user()->arriendos;
+        $arriendos = [];
+        foreach(Auth::user()->arriendos->groupBy('idInmueble') as $lista) {
+            array_push($arriendos, $lista->sortByDesc('id')->first());
+        }
         return view('arriendo.listar', ['arriendos' => $arriendos]);
     }
 
@@ -58,8 +61,9 @@ class ArriendoController extends Controller {
         $arriendo->rutInquilino = $request->inquilino;
         $arriendo->diaPago = $request->diaPago;
         $arriendo->estado = false;
+        $arriendo->renovar = true;
         $arriendo->urlContrato = null;
-        $arriendo->numeroRenovacion = null;
+        $arriendo->numeroRenovacion = 0;
         $arriendo->fechaTerminoReal = $request->fechaFin;
         if($arriendo->save()){
             $garantia = Garantia::find($arriendo->id);
@@ -187,33 +191,82 @@ class ArriendoController extends Controller {
         return \Response::download($url, 'Formato.'.$extension);
     }
 
+    public function rechazarRenovacion(Request $request) {
+        $arriendo = Arriendo::find($request->id);
+        $arriendo->renovar = false;
+        return $arriendo->save();
+    }
+
+    public static function renovar($arriendo) {
+    
+        $fechaInicio = new \DateTime($arriendo->fechaInicio);
+        $fechaTermino = new \DateTime($arriendo->fechaTerminoPropuesta);
+
+        $intervalo = $fechaInicio->diff($fechaTermino);
+        
+        $fechaActual = new \DateTime();
+        $nuevoFin = new \DateTime();
+        $nuevoFin->add($intervalo);
+
+        $nuevo = new Arriendo();
+        $nuevo->idInmueble = $arriendo->inmueble->id;
+        $nuevo->fechaInicio = $fechaActual->format('Y-m-d');
+        $nuevo->fechaTerminoPropuesta = $nuevoFin->format('Y-m-d');
+        $nuevo->fechaTerminoReal = $nuevoFin->format('Y-m-d');
+        $nuevo->canon = $arriendo->canon;
+        $nuevo->rutInquilino = $arriendo->inquilino->rut;
+        $nuevo->diaPago = $arriendo->diaPago;
+        $nuevo->estado = true;
+        $nuevo->renovar = $arriendo->renovar;
+        $nuevo->urlContrato = null; //Despues podrá cargar uno
+        $nuevo->numeroRenovacion = $arriendo->numeroRenovacion + 1;
+        
+        $nuevo->save();
+        /*if( && $arriendo->garantia){
+            $arriendo->garantia->idArriendo = $nuevo->id;
+            $arriendo->garantia->save();
+        }*/
+        $nuevo->inmueble->idEstado = 6;
+        $nuevo->inmueble->save();
+
+        //Generar deudas al inquilino de acuerdo a las fechas establecidas
+        DeudaController::generar($nuevo);
+
+        //Notificar al inquilino
+        $arriendo->inquilino->notify(new ArriendoNotificacion($arriendo, $arriendo->inmueble->propietario, 5));
+        //Notificar al propietario
+        $arriendo->inmueble->propietario->notify(new ArriendoNotificacion($arriendo, $arriendo->inquilino, 5));
+
+        echo 'Arriendo '.$arriendo->id.' renovado'. PHP_EOL;
+        return;
+    }
+
     public static function finalizar($arriendo) {
         $arriendo->estado = false;
         $arriendo->save();
         $arriendo->inmueble->idEstado = 7;
         $arriendo->inmueble->save();
-        $calificacion = new Calificacion();
-        $calificacion->idArriendo = $arriendo->id;
         
-        //Calcular nota al inquilino
-        $conRetraso = $arriendo->deudas->where('diasRetraso', '>', 0)->count();
-        $noPagos = $arriendo->deudas->where('diasRetraso', -1)->count();
-        $periodos = $arriendo->deudas->count();
-        $nota = (($periodos - $conRetraso - ($noPagos * 1.5)) / $periodos) * 5;
-        $calificacion->cumplimientoInquilino = $nota < 0 ? 1 : $nota;
-        $calificacion->save();
+        if(!$arriendo->renovar) {
+            $calificacion = new Calificacion();
+            $calificacion->idArriendo = $arriendo->id;
+            //Calcular nota al inquilino
+            $conRetraso = $arriendo->deudas->where('diasRetraso', '>', 0)->count();
+            $noPagos = $arriendo->deudas->where('diasRetraso', -1)->count();
+            $periodos = $arriendo->deudas->count();
+            $nota = (($periodos - $conRetraso - ($noPagos * 1.5)) / $periodos) * 5;
+            $calificacion->cumplimientoInquilino = $nota < 0 ? 1 : $nota;
+            $calificacion->save();
+            
+            //Notificar al inquilino
+            $arriendo->inquilino->notify(new ArriendoNotificacion($arriendo, $arriendo->inmueble->propietario, 3));
+            $arriendo->inquilino->notify(new CalificacionNotificacion($arriendo->calificacion, $arriendo->inmueble->propietario, 3));
+            //Notificar al propietario
+            $arriendo->inmueble->propietario->notify(new ArriendoNotificacion($arriendo, $arriendo->inquilino, 3));
+        }
         
-        //Notificar al inquilino
-        $arriendo->inquilino->notify(new ArriendoNotificacion($arriendo, $arriendo->inmueble->propietario, 3));
-        $arriendo->inquilino->notify(new CalificacionNotificacion($arriendo->calificacion, $arriendo->inmueble->propietario, 3));
-        //Notificar al propietario
-        $arriendo->inmueble->propietario->notify(new ArriendoNotificacion($arriendo, $arriendo->inquilino, 3));
-        echo 'Finalizó el arriendo '.$arriendo->id. PHP_EOL;
+        echo 'Arriendo '.$arriendo->id.' finalizado'. PHP_EOL;
         return;
-    }
-
-    public function renovar() {
-
     }
 
     public static function preguntarRenovacion($arriendo) {
@@ -229,6 +282,9 @@ class ArriendoController extends Controller {
         
         if($fecha < $fechaActual) {
             ArriendoController::finalizar($arriendo);
+            if($arriendo->renovar) {
+                ArriendoController::renovar($arriendo);
+            }
         } else {
             $intervalo = $fechaActual->diff($fecha);
             $diasDiferencia = (int)$intervalo->format('%R%a');

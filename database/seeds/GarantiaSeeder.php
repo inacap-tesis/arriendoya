@@ -11,10 +11,10 @@ class GarantiaSeeder extends Seeder
      */
     public function run()
     {
-        /*DB::table('garantias')->delete();
+        DB::table('garantias')->delete();
         DB::table('garantias')->insert([
             ['idArriendo' => 1, 'estado' => false, 'monto' => 300000, 'diasRetraso' => -1],
             ['idArriendo' => 2, 'estado' => false, 'monto' => 350000, 'diasRetraso' => -1]
-        ]);*/
+        ]);
     }
 }

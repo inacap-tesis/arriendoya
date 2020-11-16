@@ -8,6 +8,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use App\Arriendo;
 use App\Usuario;
+use DateTime;
 
 class ArriendoNotificacion extends Notification
 {
@@ -63,8 +64,10 @@ class ArriendoNotificacion extends Notification
     public function toArray($notifiable)
     {
         //1-Inicio
-        //2-Renovación
+        //2-Consultar renovación
         //3-Finalización
+        //4-Informar rechazo de renovación
+        //5-Informar renovación
         switch($this->tipo) {
             case 1:
                 if($this->arriendo->inquilino->rut != $this->usuario->rut) {
@@ -76,12 +79,28 @@ class ArriendoNotificacion extends Notification
                 }
             break;
             case 2: 
-                $titulo = '¿Te gustaría renovar el arriendo?';
-                $mensaje = 'Recuerda que estamos cerca a finalizar tu arriendo de '.$this->arriendo->inmueble->tipo->nombre.', que está en '.$this->arriendo->inmueble->calleDireccion.' '.$this->arriendo->inmueble->numeroDireccion.' - '.$this->arriendo->inmueble->comuna->nombre.', ¿te gustaría renovarlo?';
+                $fechaActual = new \DateTime();
+                $fechaTermino = new \DateTime($this->arriendo->fechaTerminoReal);
+                $intervalo = $fechaActual->diff($fechaTermino);
+                $dias = (int)$intervalo->format('%R%a');
+                $titulo = '¡Tu arriendo se renovará automáticamente!';
+                if($dias == 0) {
+                    $mensaje = 'Al término de hoy día, renovaremos automáticamente tu arriendo de '.$this->arriendo->inmueble->tipo->nombre.', que está en '.$this->arriendo->inmueble->calleDireccion.' '.$this->arriendo->inmueble->numeroDireccion.' - '.$this->arriendo->inmueble->comuna->nombre.'. Si no deseas que se renueve automáticamente, presiona el siguiente botón.';
+                } else {
+                    $mensaje = 'Estamos a '.$dias.' días de renovar automáticamente tu arriendo de '.$this->arriendo->inmueble->tipo->nombre.', que está en '.$this->arriendo->inmueble->calleDireccion.' '.$this->arriendo->inmueble->numeroDireccion.' - '.$this->arriendo->inmueble->comuna->nombre.'. Si no deseas que se renueve automáticamente, presiona el siguiente botón.';
+                }
             break;
             case 3:
                 $titulo = 'Arriendo finalizado';
                 $mensaje = 'Tu arriendo de '.$this->arriendo->inmueble->tipo->nombre.', que está en '.$this->arriendo->inmueble->calleDireccion.' '.$this->arriendo->inmueble->numeroDireccion.' - '.$this->arriendo->inmueble->comuna->nombre.' acaba de finalizar, por favor recuerda realizar la calificación en base a tu experiencia.';
+            break;
+            case 4:
+                $titulo = '';
+                $mensaje = '';
+            break;
+            case 5:
+                $titulo = '¡Felicitaciones! tu arriendo ha sido renovado';
+                $mensaje = 'Tu arriendo de '.$this->arriendo->inmueble->tipo->nombre.', que está en '.$this->arriendo->inmueble->calleDireccion.' '.$this->arriendo->inmueble->numeroDireccion.' - '.$this->arriendo->inmueble->comuna->nombre.', ha sido renovado correctamente.';
             break;
             default: break;
         };

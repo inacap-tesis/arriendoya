@@ -174,8 +174,9 @@ class CreateAllTables extends Migration
             $table->string('rutInquilino', 12);
             $table->smallInteger('diaPago');
             $table->boolean('estado');
+            $table->boolean('renovar');
             $table->string('urlContrato')->nullable();
-            $table->smallInteger('numeroRenovacion')->nullable();
+            $table->smallInteger('numeroRenovacion');
             $table->timestamps();
 
             $table->foreign('idInmueble')->references('id')->on('inmuebles')->onDelete('cascade');

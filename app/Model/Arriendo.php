@@ -15,6 +15,7 @@ class Arriendo extends Model
         'rutInquilino',
         'diaPago',
         'estado',
+        'renovar',
         'urlContrato',
         'numeroRenovacion', 
         'fechaTerminoReal'

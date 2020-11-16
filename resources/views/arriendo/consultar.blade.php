@@ -31,9 +31,10 @@
                 @endif
                 @php
                 $deudas = $arriendo->deudas;
-                $solicitudesRecibidas = $arriendo->solicitudesFinalizacion->where('rutReceptor',Auth::user()->rut)->whereNull('respuesta');
-                $solicitudesEmitidas = $arriendo->solicitudesFinalizacion->where('rutEmisor', Auth::user()->rut)->whereNull('respuesta');
-                $solicitudesRechazadas = $arriendo->solicitudesFinalizacion->where('rutEmisor', Auth::user()->rut)->first();
+                $fechaActual = new \DateTime();
+                $solicitudesRecibidas = $arriendo->solicitudesFinalizacion->where('fechaPropuesta', '>', $fechaActual->format('Y-m-d'))->where('rutReceptor',Auth::user()->rut)->whereNull('respuesta');
+                $solicitudesEmitidas = $arriendo->solicitudesFinalizacion->where('fechaPropuesta', '>', $fechaActual->format('Y-m-d'))->where('rutEmisor', Auth::user()->rut)->whereNull('respuesta');
+                $solicitudesRechazadas = $arriendo->solicitudesFinalizacion->where('fechaPropuesta', '>', $fechaActual->format('Y-m-d'))->where('rutEmisor', Auth::user()->rut)->first();
                 @endphp
                 @if (count($solicitudesRecibidas) > 0)
                 <!-- Button trigger modal -->

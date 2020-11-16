@@ -37,6 +37,12 @@
             <div id="{{ __('_'.$notificacion->id) }}" class="collapse @if($notificacion->read_at && $loop->index == 0) show @endif" aria-labelledby="{{ __($notificacion->id) }}" data-parent="#notificaciones">
               <div class="card-body">
                 {{ $notificacion->data['mensaje'] }}
+                @if ($notificacion->type == 'App\Notifications\ArriendoNotificacion' && $notificacion->data['tipo'] == 2)
+                    <p>
+                      <br>
+                      <a href="#" class="btn btn-danger" onclick="noRenovar({{ $notificacion->data['arriendo'] }})">No quiero que se renueve</a>
+                    </p>
+                @endif
               </div>
             </div>
           </div>
@@ -77,6 +83,22 @@
                 $('#' + response.id + '_').remove();
             }
         });
+    }
+
+    function noRenovar(id) {
+      $.ajax({
+          url: '/arriendo/noRenovar',
+          type: "PUT",
+          dataType: 'json',//this will expect a json response
+          data: { 
+            '_token': '{{ csrf_token() }}',
+              id 
+            }, 
+          success: function(response) {
+            //Informar al usuario
+            console.log(response);
+          }
+      });
     }
 </script>
 @endsection
