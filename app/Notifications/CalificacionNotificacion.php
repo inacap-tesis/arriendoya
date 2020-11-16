@@ -68,15 +68,15 @@ class CalificacionNotificacion extends Notification
         switch($this->tipo) {
             case 1:
                 $titulo = 'Acaban de calificarte';
-                $mensaje = $this->usuario->primerNombre.' '.$this->usuario->primerApellido.' acaba de calificarte con un ['.$this->calificacion->notaAlInquilino.'], en base a su experiencia y comentó lo siguiente "'.$this->calificacion->comentarioAlInquilino.'"';
+                $mensaje = $this->usuario->primerNombre.' '.$this->usuario->primerApellido.' acaba de calificarte con un ['.$this->calificacion->notaAlInquilino.'], en base a su experiencia y comentó lo siguiente "'.$this->calificacion->comentarioAlInquilino.'".';
             break;
             case 2: 
                 $titulo = 'Acaban de calificarte el arriendo';
-                $mensaje = $this->usuario->primerNombre.' '.$this->usuario->primerApellido.' acaba de calificar el arriendo con un ['.$this->calificacion->notaAlInquilino.'], en base a su experiencia y comentó lo siguiente "'.$this->calificacion->comentarioAlInquilino.'"';
+                $mensaje = $this->usuario->primerNombre.' '.$this->usuario->primerApellido.' acaba de calificar el arriendo con un ['.$this->calificacion->notaAlArriendo.'], en base a su experiencia y comentó lo siguiente "'.$this->calificacion->comentarioAlArriendo.'".';
             break;
             case 3:
                 $titulo = 'Acabamos de calificar tu niver de cumplimiento';
-                $mensaje = 'De acuerdo a tu anterior arriendo de '.$this->calificacion->arriendo->inmueble->tipo->nombre.', que está en '.$this->calificacion->arriendo->inmueble->calleDireccion.' '.$this->calificacion->arriendo->inmueble->numeroDireccion.' - '.$this->calificacion->arriendo->inmueble->comuna->nombre.', tu nivel de cumplimiento en el pago de renta fue de ['.$this->calificacion->cumplimientoInquilino.']';
+                $mensaje = 'De acuerdo a tu anterior arriendo de '.$this->calificacion->arriendo->inmueble->tipo->nombre.', que está en '.$this->calificacion->arriendo->inmueble->calleDireccion.' '.$this->calificacion->arriendo->inmueble->numeroDireccion.' - '.$this->calificacion->arriendo->inmueble->comuna->nombre.', tu nivel de cumplimiento en el pago de renta fue de ['.$this->calificacion->cumplimientoInquilino.'].';
             break;
             default: break;
         };

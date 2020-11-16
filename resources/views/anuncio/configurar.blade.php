@@ -28,38 +28,39 @@
 
                         <input type="hidden" name="id" value="{{$inmueble->id}}">
 
-                        <!--canon-->
-                        <div class="form-group row">
-                            <label for="canon" class="col-md-4 col-form-label text-md-right">{{ __('Renta mensual') }}</label>
-                            <div class="col-md-6">
-                                <div class="input-group mb-2">
-                                    <div class="input-group-prepend">
-                                      <div class="input-group-text">$</div>
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="form-row">
+                                    <div class="form-group col">
+                                        <label for="canon">{{ __('Renta mensual') }}</label>
+                                        <div>
+                                            <div class="input-group mb-2">
+                                                <div class="input-group-prepend">
+                                                  <div class="input-group-text">$</div>
+                                                </div>
+                                                <input type="number" min="0" class="form-control" id="canon" name="canon" @if ($inmueble->anuncio) value="{{ $inmueble->anuncio->canon }}" @endif required>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <input type="number" min="0" class="form-control" id="canon" name="canon" @if ($inmueble->anuncio) value="{{ $inmueble->anuncio->canon }}" @endif required>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Publicar</button>
+                                <a href="/inmuebles" class="btn btn-primary">Cancelar</a>
+                            </div>
+                            <div class="col">
+                                <div class="form-row">
+                                    <div class="form-group col">
+                                        <label for="condicionesArriendo">{{ __('Condiciones del arriendo') }}</label>
+                                        <textarea class="form-control" id="condicionesArriendo" name="condicionesArriendo" rows="3" placeholder="¿Cuales son las principales condiciones que tendrá el arriendo de este inmueble?" required>@if ($inmueble->anuncio){{ $inmueble->anuncio->condicionesArriendo }}@endif</textarea>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col">
+                                        <label for="documentosRequeridos">{{ __('Documentos requeridos') }}</label>
+                                        <textarea class="form-control" id="documentosRequeridos" name="documentosRequeridos" rows="3" placeholder="¿Qué documentos necesitarás de los interesados en este anuncio?" required>@if ($inmueble->anuncio){{ $inmueble->anuncio->documentosRequeridos }}@endif</textarea>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-
-                        <!--condicionesArriendo-->
-                        <div class="form-group row">
-                            <label for="condicionesArriendo" class="col-md-4 col-form-label text-md-right">{{ __('Condiciones del arriendo') }}</label>
-                            <div class="col-md-6">
-                                <textarea class="form-control" id="condicionesArriendo" name="condicionesArriendo" rows="3" placeholder="¿Cuales son las principales condiciones que tendrá el arriendo de este inmueble?" required>@if ($inmueble->anuncio){{ $inmueble->anuncio->condicionesArriendo }}@endif</textarea>
-                            </div>
-                        </div>
-
-                        <!--documentosRequeridos-->
-                        <div class="form-group row">
-                            <label for="documentosRequeridos" class="col-md-4 col-form-label text-md-right">{{ __('Documentos requeridos') }}</label>
-                            <div class="col-md-6">
-                                <textarea class="form-control" id="documentosRequeridos" name="documentosRequeridos" rows="3" placeholder="¿Qué documentos necesitarás de los interesados en este anuncio?" required>@if ($inmueble->anuncio){{ $inmueble->anuncio->documentosRequeridos }}@endif</textarea>
-                            </div>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary">Publicar</button>
-                        <a href="/inmuebles" class="btn btn-primary">Cancelar</a>
-
                     </form>
                 </div>
             </div>

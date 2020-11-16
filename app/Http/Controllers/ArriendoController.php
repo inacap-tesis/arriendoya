@@ -15,6 +15,7 @@ use App\Deuda;
 use App\Garantia;
 use App\Calificacion;
 use App\Http\Controllers\DeudaController;
+use App\Http\Requests\ArriendoRequest;
 use DateTime;
 
 class ArriendoController extends Controller {
@@ -33,16 +34,21 @@ class ArriendoController extends Controller {
     }
 
     public function configurar($id) {
-        $arriendo = Arriendo::where([['idInmueble', '=', $id], ['estado', '=', false]])->orderBy('fechaTerminoReal','DESC')->first();
-        if($arriendo->calificacion) {
-            $arriendo = null;
+        if(Auth::user()->cuentaBancaria) {
+            $fechaActual = new \DateTime();
+            $arriendo = Arriendo::where('idInmueble', $id)
+                ->where('estado', false)
+                ->where('fechaTerminoReal', '>', $fechaActual->format('Y-m-d'))
+                ->orderBy('fechaTerminoReal', 'desc')->first();
+            $interes = InteresAnuncio::where([ ['idAnuncio', '=', $id], ['candidato', '=', true] ])->get();
+            return view('arriendo.configurar', [
+                'anuncio' => $id,
+                'intereses' => $interes,
+                'arriendo' => $arriendo
+            ]);
+        } else {
+            return redirect('/cuenta')->with('msg', 'Por favor primero configure su cuenta bancaria');
         }
-        $interes = InteresAnuncio::where([ ['idAnuncio', '=', $id], ['candidato', '=', true] ])->get();
-        return view('arriendo.configurar', [
-            'anuncio' => $id,
-            'intereses' => $interes,
-            'arriendo' => $arriendo
-        ]);
     }
 
     public function consultar($id) {
@@ -84,16 +90,28 @@ class ArriendoController extends Controller {
     }
 
     public function registrar(Request $request) {
+        $validator = \Validator::make($request->all(), [
+            'fechaInicio' => 'required',
+            'fechaFin' => 'required',
+            'canon' => 'required|min:0',
+            'diaPago' => 'required|min:0|max:28'
+        ], [
+            'fechaInicio.required' => 'fecha requerida'
+        ]);
+        if($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
         $arriendo = new Arriendo();
         $arriendo->idInmueble = $request->inmueble;
         $this->guardar($arriendo, $request);
-        return redirect('/inmuebles');
+        return redirect('/inmuebles')->with('msg', 'Arriendo configurado');
     }
 
     public function modificar(Request $request) {
         $arriendo = Arriendo::find($request->arriendo);
         $this->guardar($arriendo, $request);
-        return redirect('/inmuebles');
+        return redirect('/inmuebles')->with('msg', 'Arriendo modificado');
     }
 
     public function eliminar(Request $request) {

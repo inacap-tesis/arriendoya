@@ -68,16 +68,21 @@ class DeudaController extends Controller
         $fechaFin = DeudaController::fechaFin($fecha, $pago);
         $periodoFin = $fechaFin->format('d').' '.Str::substr(CatalogoController::consultarMes((int)$fechaFin->format('m')), 0, 3);
 
-        //Se guarda el primer periodo
-        $deuda = new Deuda();
-        $deuda->idArriendo = $arriendo->id;
-        $deuda->fechaCompromiso = $fecha->format('Y-m-d');
-        $deuda->estado = false;
-        $deuda->diasRetraso = -1;
-        $deuda->titulo = $periodoInicio.' - '.$periodoFin;
-        $deuda->save();
+        $fechaActual = new DateTime();
 
-        $cant = 1;
+        $cant = 0;
+        if($fecha > $fechaActual) {
+            //Se guarda el primer periodo
+            $deuda = new Deuda();
+            $deuda->idArriendo = $arriendo->id;
+            $deuda->fechaCompromiso = $fecha->format('Y-m-d');
+            $deuda->estado = false;
+            $deuda->diasRetraso = -1;
+            $deuda->titulo = $periodoInicio.' - '.$periodoFin;
+            $deuda->save();
+            $cant = 1;
+        }
+
         $mes = (int)$fecha->format('m');
         $anio = (int)$fecha->format('Y');
         do {
@@ -88,23 +93,28 @@ class DeudaController extends Controller
                 $mes = 1;
             }
             $fecha = new DateTime($anio.'-'.$mes.'-'.$pago);
-            $periodoInicio = $fecha->format('d').' '.Str::substr(CatalogoController::consultarMes($mes), 0, 3);
 
-            $fechaFin = DeudaController::fechaFin($fecha, $pago);
-            if($fechaFin > $fin) {
-                $periodoFin = $fin->format('d').' '.Str::substr(CatalogoController::consultarMes((int)$fin->format('m')), 0, 3);
-            } else {
-                $periodoFin = $fechaFin->format('d').' '.Str::substr(CatalogoController::consultarMes((int)$fechaFin->format('m')), 0, 3);
+            if($fecha > $fechaActual) {
+
+                $periodoInicio = $fecha->format('d').' '.Str::substr(CatalogoController::consultarMes($mes), 0, 3);
+
+                $fechaFin = DeudaController::fechaFin($fecha, $pago);
+                if($fechaFin > $fin) {
+                    $periodoFin = $fin->format('d').' '.Str::substr(CatalogoController::consultarMes((int)$fin->format('m')), 0, 3);
+                } else {
+                    $periodoFin = $fechaFin->format('d').' '.Str::substr(CatalogoController::consultarMes((int)$fechaFin->format('m')), 0, 3);
+                }
+
+                $deuda = new Deuda();
+                $deuda->idArriendo = $arriendo->id;
+                $deuda->fechaCompromiso = $fecha->format('Y-m-d');
+                $deuda->estado = false;
+                $deuda->diasRetraso = -1;
+                $deuda->titulo = $periodoInicio.' - '.$periodoFin;
+                $deuda->save();
+
+                $cant++;
             }
-
-            $deuda = new Deuda();
-            $deuda->idArriendo = $arriendo->id;
-            $deuda->fechaCompromiso = $fecha->format('Y-m-d');
-            $deuda->estado = false;
-            $deuda->diasRetraso = -1;
-            $deuda->titulo = $periodoInicio.' - '.$periodoFin;
-            $deuda->save();
-            $cant++;
         } while ($fechaFin < $fin);
 
         return $cant;

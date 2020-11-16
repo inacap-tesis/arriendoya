@@ -26,15 +26,17 @@
                 <a class="navbar-brand" href="{{ url('/') }}">
                     <img src="{{ asset('images/imagotipo.png') }}" width="180" alt="" loading="lazy">
                 </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
-
                     </ul>
+
+                    @if (session('msg'))
+                    <div style="position: relative; top: 10px;" class="alert alert-warning" role="alert">
+                        {{ session('msg') }}
+                    </div>
+                    @endif
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
@@ -62,9 +64,8 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    <a href="/cuenta" class="dropdown-item">{{ __('Cuenta Bancaria') }}</a>
-                                    <a href="/antecedentes" class="dropdown-item">{{ __('Antecedentes') }}</a>
-                                    <a href="/usuario/clave" class="dropdown-item">{{ __('Cambiar Clave') }}</a>
+                                    <a href="/cuenta" class="dropdown-item">{{ __('Mi cuenta bancaria') }}</a>
+                                    <a href="/antecedentes" class="dropdown-item">{{ __('Mis antecedentes') }}</a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">

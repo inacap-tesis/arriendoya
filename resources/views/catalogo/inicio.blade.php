@@ -118,25 +118,25 @@
             <div class="col-9">
                 <div class="row">
                     <div class="col text-right">
-                        <a id="precio" class="btn btn-primary" onclick="ordenar('precio')" data-toggle="tooltip" data-placement="top" title="Mostrar lo más barato primero">
+                        <a id="precio" class="text-secondary" onclick="ordenar('precio')" data-toggle="tooltip" data-placement="top" title="Mostrar lo más barato primero">
                             <svg class="bi" width="10" height="10" fill="currentColor">
                                 <use xlink:href="{{ asset('icons/bootstrap-icons.svg').'#caret-down-fill' }}"/>
                             </svg>
-                            <svg class="bi" width="20" height="20" fill="currentColor">
+                            <svg class="bi" width="30" height="30" fill="currentColor">
                                 <use xlink:href="{{ asset('icons/bootstrap-icons.svg').'#cash' }}"/>
                             </svg>
                         </a>
-                        <a id="fecha" class="btn btn-primary" onclick="ordenar('fecha')" data-toggle="tooltip" data-placement="top" title="Mostrar lo más reciente primero" style="display: none">
+                        <a id="fecha" class="text-secondary" onclick="ordenar('fecha')" data-toggle="tooltip" data-placement="top" title="Mostrar lo más reciente primero" style="display: none">
                             <svg class="bi" width="10" height="10" fill="currentColor">
                                 <use xlink:href="{{ asset('icons/bootstrap-icons.svg').'#caret-down-fill' }}"/>
                             </svg>
-                            <svg class="bi" width="20" height="20" fill="currentColor">
+                            <svg class="bi" width="25" height="25" fill="currentColor">
                                 <use xlink:href="{{ asset('icons/bootstrap-icons.svg').'#calendar3' }}"/>
                             </svg>
                         </a>
                     </div>
                 </div>
-                <div id="anuncios" class="row row-cols-1 row-cols-md-3 bg-secondary">
+                <div id="anuncios" class="row row-cols-1 row-cols-md-3">
                     @foreach ($anuncios as $anuncio)
                     <div class="col mb-3">
                         <div class="card" style="width: 16.8rem;">

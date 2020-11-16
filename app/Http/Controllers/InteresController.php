@@ -16,8 +16,9 @@ class InteresController extends Controller
         $this->middleware('auth');
     }
 
-    public function listar($anuncio) {
-        $intereses = InteresAnuncio::where('idAnuncio', '=', $anuncio)->get();
+    public function listar($id) {
+        $anuncio = Anuncio::find($id);
+        $intereses = InteresAnuncio::where('idAnuncio', '=', $id)->get();
         return view('interes.listar', [
             'anuncio' => $anuncio,
             'intereses' => $intereses
@@ -25,16 +26,20 @@ class InteresController extends Controller
     }
 
     public function registrar(Request $request) {
-        $interes = new InteresAnuncio();
-        $interes->idAnuncio = $request->id;
-        $interes->rutUsuario = Auth::user()->rut;
-        $interes->candidato = false;
-        $interes->save();
+        if(Auth::user()->cuentaBancaria) {
+            $interes = new InteresAnuncio();
+            $interes->idAnuncio = $request->id;
+            $interes->rutUsuario = Auth::user()->rut;
+            $interes->candidato = false;
+            $interes->save();
 
-        //Notificar a propietario
-        $interes->anuncio->inmueble->propietario->notify(new AnuncioNotificacion($interes->anuncio, $interes->usuario, 1));
+            //Notificar a propietario
+            $interes->anuncio->inmueble->propietario->notify(new AnuncioNotificacion($interes->anuncio, $interes->usuario, 1));
 
-        return redirect('/anuncio/'.$request->id);
+            return redirect('/anuncio/'.$request->id);
+        } else {
+            return redirect('/cuenta')->with('msg', 'Por favor primero configure su cuenta bancaria');
+        }
     }
 
     public function eliminar(Request $request) {

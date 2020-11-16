@@ -74,7 +74,6 @@ class RouteServiceProvider extends ServiceProvider
                 require base_path('routes/web/interesAnuncio.php');
                 require base_path('routes/web/notificacion.php');
                 require base_path('routes/web/solicitudFinalizacion.php');
-                require base_path('routes/web/usuario.php');
             });
             //->group(base_path('routes/web.php'));
     }

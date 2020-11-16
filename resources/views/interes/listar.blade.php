@@ -1,78 +1,89 @@
 @extends('layouts.app')
 
 @section('content')
-<form action="/interes/candidatos" method="POST">
-  @csrf
-  @method('POST')
-  <input type="hidden" value="{{ $anuncio }}" name="anuncio">
-  <div class="container">
-    <div class="row">
-      <div class="col">
-        <h3>Lista de Interesados</h3>
-      </div>
-      <div class="col text-right">
-        <button type="submit" class="btn btn-success">
-          <svg class="bi" width="20" height="20" fill="currentColor">
-            <use xlink:href="{{ asset('icons/bootstrap-icons.svg').'#check' }}"/>
-          </svg>
-        </button>
-        <a href="/inmuebles" class="btn btn-danger">
-          <svg class="bi" width="20" height="20" fill="currentColor">
-            <use xlink:href="{{ asset('icons/bootstrap-icons.svg').'#x' }}"/>
-          </svg>
-        </a>
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <div class="card">
+        <div class="card-header" style="font-weight: bold;">{{ __('Interesados en '.$anuncio->inmueble->tipo->nombre.' que está en '.$anuncio->inmueble->calleDireccion.' '.$anuncio->inmueble->numeroDireccion) }}</div>
+        <div class="card-body">
+          <form action="/interes/candidatos" method="POST">
+            @csrf
+            @method('POST')
+            <input type="hidden" value="{{ $anuncio->idInmueble }}" name="anuncio">
+            <div class="container">
+              <div class="row">
+                <div class="col">
+                  <h3>Lista de Interesados</h3>
+                </div>
+                <div class="col text-right">
+                  <button type="submit" class="btn btn-success">
+                    <svg class="bi" width="20" height="20" fill="currentColor">
+                      <use xlink:href="{{ asset('icons/bootstrap-icons.svg').'#check' }}"/>
+                    </svg>
+                  </button>
+                  <a href="/inmuebles" class="btn btn-danger">
+                    <svg class="bi" width="20" height="20" fill="currentColor">
+                      <use xlink:href="{{ asset('icons/bootstrap-icons.svg').'#x' }}"/>
+                    </svg>
+                  </a>
+                </div>
+              </div>
+              @include('layouts.modal', [
+                'static' => false,
+                'size' => 'modal-lg'
+                ])
+              <br>
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Interesado</th>
+                      <th scope="col" class="text-center">¿Es candidato?</th>
+                      <th scope="col" class="text-right"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @foreach ($intereses as $interes)
+                    <tr id="{{ $interes->usuario->rut }}">
+                      <th scope="row">
+                        {{ __($interes->usuario->primerNombre.' '.$interes->usuario->segundoNombre.' '.$interes->usuario->primerApellido.' '.$interes->usuario->segundoApellido) }}
+                      </th>
+                      <td class="text-center">
+                        <input style="width:20px; height:20px;" class="form-check-input" type="checkbox" name="{{ $interes->usuario->rut }}" id="{{ $interes->usuario->rut }}" @if ($interes->candidato) checked @endif>
+                      </td>
+                      <td class="text-right">
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-primary" onclick="mostrarCalificaciones({{ $interes->usuario }})">
+                          Calificaciones
+                          <svg class="bi" width="20" height="20" fill="currentColor">
+                            <use xlink:href="{{ asset('icons/bootstrap-icons.svg').'#bookmark-star-fill' }}"/>
+                          </svg>
+                        </button>
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-primary" onclick="mostrarAntecedentes({{ $interes->usuario }})">
+                          Antecedentes
+                          <svg class="bi" width="20" height="20" fill="currentColor">
+                            <use xlink:href="{{ asset('icons/bootstrap-icons.svg').'#file-earmark-text-fill' }}"/>
+                          </svg>
+                        </button>
+                        <a href="#" class="btn btn-danger" onclick="{{ __('eliminarInteres('.$anuncio->idInmueble.',"'.$interes->usuario->rut.'")') }}">
+                          Eliminar
+                          <svg class="bi" width="20" height="20" fill="currentColor">
+                            <use xlink:href="{{ asset('icons/bootstrap-icons.svg').'#trash-fill' }}"/>
+                          </svg>
+                        </a>
+                      </td>
+                    </tr>
+                    @endforeach
+                  </tbody>
+                </table>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
-    @include('layouts.modal', [
-      'static' => false,
-      'size' => 'modal-lg'
-      ])
-    <br>
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">Interesado</th>
-            <th scope="col" class="text-center">¿Es candidato?</th>
-            <th scope="col" class="text-right"></th>
-          </tr>
-        </thead>
-        <tbody>
-          @foreach ($intereses as $interes)
-          <tr id="{{ $interes->usuario->rut }}">
-            <th scope="row">
-              {{ __($interes->usuario->primerNombre.' '.$interes->usuario->segundoNombre.' '.$interes->usuario->primerApellido.' '.$interes->usuario->segundoApellido) }}
-            </th>
-            <td class="text-center">
-              <input style="width:20px; height:20px;" class="form-check-input" type="checkbox" name="{{ $interes->usuario->rut }}" id="{{ $interes->usuario->rut }}" @if ($interes->candidato) checked @endif>
-            </td>
-            <td class="text-right">
-              <!-- Button trigger modal -->
-              <button type="button" class="btn btn-primary" onclick="mostrarCalificaciones({{ $interes->usuario }})">
-                Calificaciones
-                <svg class="bi" width="20" height="20" fill="currentColor">
-                  <use xlink:href="{{ asset('icons/bootstrap-icons.svg').'#bookmark-star-fill' }}"/>
-                </svg>
-              </button>
-              <!-- Button trigger modal -->
-              <button type="button" class="btn btn-primary" onclick="mostrarAntecedentes({{ $interes->usuario }})">
-                Antecedentes
-                <svg class="bi" width="20" height="20" fill="currentColor">
-                  <use xlink:href="{{ asset('icons/bootstrap-icons.svg').'#file-earmark-text-fill' }}"/>
-                </svg>
-              </button>
-              <a href="#" class="btn btn-danger" onclick="{{ __('eliminarInteres('.$anuncio.',"'.$interes->usuario->rut.'")') }}">
-                Eliminar
-                <svg class="bi" width="20" height="20" fill="currentColor">
-                  <use xlink:href="{{ asset('icons/bootstrap-icons.svg').'#trash-fill' }}"/>
-                </svg>
-              </a>
-            </td>
-          </tr>
-          @endforeach
-        </tbody>
-      </table>
   </div>
-</form>
+</div>
 @endsection
 
 @section('scripts')
