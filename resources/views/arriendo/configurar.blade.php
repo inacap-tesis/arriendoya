@@ -48,7 +48,7 @@
                                     <div class="input-group-prepend">
                                       <div class="input-group-text">$</div>
                                     </div>
-                                    <input type="number" min="0" class="form-control" id="canon" name="canon" @if($arriendo) value="{{ $arriendo->canon }}" @endif required>
+                                    <input type="number" min="1" max="8000000" class="form-control" id="canon" name="canon" @if($arriendo) value="{{ $arriendo->canon }}" @endif required>
                                     <span class="invalid-feedback" role="alert">
                                         <strong id="_canon"></strong>
                                     </span>
@@ -68,7 +68,7 @@
                                   <div class="input-group-prepend">
                                     <div class="input-group-text">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="conGarantia" name="conGarantia" onchange="tieneGarantia()" style="margin-top: 5px;" @if($arriendo && $arriendo->garantia) checked @endif>
+                                            <input class="form-check-input" type="checkbox" min="1" max="8000000" id="conGarantia" name="conGarantia" onchange="tieneGarantia()" style="margin-top: 5px;" @if($arriendo && $arriendo->garantia) checked @endif>
                                             <label class="form-check-label" for="conGarantia">
                                                 Incluye garantía
                                             </label>

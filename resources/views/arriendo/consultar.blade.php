@@ -104,7 +104,7 @@
         
         var motivoDiv = $('<div class="form-group"></div>');
         var motivoLabel = $('<label for="motivo">Motivo</label>');
-        var motivoTextarea = $('<textarea class="form-control" id="motivo" name="motivo" rows="3" required></textarea>');
+        var motivoTextarea = $('<textarea maxlength="255" class="form-control" id="motivo" name="motivo" rows="3" required></textarea>');
         var motivoMessage = $('<div id="msgMotivo" class="invalid-feedback"></div>');
         motivoDiv.append(motivoLabel, motivoTextarea, motivoMessage);
 
@@ -229,7 +229,7 @@
         
         var motivoDiv = $('<div class="form-group"></div>');
         var motivoLabel = $('<label for="motivo">¿Qué problema tiene con el pago?</label>');
-        var motivoTextarea = $('<textarea class="form-control" id="motivo" name="motivo" rows="3" required></textarea>');
+        var motivoTextarea = $('<textarea maxlength="255" class="form-control" id="motivo" name="motivo" rows="3" required></textarea>');
         var motivoMessage = $('<div id="msgMotivo" class="invalid-feedback"></div>');
         motivoDiv.append(motivoLabel, motivoTextarea, motivoMessage);
 

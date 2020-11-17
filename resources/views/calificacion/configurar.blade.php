@@ -16,7 +16,7 @@
                         <!--comentario-->
                         <div class="form-group row">
                             <div class="col-2"></div>
-                            <textarea class="form-control col-8" id="comentario" name="comentario" rows="7" placeholder="¿Cómo definiría su experiencia durante el arriendo?" required></textarea>
+                            <textarea maxlength="255" class="form-control col-8" id="comentario" name="comentario" rows="7" placeholder="¿Cómo definiría su experiencia durante el arriendo?" required></textarea>
                             <span class="invalid-feedback" role="alert">
                                 <strong id="msgComentario"></strong>
                             </span>

@@ -109,13 +109,13 @@
         
         var valorDiv = $('<div class="form-group"></div>');
         var valorLabel = $('<label for="valor">Valor</label>');
-        var valorInput = $('<input type="number" min="0" class="form-control" id="valor" required>');
+        var valorInput = $('<input type="number" min="1" max="8000000" class="form-control" id="valor" required>');
         var valorMessage = $('<div id="msgValor" class="invalid-feedback"></div>');
         valorDiv.append(valorLabel, valorInput, valorMessage);
 
         var motivoDiv = $('<div class="form-group"></div>');
         var motivoLabel = $('<label for="motivo">Motivo</label>');
-        var motivoTextarea = $('<textarea class="form-control" id="motivo" name="motivo" rows="3" required></textarea>');
+        var motivoTextarea = $('<textarea maxlength="255" class="form-control" id="motivo" name="motivo" rows="3" required></textarea>');
         var motivoMessage = $('<div id="msgMotivo" class="invalid-feedback"></div>');
         motivoDiv.append(motivoLabel, motivoTextarea, motivoMessage);
 

@@ -38,7 +38,7 @@
                                                 <div class="input-group-prepend">
                                                   <div class="input-group-text">$</div>
                                                 </div>
-                                                <input type="number" min="0" class="form-control" id="canon" name="canon" @if ($inmueble->anuncio) value="{{ $inmueble->anuncio->canon }}" @endif required>
+                                                <input type="number" min="1" max="8000000" class="form-control" id="canon" name="canon" @if ($inmueble->anuncio) value="{{ $inmueble->anuncio->canon }}" @endif required>
                                             </div>
                                         </div>
                                     </div>
@@ -50,13 +50,13 @@
                                 <div class="form-row">
                                     <div class="form-group col">
                                         <label for="condicionesArriendo">{{ __('Condiciones del arriendo') }}</label>
-                                        <textarea class="form-control" id="condicionesArriendo" name="condicionesArriendo" rows="3" placeholder="¿Cuales son las principales condiciones que tendrá el arriendo de este inmueble?" required>@if ($inmueble->anuncio){{ $inmueble->anuncio->condicionesArriendo }}@endif</textarea>
+                                        <textarea maxlength="255" class="form-control" id="condicionesArriendo" name="condicionesArriendo" rows="3" placeholder="¿Cuales son las principales condiciones que tendrá el arriendo de este inmueble?" required>@if ($inmueble->anuncio){{ $inmueble->anuncio->condicionesArriendo }}@endif</textarea>
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col">
                                         <label for="documentosRequeridos">{{ __('Documentos requeridos') }}</label>
-                                        <textarea class="form-control" id="documentosRequeridos" name="documentosRequeridos" rows="3" placeholder="¿Qué documentos necesitarás de los interesados en este anuncio?" required>@if ($inmueble->anuncio){{ $inmueble->anuncio->documentosRequeridos }}@endif</textarea>
+                                        <textarea maxlength="255" class="form-control" id="documentosRequeridos" name="documentosRequeridos" rows="3" placeholder="¿Qué documentos necesitarás de los interesados en este anuncio?" required>@if ($inmueble->anuncio){{ $inmueble->anuncio->documentosRequeridos }}@endif</textarea>
                                     </div>
                                 </div>
                             </div>
