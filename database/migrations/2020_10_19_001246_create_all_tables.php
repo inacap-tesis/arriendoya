@@ -251,6 +251,7 @@ class CreateAllTables extends Migration
             $table->string('rutReceptor', 12);
             $table->date('fechaPropuesta');
             $table->boolean('respuesta')->nullable();
+            $table->boolean('estado');
             $table->timestamps();
 
             $table->foreign('idArriendo')->references('id')->on('arriendos')->onDelete('cascade');

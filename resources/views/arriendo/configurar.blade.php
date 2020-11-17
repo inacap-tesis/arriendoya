@@ -28,7 +28,7 @@
                         <div class="form-row">
                             <div class="form-group col">
                                 <label for="fechaInicio">Fecha de inicio</label>
-                                <input type="date" class="form-control" id="fechaInicio" name="fechaInicio" @if($arriendo) value="{{ $arriendo->fechaInicio }}" @endif required>
+                                <input type="date" class="form-control" id="fechaInicio" name="fechaInicio" @if($arriendo) value="{{ $arriendo->fechaInicio }}" @endif onchange="validarFechaInicio()" required>
                                 <span class="invalid-feedback" role="alert">
                                     <strong id="_fechaInicio"></strong>
                                 </span>
@@ -123,9 +123,23 @@
             valid = isValid('garantia', 'Por favor ingrese la garantía.');
         }
         
-        if(valid && validarFechaTermino()) {
+        if(valid && validarFechaInicio() && validarFechaTermino()) {
             $('#formulario').submit();
         }
+    }
+
+    function validarFechaInicio() {
+        if(isValid('fechaFin', 'Por favor ingrese la fecha de término.')){
+            var fecha = new Date($('#fechaInicio').val() + ' 00:00:00');
+            var fechaFin = new Date($('#fechaFin').val() + ' 00:00:00');
+            if(fecha > fechaFin) {
+                $('#fechaInicio').addClass('is-invalid');
+                $('#_fechaInicio').empty();
+                $('#_fechaInicio').text('Esta fecha debe ser menor que la fecha de término.');
+                return false;
+            }
+        }
+        return true;
     }
 
     function validarFechaTermino() {
@@ -137,10 +151,19 @@
             $('#_fechaFin').text('La fecha debe ser mayo que la actual.');
             return false;
         } else {
+            if(isValid('fechaInicio', 'Por favor ingrese la fecha de inicio.')){
+                var fechaInicio = new Date($('#fechaInicio').val() + ' 00:00:00');
+                if(fecha < fechaInicio) {
+                    $('#fechaFin').addClass('is-invalid');
+                    $('#_fechaFin').empty();
+                    $('#_fechaFin').text('Esta fecha debe ser mayo que la fecha de inicio.');
+                    return false;
+                }
+            }
             $('#fechaFin').removeClass('is-invalid');
             $('#_fechaFin').empty();
-            
         }
+        return true;
     }
 </script>
 @endsection

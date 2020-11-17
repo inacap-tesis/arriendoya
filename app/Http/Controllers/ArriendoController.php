@@ -186,7 +186,10 @@ class ArriendoController extends Controller {
 
     public function finalizarForzosamente(Request $request) {
         $arriendo = Arriendo::find($request->id);
-        $arriendo->fechaTerminoReal = $arriendo->solicitudesFinalizacion->first()->fechaPropuesta;
+        $solicitud = $arriendo->solicitudesFinalizacion->first();
+        $solicitud->estado = false;
+        $solicitud->save();
+        $arriendo->fechaTerminoReal = $solicitud->fechaPropuesta;
         $arriendo->save();
         //Actualizar las deudas
         DeudaController::modificarPeriodo($arriendo);

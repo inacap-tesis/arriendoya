@@ -23,6 +23,7 @@ class SolicitudFinalizacionController extends Controller
         $solicitud->rutEmisor = Auth::user()->rut;
         $solicitud->fechaPropuesta = $request->fecha;
         $solicitud->respuesta = null;
+        $solicitud->estado = true;
         if(Auth::user()->rut == $arriendo->inquilino->rut) {
             $solicitud->rutReceptor = $arriendo->inmueble->propietario->rut;
             $solicitud->save();
@@ -42,6 +43,7 @@ class SolicitudFinalizacionController extends Controller
         $solicitud = SolicitudFinalizacion::find($request->id);
         if($request->respuesta == 'true') {
             $solicitud->respuesta = true;
+            $solicitud->estado = false;
             $solicitud->arriendo->fechaTerminoPropuesta = $solicitud->fechaPropuesta;
             $solicitud->arriendo->fechaTerminoReal = $solicitud->fechaPropuesta;
             $solicitud->arriendo->save();

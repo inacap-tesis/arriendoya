@@ -15,8 +15,11 @@
 
                         <!--comentario-->
                         <div class="form-group row">
-                            <div class="col-4"></div>
-                            <textarea class="form-control col-4" id="comentario" name="comentario" rows="7" placeholder="¿Cómo definiría su experiencia durante el arriendo?" required></textarea>
+                            <div class="col-2"></div>
+                            <textarea class="form-control col-8" id="comentario" name="comentario" rows="7" placeholder="¿Cómo definiría su experiencia durante el arriendo?" required></textarea>
+                            <span class="invalid-feedback" role="alert">
+                                <strong id="msgComentario"></strong>
+                            </span>
                         </div>
 
                         <h5>¿Qué nivel de satisfacción significó para usted?</h5>
@@ -95,7 +98,7 @@
                 }
             });
         } else {
-            $('#msgComentario').text('Es necesario explicar el problema.');
+            $('#msgComentario').text('Su opinión es muy importante para nosotros, por favor permítanos conocer su experiencia.');
             $('#comentario').addClass('is-invalid');
         }
     }

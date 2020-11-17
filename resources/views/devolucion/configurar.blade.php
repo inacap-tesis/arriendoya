@@ -6,83 +6,99 @@
       'static' => true,
       'size' => null
       ])
-    <div class="row">
-        <div class="col">
-            <h4 class="text-center">Realizar devolución</h4>
-        </div>
-        <div class="col text-right">
-            <button class="btn btn-success" onclick="agregarDescuento()">Agregar descuento</button>
-        </div>
-    </div>
-    <br>
-    <form action="{{ $url }}" method="post" enctype="multipart/form-data">
-        @csrf
-        <input type="hidden" name="id" value="{{ $id }}">
-        <div class="row">
-            <div class="col-6">
-                <table class="table">
-                    <tbody>
-                        <tr>
-                            <th scope="row">RUT</th>
-                            <td>{{ $deuda->arriendo->inquilino->rut }}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Nombre completo</th>
-                            <td>{{ $deuda->arriendo->inquilino->primerNombre.' '.$deuda->arriendo->inquilino->segundoNombre.' '.$deuda->arriendo->inquilino->primerApellido.' '.$deuda->arriendo->inquilino->segundoApellido }}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Correo electrónico</th>
-                            <td>{{ $deuda->arriendo->inquilino->email }}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Banco</th>
-                            <td>{{ $deuda->arriendo->inquilino->cuentaBancaria->banco->nombre }}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Tipo de cuenta</th>
-                            <td>{{ $deuda->arriendo->inquilino->cuentaBancaria->tipoCuenta->nombre }}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Número de cuenta</th>
-                            <td>{{ $deuda->arriendo->inquilino->cuentaBancaria->numero }}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Valor</th>
-                            <td>{{ '$ '.number_format($monto, 0, ',', '.') }}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="col-6">
-                <input id="disponible" name="disponible" type="hidden" value="0">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Monto</th>
-                            <th colspan="2">Motivo</th>
-                        </tr>
-                    </thead>
-                    <tbody id="lista">
-
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-6">
-                <div class="input-group mb-3">
-                    <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="documento" name="documento" required>
-                        <label class="custom-file-label" for="documento">Comprobante de pago...</label>
+      <div class="row">
+          <div class="col">
+            <form class="card" action="{{ $url }}" method="post" enctype="multipart/form-data">
+                @csrf
+                <input type="hidden" name="id" value="{{ $id }}">
+                <div class="card-header" style="font-weight: bold;">{{ __('Informar devolución de garantía') }}</div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6">
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">RUT</th>
+                                        <td>{{ $deuda->arriendo->inquilino->rut }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Nombre completo</th>
+                                        <td>{{ $deuda->arriendo->inquilino->primerNombre.' '.$deuda->arriendo->inquilino->segundoNombre.' '.$deuda->arriendo->inquilino->primerApellido.' '.$deuda->arriendo->inquilino->segundoApellido }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Correo electrónico</th>
+                                        <td>{{ $deuda->arriendo->inquilino->email }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Banco</th>
+                                        <td>{{ $deuda->arriendo->inquilino->cuentaBancaria->banco->nombre }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Tipo de cuenta</th>
+                                        <td>{{ $deuda->arriendo->inquilino->cuentaBancaria->tipoCuenta->nombre }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Número de cuenta</th>
+                                        <td>{{ $deuda->arriendo->inquilino->cuentaBancaria->numero }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Valor</th>
+                                        <td>{{ '$ '.number_format($monto, 0, ',', '.') }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-6">
+                            <div class="row">
+                                <div class="col">
+                                    <button class="btn btn-success" onclick="agregarDescuento()">Agregar descuento</button>
+                                </div>
+                                <!--<div class="col text-right">
+                                    <h6 style="margin-top: 15px"><b id="totalDisponible">$ 0 </b><span> a devolver</span></h6>
+                                </div>-->
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col">
+                                    <h5>Lista de descuentos</h5>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <input id="disponible" name="disponible" type="hidden" value="0">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Monto</th>
+                                                <th colspan="2">Motivo</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="lista">    
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="input-group mb-3">
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="documento" name="documento" required>
+                                    <label class="custom-file-label" for="documento">Comprobante de pago...</label>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary">Pagar</button>
-                <a href="{{ '/arriendo/'.$deuda->arriendo->id }}" class="btn btn-primary">Cancelar</a>
-            </div>
-        </div>
-        
-    </form>
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-primary">Pagar</button>
+                    <a href="{{ '/arriendo/'.$deuda->arriendo->id }}" class="btn btn-primary">Cancelar</a>
+                </div>
+            </form>
+          </div>
+      </div>
 </div>
 @endsection
 @section('scripts')
@@ -165,6 +181,9 @@
             var btn = $('<a href="#" class="btn btn-danger" onclick="eliminar(' + index + ')">Eliminar</a>');
             trBtn.append(btn);
             tr.append(tdIndex, tdValor, trMotivo, trBtn);
+            console.log(temp.disponible);
+            /*var disponible = temp.disponible - parseInt(valor);
+            $('#totalDisponible').text('$ ' + disponible.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."));*/
             $('#lista').append(tr);
             $('#ventanaModal').modal('toggle');
         }

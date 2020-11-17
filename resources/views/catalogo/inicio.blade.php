@@ -136,21 +136,7 @@
                         </a>
                     </div>
                 </div>
-                <div id="anuncios" class="row row-cols-1 row-cols-md-3">
-                    @foreach ($anuncios as $anuncio)
-                    <div class="col mb-3">
-                        <div class="card" style="width: 16.8rem;">
-                            <div class="card-body">
-                              <h5 class="card-title">{{ __( $anuncio->inmueble->calleDireccion.' '.$anuncio->inmueble->numeroDireccion ) }}</h5>
-                                <h6 class="card-subtitle mb-2 text-muted">{{ __( '$'.$anuncio->canon ) }}</h6>
-                              <p class="card-text">{{ __( $anuncio->condicionesArriendo ) }}</p>
-                              <p class="card-text">{{ __( $anuncio->documentosRequeridos ) }}</p>
-                                <p>{{ $anuncio->inmueble->comuna->provincia->region->nombre }}</p>
-                              <a href="{{ '/anuncio'.'/'.$anuncio->idInmueble }}" class="card-link">Ver más...</a>
-                            </div>
-                        </div>
-                    </div>
-                    @endforeach
+                <div id="anuncios" class="row">
                 </div>
             </div>
         </div>
@@ -161,25 +147,22 @@
 <script src="{{ asset('js/location.js') }}" defer></script>
 <script type="text/javascript">
 
-    function cargarAnuncios(anuncios) {
+    document.addEventListener('DOMContentLoaded', function () {
+        $.ajax({
+            url: '/catalogo/filtrar',
+            type: "Get",
+            dataType: 'json',//this will expect a json response
+            data: {}, 
+            success: function(response) {
+                cargarAnuncios(response.view);
+            }
+        });
+    });
+
+    function cargarAnuncios(view) {
         var row = $("#anuncios");
         row.empty();
-        anuncios.map(anuncio => {
-            var col = $('<div></div>').addClass('col mb-3');
-            var card = $('<div></div>').addClass('card');
-            card.css('width', '16.8rem');
-            var card_body = $('<div></div>').addClass('card-body');
-            var card_title = $('<h5>' + anuncio.inmueble.calleDireccion + ' ' + anuncio.inmueble.numeroDireccion + '</h5>').addClass('card-title');
-            var card_subtitle = $('<h6>$' + anuncio.canon + '</h6>').addClass('card-subtitle mb-2 text-muted');
-            var card_text1 = $('<p>' + anuncio.condicionesArriendo + '</p>').addClass('card-text');
-            var card_text2 = $('<p>' + anuncio.documentosRequeridos + '</p>').addClass('card-text');
-            var p = $('<p>' + anuncio.inmueble.comuna.provincia.region.nombre + '</p>');
-            var card_link = $('<a href="/anuncio/' + anuncio.idInmueble + '">Ver más...</a>').addClass('card-link');
-            card_body.append(card_title, card_subtitle, card_text1, card_text2, p, card_link);
-            card.append(card_body);
-            col.append(card);
-            row.append(col);
-        });
+        row.html(view);
     }
 
     function capturarFiltros() {
@@ -242,7 +225,7 @@
                 dataType: 'json',//this will expect a json response
                 data: {}, 
                 success: function(response) {
-                    cargarAnuncios(response);
+                    cargarAnuncios(response.view);
                 }
             });
         }
@@ -254,6 +237,7 @@
         var filtros = capturarFiltros();
         
         if(filtros || tipoOrden) {
+
             $.ajax({
                 url: '/catalogo/filtrar',
                 type: "Get",
@@ -269,7 +253,7 @@
                     tipoOrden: tipoOrden
                 } : { tipoOrden: tipoOrden }, 
                 success: function(response) {
-                    cargarAnuncios(response);
+                    cargarAnuncios(response.view);
                 }
             });
         }

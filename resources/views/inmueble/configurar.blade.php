@@ -86,7 +86,7 @@
                                 <div class="form-row">
                                     <div class="form-group col">
                                         <label for="caracteristicas">Características</label>
-                                        <textarea class="form-control" id="caracteristicas" name="caracteristicas" rows="3" required>@if ($inmueble){{ $inmueble->caracteristicas }}@endif</textarea>
+                                        <textarea class="form-control" maxlength="255" id="caracteristicas" name="caracteristicas" rows="3" required>@if ($inmueble){{ $inmueble->caracteristicas }}@endif</textarea>
                                         <div class="invalid-feedback">
                                             Por favor ingrese las características del inmueble.
                                         </div>

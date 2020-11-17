@@ -34,7 +34,7 @@
                 $fechaActual = new \DateTime();
                 $solicitudesRecibidas = $arriendo->solicitudesFinalizacion->where('fechaPropuesta', '>', $fechaActual->format('Y-m-d'))->where('rutReceptor',Auth::user()->rut)->whereNull('respuesta');
                 $solicitudesEmitidas = $arriendo->solicitudesFinalizacion->where('fechaPropuesta', '>', $fechaActual->format('Y-m-d'))->where('rutEmisor', Auth::user()->rut)->whereNull('respuesta');
-                $solicitudesRechazadas = $arriendo->solicitudesFinalizacion->where('fechaPropuesta', '>', $fechaActual->format('Y-m-d'))->where('rutEmisor', Auth::user()->rut)->first();
+                $solicitudRechazada = $arriendo->solicitudesFinalizacion->where('fechaPropuesta', '>', $fechaActual->format('Y-m-d'))->where('rutEmisor', Auth::user()->rut)->first();
                 @endphp
                 @if (count($solicitudesRecibidas) > 0)
                 <!-- Button trigger modal -->
@@ -47,7 +47,7 @@
                     Solicitar Finalización
                 </button>
                 @endif
-                @if ($solicitudesRechazadas && $solicitudesRechazadas->respuesta == 'false')
+                @if ($solicitudRechazada && $solicitudRechazada->estado == true && isset($solicitudRechazada->respuesta) && $solicitudRechazada->respuesta == false)
                 <a href="#" class="btn btn-primary" onclick="finalizarForzosamente({{ $arriendo }})">Finalizar Forzosamente</a>
                 @endif
             </ul>

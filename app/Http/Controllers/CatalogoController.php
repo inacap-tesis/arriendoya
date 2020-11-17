@@ -11,6 +11,7 @@ use App\Provincia;
 use App\Comuna;
 use App\Inmueble;
 use App\Arriendo;
+use DateTime;
 
 class CatalogoController extends Controller
 {
@@ -191,7 +192,20 @@ class CatalogoController extends Controller
         }
         $anuncios = $lista;
 
-        return $anuncios;
+        $response = '';
+        foreach($anuncios as $anuncio) {
+            $fecha = new DateTime($anuncio->fechaPublicacion);
+            $response .= view('catalogo.item', [
+                'titulo' => $anuncio->inmueble->tipo->nombre.' en '.$anuncio->inmueble->calleDireccion.' '.$anuncio->inmueble->numeroDireccion,
+                'canon' => '$ '.number_format($anuncio->canon, 0, '.', '.'),
+                'caracteristicas' => $anuncio->inmueble->caracteristicas,
+                'foto' => $anuncio->inmueble->fotos->count() > 0 ? $anuncio->inmueble->fotos->first()->urlFoto : 'inmuebles/default.png',
+                'id' => $anuncio->idInmueble,
+                'nota' => 3,
+                'fecha' => $fecha->format('d-m-Y')
+                ])->render();
+        }
+        return response()->json([ 'view' => $response ]);
     }
 
     public function anunciosTipo($anuncios, $tipo) {
