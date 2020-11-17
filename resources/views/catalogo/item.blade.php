@@ -2,7 +2,11 @@
     <div class="card">
         <div class="row no-gutters">
             <a href="{{ '/anuncio'.'/'.$id }}" class="col-md-4">
+                @if (isset($foto))
                 <img src="{{ asset('storage/'.$foto) }}" class="rounded img-fluid" style="max-height: 15em;" /> 
+                @else
+                <img src="{{ asset('images/inmueble_default.png') }}" class="rounded img-fluid" style="max-height: 15em;" /> 
+                @endif
             </a>
           <div class="col-md-8">
             <div class="card-body">

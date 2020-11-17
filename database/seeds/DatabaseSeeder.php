@@ -17,11 +17,11 @@ class DatabaseSeeder extends Seeder
             TipoCuentaBancoSeeder::class,
             TipoInmuebleSeeder::class,
             //CategoriaNotificacionSeeder::class,
-            EstadoInmuebleSeeder::class,
+            /*EstadoInmuebleSeeder::class,
             UsuarioSeeder::class,
             InmuebleSeeder::class,
             ArriendoSeeder::class,
-            GarantiaSeeder::class
+            GarantiaSeeder::class*/
         ]);
     }
 }

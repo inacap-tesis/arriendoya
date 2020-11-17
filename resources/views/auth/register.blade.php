@@ -116,7 +116,7 @@
                                         </div>
                                     </div>
                                     <div class="row justify-content-center">
-                                        <img id="imagen" src="{{ asset('storage/usuarios/default.png') }}" class="rounded img-fluid" style="max-height: 200px;" alt="Responsive image">
+                                        <img id="imagen" src="{{ asset('images/usuario_default.png') }}" class="rounded img-fluid" style="max-height: 200px;" alt="Responsive image">
                                     </div>
                                   </div>
                             </div>

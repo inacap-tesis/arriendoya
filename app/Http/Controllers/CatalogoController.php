@@ -199,7 +199,7 @@ class CatalogoController extends Controller
                 'titulo' => $anuncio->inmueble->tipo->nombre.' en '.$anuncio->inmueble->calleDireccion.' '.$anuncio->inmueble->numeroDireccion,
                 'canon' => '$ '.number_format($anuncio->canon, 0, '.', '.'),
                 'caracteristicas' => $anuncio->inmueble->caracteristicas,
-                'foto' => $anuncio->inmueble->fotos->count() > 0 ? $anuncio->inmueble->fotos->first()->urlFoto : 'inmuebles/default.png',
+                'foto' => $anuncio->inmueble->fotos->count() > 0 ? $anuncio->inmueble->fotos->first()->urlFoto : null,
                 'id' => $anuncio->idInmueble,
                 'nota' => 3,
                 'fecha' => $fecha->format('d-m-Y')

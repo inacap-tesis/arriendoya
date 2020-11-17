@@ -64,7 +64,7 @@
                   @endforeach
                   @else
                   <div class="carousel-item active">
-                    <img src="https://www.hogares.cl/wp-content/uploads/2018/06/SLA_3734.jpg" class="d-block w-100" alt="...">
+                    <img src="{{ asset('images/inmueble_default.png') }}" class="d-block w-100" alt="...">
                   </div>
                   @endif
                 </div>
