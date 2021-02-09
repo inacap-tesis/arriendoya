@@ -47,7 +47,7 @@ class InmuebleSeeder extends Seeder
                 'numeroDireccion' => 5641,
                 'condominioDireccion' => '',
                 'numeroDepartamentoDireccion' => '',
-                'caracteristicas' => 'Prueba'
+                'caracteristicas' => 'Cómoda y amplia habitación de 3x4 metros cuadrados'
             ]
         ]);
     }

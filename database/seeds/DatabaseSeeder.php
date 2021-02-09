@@ -16,12 +16,12 @@ class DatabaseSeeder extends Seeder
             RegionSeeder::class,
             TipoCuentaBancoSeeder::class,
             TipoInmuebleSeeder::class,
-            EstadoInmuebleSeeder::class
-            /*CategoriaNotificacionSeeder::class,
+            EstadoInmuebleSeeder::class,
+            //CategoriaNotificacionSeeder::class,
             UsuarioSeeder::class,
             InmuebleSeeder::class,
             ArriendoSeeder::class,
-            GarantiaSeeder::class*/
+            GarantiaSeeder::class
         ]);
     }
 }

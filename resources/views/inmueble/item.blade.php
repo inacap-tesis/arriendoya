@@ -9,9 +9,8 @@
           <p class="card-text">{{ __( 'Fecha inicio: '.$elemento->fechaInicio ) }}</p>
           <p class="card-text">{{ __( 'Fecha término: '.$elemento->fechaTerminoReal ) }}</p>
           <p class="card-text">{{ __( 'Día de pago: El '.$elemento->diaPago.' de cada mes.' ) }}</p>
-          <p class="card-text">{{ __( ($elemento->subarriendo ? 'Se': 'No se').' permite subarrendar.' ) }}</p>
           @if ($elemento->garantia)
-          <p class="card-text">{{ __( 'Garantía: $'.$elemento->garantia ) }}</p>
+          <p class="card-text">{{ __( 'Garantía: $'.$elemento->garantia->monto ) }}</p>
           @endif
           @else
           <h6 class="card-title" style="text-decoration: underline;">Características:</h6>

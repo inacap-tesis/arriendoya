@@ -11,6 +11,10 @@ use App\Http\Controllers\DescuentoDevolucionGarantiaController;
 class DevolucionGarantiaController extends Controller
 {
 
+    public function __construct() {
+        $this->middleware('auth');
+    }
+
     public function configurar($id) {
         $garantia = Garantia::find($id);
         if(!$garantia) {

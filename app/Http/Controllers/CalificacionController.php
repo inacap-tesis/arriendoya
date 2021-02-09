@@ -12,6 +12,10 @@ use App\Notifications\CalificacionNotificacion;
 class CalificacionController extends Controller
 {
 
+    public function __construct() {
+        $this->middleware('auth');
+    }
+
     public function consultar($rut) {
         $usuario = Usuario::find($rut);
         $calificaciones = $usuario->calificacionesComoInquilino;
@@ -59,32 +63,4 @@ class CalificacionController extends Controller
         return (int)$request->esPropietario;
     }
 
-    public function calificarInmueblePropietario() {
-
-    }
-
-    public function calificarInquilino() {
-        
-    }
-
-    public function registrarCalificacionInmueblePropietario() {
-        
-    }
-
-    public function registrarCalificacionInquilino() {
-        
-    }
-
-    public function consultarCalificacionesInmueble() {
-        
-    }
-
-    public function consultarCalificacionesInquilino() {
-        
-    }
-
-    public function consultarCalificacionesPropietario() {
-        
-    }
-    
 }

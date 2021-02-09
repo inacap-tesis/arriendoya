@@ -9,8 +9,8 @@ use App\DevolucionGarantia;
 class DescuentoDevolucionGarantiaController extends Controller
 {
 
-    public function consultar() {
-
+    public function __construct() {
+        $this->middleware('auth');
     }
 
     public static function registrar(int $devolucion, int $monto, string $motivo) {

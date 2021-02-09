@@ -14,8 +14,13 @@ use DateTime;
 class DeudaController extends Controller
 {
 
-    public function listar() {
-
+    public function __construct() {
+        $this->middleware('auth', 
+        ['only' => [
+            'modificarPeriodo',
+            'fechaFin',
+            'generar'
+        ]]);
     }
 
     public static function modificarPeriodo(Arriendo $arriendo) {
